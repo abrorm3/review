@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev":"nodemon index.js",
+    "dev": "nodemon index.js",
     "start": "nodemon index.js"
   },
   "author": "",
@@ -17,5 +17,8 @@
     "ejs": "^3.1.9",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
