@@ -1,0 +1,22 @@
+<div class="flex items-center h-screen bg-sky-300">
+  <div id="auth" class="w-full max-w-md mx-auto bg-white rounded-xl p-6 md:p-11 shadow-md">
+    <h1 class="text-center pb-5 md:pb-10 text-xl md:text-2xl text-gray-800">User Management</h1>
+    <div class="loadingSpinner" *ngIf="isLoading">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading">
+      <div *ngIf="errorMessage" class="text-red-500 text-center mb-3">{{ errorMessage }}</div>
+      <div class="email-form">
+        <input type="email" id="email" ngModel required name="email" placeholder="Email" class="w-full py-2 px-3 md:px-4 rounded border focus:outline-none focus:border-blue-500 text-gray-700">
+      </div>
+      <div class="password-form mt-2 relative">
+        <input [type]="changetype ? 'text' : 'password'" name="password" id="password" required ngModel placeholder="Password" class="w-full py-2 px-3 md:px-4 rounded border focus:outline-none focus:border-blue-500 pr-9 md:pr-10 text-gray-700">
+        <img (click)="viewpassword()" [src]="visible ? 'assets/icons/eye-closed-icon.svg' : 'assets/icons/eye-icon.svg'" alt="eye icon" width="24px" class="cursor-pointer absolute top-1/2 transform -translate-y-1/2 right-2 md:right-3">
+      </div>
+      <div class="actionButtons mt-3 md:mt-4 flex flex-col items-center">
+        <button type="submit" [disabled]="!authForm.valid" class="bg-sky-200 w-full md:w-9/12 py-2 px-4 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed rounded text-white">{{isLoginMode ? "Login" : "Sign Up"}}</button>
+        <p class="mt-2 text-center md:mt-3 text-gray-600">Switch to <span (click)="onSwitchMode()" class="text-sky-400 cursor-pointer">{{isLoginMode ? 'Sign Up' : 'Login'}}</span></p>
+      </div>
+    </form>
+  </div>
+</div>

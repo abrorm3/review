@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev":"nodemon index.js",
     "start": "nodemon index.js"
   },
   "author": "",
@@ -11,7 +12,9 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.1"
   }
