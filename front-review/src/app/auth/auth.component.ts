@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { AuthResponse } from './auth.model';
-import { GoogleAuthService } from './google-auth.service';
+import { SocialUser, SocialAuthService, GoogleLoginProvider } from '@abacritt/angularx-social-login';
 
 declare var gapi: any;
 @Component({
@@ -12,71 +12,28 @@ declare var gapi: any;
   styleUrls: ['./auth.component.css'],
 })
 export class AuthComponent implements OnInit {
-  isLoading = false;
-  isLoginMode = true;
-  visible: boolean = false;
-  changetype: boolean = false;
-  errorMessage: string = '';
-
+  loginForm!: FormGroup;
+  socialUser!: SocialUser;
+  isLoggedin?: boolean;
   constructor(
-    private authService: AuthService,
-    private router: Router,
-    private googleAuthService: GoogleAuthService
+    private formBuilder: FormBuilder,
+    private socialAuthService: SocialAuthService
   ) {}
-
   ngOnInit() {
-    this.googleAuthService.initClient();
+    this.loginForm = this.formBuilder.group({
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+    this.socialAuthService.authState.subscribe((user) => {
+      this.socialUser = user;
+      this.isLoggedin = user != null;
+      console.log(this.socialUser);
+    });
   }
-  onSubmit(form: NgForm) {
-    if (form.invalid) {
-      return;
-    }
-    const email = form.value.email;
-    const password = form.value.password;
-    this.isLoading = true;
-
-    if (this.isLoginMode) {
-      //LOGIN
-      this.authService.login({ email, password }).subscribe({
-        next: (resData: AuthResponse) => {
-          // console.log('Logged in!', resData.token, resData.userId);
-          this.isLoading = false;
-          this.router.navigate(['/user-management']);
-        },
-        error: (errorMessage: any) => {
-          this.errorMessage = errorMessage;
-          this.isLoading = false;
-          console.error('Login failed:', errorMessage);
-        },
-      });
-    }
-
-    if (!this.isLoginMode) {
-      //SIGN IN
-      this.authService.signup({ email, password }).subscribe({
-        next: (resData) => {
-          console.log('Registered!', resData.token);
-          this.isLoading = false;
-          this.router.navigate(['/user-management']);
-        },
-        error: (errorMessage) => {
-          this.errorMessage = errorMessage.toString().split(': ')[1];
-          this.isLoading = false;
-          console.error('Registration failed:', errorMessage);
-        },
-      });
-    }
-
-    form.reset();
+  loginWithGoogle(): void {
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
-  viewpassword() {
-    this.visible = !this.visible;
-    this.changetype = !this.changetype;
-  }
-  onSwitchMode() {
-    this.isLoginMode = !this.isLoginMode;
-  }
-  gSignIn() {
-    this.googleAuthService.signIn();
+  logOut(): void {
+    this.socialAuthService.signOut();
   }
 }

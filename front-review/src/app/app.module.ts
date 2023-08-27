@@ -7,9 +7,10 @@ import { AppComponent } from './app.component';
 import { TranslationModule } from './translation.module';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner/loading-spinner.component';
 import { AuthComponent } from './auth/auth.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthModule } from './auth/auth.module';
+import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -22,6 +23,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     TranslationModule,
     AuthModule,
+    ReactiveFormsModule, SocialLoginModule,
     FormsModule,
     AppRoutingModule,
     TranslateModule.forRoot({
@@ -32,7 +34,18 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
   ],
-  providers: [],
+  providers: [{
+    provide: 'SocialAuthServiceConfig',
+    useValue: {
+      autoLogin: false,
+      providers: [
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider('478306182791-gp3oe0veh3j5042f2licqcd7eflljdt6.apps.googleusercontent.com'),
+        },
+      ],
+    } as SocialAuthServiceConfig,
+  },],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
