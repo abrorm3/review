@@ -91,6 +91,10 @@ export class AuthComponent implements OnInit {
             console.log('Registered!', resData.token);
             this.isLoading = false;
             this.router.navigate(['/feed']);
+            console.log(this.email);
+            console.log(this.username);
+
+
           },
           error: (errorMessage) => {
             this.errorMessage = errorMessage.toString().split(': ')[1];

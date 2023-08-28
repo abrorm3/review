@@ -23,7 +23,7 @@ class authController {
           .status(400)
           .json({ message: "Password should be longer than 4 and less than 20 characters", errors });
       }
-      const { email, password } = req.body;
+      const { email, password, username } = req.body;
       if (!/\S+@\S+\.\S+/.test(email)) {
         return res.status(400).json({ message: "Invalid email format" });
       }
@@ -37,6 +37,7 @@ class authController {
       const user = new User({
         email,
         password: hashPassword,
+        username,
         roles: [userRole.value],
         registrationTime: new Date(),
         lastLoginTime: new Date(),
