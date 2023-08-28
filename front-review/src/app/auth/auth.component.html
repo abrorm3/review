@@ -1,39 +1,13 @@
-<div class="container" style="max-width: 550px">
+
   <h2 class="text-center mb-5">Angular Login with Google</h2>
-  <asl-google-signin-button text="signin_with" size='medium'></asl-google-signin-button>
-  <div *ngIf="isLoggedin === true">
-    <div class="form-group">
-      <label>First Name</label>
-      <input
-        type="text"
-        class="form-control"
-        [value]="socialUser.firstName"
-        id="firstname"
-        readonly
-      />
+  <asl-google-signin-button
+    text="signin_with"
+    size="medium"
+  ></asl-google-signin-button>
+  <div *ngIf="user">
+    <img src="{{ user.photoUrl }}" referrerpolicy="no-referrer" />
+    <div>
+      <h4>{{ user.name }}</h4>
+      <p>{{ user.email }}</p>
     </div>
-    <div class="form-group">
-      <label>Last Name</label>
-      <input
-        type="text"
-        class="form-control"
-        [value]="socialUser.lastName"
-        id="lastname"
-        readonly
-      />
-    </div>
-    <div class="form-group">
-      <label>Email</label>
-      <input
-        type="text"
-        class="form-control"
-        [value]="socialUser.email"
-        id="email"
-        readonly
-      />
-    </div>
-    <button type="button" (click)="logOut()" class="btn btn-primary">
-      Log Out
-    </button>
   </div>
-</div>
