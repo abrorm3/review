@@ -135,7 +135,6 @@ class authController {
       // await blockRole.save()
       const user = User;
       if (req.isBlocked) {
-        console.log("redireeect")
         return res.redirect('/auth'); // Redirect the blocked user to /auth
       }
       const users = await User.find();

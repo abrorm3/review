@@ -19,7 +19,7 @@ router.post(
   controller.registration
 );
 router.post("/login", controller.login);
-router.get("/users", roleMiddleware(["USER", "ADMIN", "BLOCK"]), (req, res) => {
+router.get("/users",  (req, res) => {
   if (req.isBlocked) {
     return res.status(403).json({ message: "User is blocked" });
   }

@@ -15,6 +15,9 @@ import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
+import {MatIconModule} from '@angular/material/icon';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -41,6 +44,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatFormFieldModule,
     MatButtonModule,
     MatInputModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {

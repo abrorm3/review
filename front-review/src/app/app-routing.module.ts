@@ -7,7 +7,7 @@ import { AuthGuardService } from './auth/auth.guard';
 const routes: Routes = [
   {path:'', redirectTo:'/feed', pathMatch:'full'},
   {path:'feed', component:FeedComponent},
-  {path:'signup', component:AuthComponent}
+  {path:'auth', component:AuthComponent}
 ]
 @NgModule({
   imports:[RouterModule.forRoot(routes)],
