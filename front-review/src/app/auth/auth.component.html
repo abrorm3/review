@@ -12,6 +12,7 @@
         (ngSubmit)="onSubmit(authForm)"
         *ngIf="!isLoading"
       >
+      <h1 *ngIf="user">{{user.name}}</h1>
         <div *ngIf="errorMessage" class="text-red-500 text-center mb-3">
           {{ errorMessage }}
         </div>
@@ -35,7 +36,7 @@
             required
             ngModel
             minlength="4"
-            placeholder="Password"  
+            placeholder="Password"
           />
           <button
             type="button"

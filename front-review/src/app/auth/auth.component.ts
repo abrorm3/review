@@ -41,6 +41,9 @@ export class AuthComponent implements OnInit {
     this.socialAuthService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = user != null;
+      if (this.loggedIn) {
+        this.router.navigate(['/feed']);
+      }
     });
   }
 
