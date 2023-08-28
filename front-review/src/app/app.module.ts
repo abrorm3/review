@@ -10,7 +10,11 @@ import { AuthComponent } from './auth/auth.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthModule } from './auth/auth.module';
-import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
+import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -23,7 +27,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     TranslationModule,
     AuthModule,
-    ReactiveFormsModule, SocialLoginModule,
+    ReactiveFormsModule, SocialLoginModule,GoogleSigninButtonModule,
     FormsModule,
     AppRoutingModule,
     TranslateModule.forRoot({
@@ -33,8 +37,13 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
+    MatCardModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatInputModule,
   ],
-  providers: [{
+  providers: [
+    {
     provide: 'SocialAuthServiceConfig',
     useValue: {
       autoLogin: false,
@@ -45,7 +54,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         },
       ],
     } as SocialAuthServiceConfig,
-  },],
+  },
+],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
