@@ -18,6 +18,7 @@ router.post(
   ],
   controller.registration
 );
+router.post("/update-username",controller.updateUsername);
 router.post("/login", controller.login);
 router.get("/users",  (req, res) => {
   if (req.isBlocked) {

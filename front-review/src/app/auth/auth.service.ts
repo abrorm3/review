@@ -49,6 +49,10 @@ export class AuthService {
       })
     )
   }
+  updateUsername(userId: string, newUsername: string):Observable<any>{
+    const requestBody = { userId, newUsername };
+    return this.http.post(`${this.backend}/auth/update-username`, requestBody);
+  }
   logout(){
     this.removeAuthToken();
   }

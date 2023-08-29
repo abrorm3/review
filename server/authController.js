@@ -52,6 +52,18 @@ class authController {
       res.status(400).json({ message: "Registration error" });
     }
   }
+  async updateUsername(req, res) {
+    const { userId, newUsername } = req.body;
+
+    User.findOneAndUpdate({ _id: userId }, { $set: { username: newUsername } }, { new: true }, (err, updatedUser) => {
+      if (err) {
+        console.error("Error updating username:", err);
+        return res.status(500).json({ message: "An error occurred" });
+      }
+      console.log("Username updated successfully:", updatedUser);
+      return res.status(200).json({ message: "Username updated successfully" });
+    });
+  }
   async login(req, res) {
     try {
       const { email, password } = req.body;
