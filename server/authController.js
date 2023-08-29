@@ -23,24 +23,19 @@ class authController {
           .status(400)
           .json({ message: "Password should be longer than 4 and less than 20 characters", errors });
       }
-      const { email, password, username } = req.body;
+      const { email, password} = req.body;
       if (!/\S+@\S+\.\S+/.test(email)) {
         return res.status(400).json({ message: "Invalid email format" });
       }
       const candidate = await User.findOne({ email });
-      const candidateUsername = await User.findOne({ username });
       if (candidate) {
         return res.status(400).json({ message: "Email is already registered" });
-      }
-      if(candidateUsername){
-        return res.status(400).json({ message: "Username is already registered" });
       }
       const hashPassword = bcrypt.hashSync(password, 7);
       const userRole = await Role.findOne({ value: "USER" });
       const user = new User({
         email,
         password: hashPassword,
-        username,
         roles: [userRole.value],
         registrationTime: new Date(),
         lastLoginTime: new Date(),

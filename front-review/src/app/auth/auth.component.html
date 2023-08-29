@@ -1,6 +1,5 @@
 <div class="flex justify-center items-center h-screen bg-sky-300">
-  <div *ngIf="!askForUserName">
-    <mat-card id="auth" class="w-full max-w-md p-6 md:p-11">
+    <mat-card id="auth" class="w-full max-w-md p-6 md:p-11 h-2.2/3">
       <h1 class="text-center pb-5 md:pb-10 text-xl md:text-2xl text-gray-800">
         Review
       </h1>
@@ -70,32 +69,3 @@
       </form>
     </mat-card>
   </div>
-  <!-- Username -->
-  <div *ngIf="askForUserName">
-    <form
-        #authForm="ngForm"
-        (ngSubmit)="onSubmit(authForm)"
-        *ngIf="!isLoading">
-        <h2>Create Username</h2>
-        <p>The selected username will be public</p>
-        <mat-form-field class="w-full">
-          <input
-            matInput
-            type="text"
-            id="username"
-            ngModel
-            required
-            name="username"
-            placeholder="Username"
-          />
-        </mat-form-field>
-        <button
-            mat-raised-button
-            color="primary"
-            [disabled]="!authForm.valid"
-          >
-            Submit
-          </button>
-      </form>
-  </div>
-</div>

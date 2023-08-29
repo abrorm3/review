@@ -24,11 +24,9 @@ export class AuthComponent implements OnInit {
   visible: boolean = false;
   changetype: boolean = false;
   errorMessage: string = '';
-  askForUserName: boolean = false;
 
   email: string;
   password: string;
-  username: string;
 
   constructor(
     private socialAuthService: SocialAuthService,
@@ -74,56 +72,40 @@ export class AuthComponent implements OnInit {
     if (form.invalid) {
       return;
     }
-    if (this.email == undefined) {
-      this.email = form.value.email;
-      this.password = form.value.password;
-    }
-    this.username = form.value.username || null;
+    const email = form.value.email;
+    const password = form.value.password;
     this.isLoading = true;
 
-    if (!this.isLoginMode) {
-      this.askForUserName = true;
-      this.isLoading = false;
-      if (this.username != null) {
-        //SIGN UP
-        this.authService.signup({  email: this.email, password: this.password, username: this.username }).subscribe({
-          next: (resData) => {
-            console.log('Registered!', resData.token);
-            this.isLoading = false;
-            this.router.navigate(['/feed']);
-            console.log(this.email);
-            console.log(this.username);
-
-
-          },
-          error: (errorMessage) => {
-            this.errorMessage = errorMessage.toString().split(': ')[1];
-            this.isLoading = false;
-            console.error('Registration failed:', errorMessage);
-          },
-        });
-      }
-    }
     if (this.isLoginMode) {
       //LOGIN
-      this.authService
-        .login({
-          email: this.email,
-          password: this.password,
-          username: this.username,
-        })
-        .subscribe({
-          next: (resData: AuthResponse) => {
-            // console.log('Logged in!', resData.token, resData.userId);
-            this.isLoading = false;
-            this.router.navigate(['/feed']);
-          },
-          error: (errorMessage: any) => {
-            this.errorMessage = errorMessage;
-            this.isLoading = false;
-            console.error('Login failed:', errorMessage);
-          },
-        });
+      this.authService.login({ email, password }).subscribe({
+        next: (resData: AuthResponse) => {
+          // console.log('Logged in!', resData.token, resData.userId);
+          this.isLoading = false;
+          this.router.navigate(['/feed']);
+        },
+        error: (errorMessage: any) => {
+          this.errorMessage = errorMessage;
+          this.isLoading = false;
+          console.error('Login failed:', errorMessage);
+        },
+      });
+    }
+
+    if (!this.isLoginMode) {
+      //SIGN UP
+      this.authService.signup({ email, password }).subscribe({
+        next: (resData) => {
+          console.log('Registered!', resData.token);
+          this.isLoading = false;
+          this.router.navigate(['/feed']);
+        },
+        error: (errorMessage) => {
+          this.errorMessage = errorMessage.toString().split(': ')[1];
+          this.isLoading = false;
+          console.error('Registration failed:', errorMessage);
+        },
+      });
     }
 
     form.reset();
