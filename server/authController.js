@@ -23,7 +23,10 @@ class authController {
           .status(400)
           .json({ message: "Password should be longer than 4 and less than 20 characters", errors });
       }
-      const { email, password} = req.body;
+      const { email, password } = req.body;
+      const emailPrefix = email.split("@")[0];
+      const initialUsername = emailPrefix + Math.floor(Math.random() * 10000); // Add random numbers to make it unique
+
       if (!/\S+@\S+\.\S+/.test(email)) {
         return res.status(400).json({ message: "Invalid email format" });
       }
@@ -36,13 +39,14 @@ class authController {
       const user = new User({
         email,
         password: hashPassword,
+        username: initialUsername,
         roles: [userRole.value],
         registrationTime: new Date(),
         lastLoginTime: new Date(),
       });
       await user.save();
       const token = generateAccessToken(user._id, user.roles);
-      return res.json({ message: "Registration successful", userId: user._id,token});
+      return res.json({ message: "Registration successful", userId: user._id, token });
     } catch (e) {
       console.log(e);
       res.status(400).json({ message: "Registration error" });
@@ -68,7 +72,7 @@ class authController {
       user.lastLoginTime = new Date();
       await user.save();
       const token = generateAccessToken(user._id, user.roles);
-      return res.json({userId, token });
+      return res.json({ userId, token });
     } catch (e) {
       console.log(e);
       res.status(400).json({ message: "Login error" });
@@ -76,7 +80,6 @@ class authController {
   }
   async blockUser(req, res) {
     try {
-      
       const { userId } = req.params;
 
       const user = await User.findByIdAndUpdate(
@@ -134,7 +137,7 @@ class authController {
       // await blockRole.save()
       const user = User;
       if (req.isBlocked) {
-        return res.redirect('/auth'); // Redirect the blocked user to /auth
+        return res.redirect("/auth"); // Redirect the blocked user to /auth
       }
       const users = await User.find();
       res.json(users);
@@ -144,15 +147,12 @@ class authController {
   }
   async blockUsers(req, res) {
     const userIds = req.query.userIds.split(",");
-  
+
     try {
-      const result = await User.updateMany(
-        { _id: { $in: userIds } },
-        { $set: { roles: ["BLOCK"] } } 
-      );
-  
+      const result = await User.updateMany({ _id: { $in: userIds } }, { $set: { roles: ["BLOCK"] } });
+
       console.log("Modified Count:", result.modifiedCount);
-  
+
       if (result.modifiedCount > 0) {
         return res.status(200).json({ message: "Users blocked successfully" });
       } else {
@@ -160,22 +160,17 @@ class authController {
       }
     } catch (error) {
       console.error("Error blocking users:", error);
-      return res
-        .status(500)
-        .json({ message: "An error occurred while blocking users" });
+      return res.status(500).json({ message: "An error occurred while blocking users" });
     }
   }
   async unblockUsers(req, res) {
     const userIds = req.query.userIds.split(",");
-    
+
     try {
-      const result = await User.updateMany(
-        { _id: { $in: userIds } },
-        { $pull: { roles: "BLOCK" } } 
-      );
-  
+      const result = await User.updateMany({ _id: { $in: userIds } }, { $pull: { roles: "BLOCK" } });
+
       console.log("Modified Count:", result.modifiedCount);
-  
+
       if (result.modifiedCount > 0) {
         return res.status(200).json({ message: "Users unblocked successfully" });
       } else {
@@ -183,14 +178,9 @@ class authController {
       }
     } catch (error) {
       console.error("Error unblocking users:", error);
-      return res
-        .status(500)
-        .json({ message: "An error occurred while unblocking users" });
+      return res.status(500).json({ message: "An error occurred while unblocking users" });
     }
   }
-  
-  
-  
 }
 
 module.exports = new authController();
