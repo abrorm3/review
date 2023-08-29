@@ -28,9 +28,12 @@ class authController {
         return res.status(400).json({ message: "Invalid email format" });
       }
       const candidate = await User.findOne({ email });
-
+      const candidateUsername = await User.findOne({ username });
       if (candidate) {
         return res.status(400).json({ message: "Email is already registered" });
+      }
+      if(candidateUsername){
+        return res.status(400).json({ message: "Username is already registered" });
       }
       const hashPassword = bcrypt.hashSync(password, 7);
       const userRole = await Role.findOne({ value: "USER" });
