@@ -53,17 +53,28 @@ class authController {
     }
   }
   async updateUsername(req, res) {
-    const { userId, newUsername } = req.body;
-
-    User.findOneAndUpdate({ _id: userId }, { $set: { username: newUsername } }, { new: true }, (err, updatedUser) => {
-      if (err) {
-        console.error("Error updating username:", err);
-        return res.status(500).json({ message: "An error occurred" });
+    try {
+      const { userId, newUsername } = req.body;
+  
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: userId },
+        { $set: { username: newUsername } },
+        { new: true }
+      );
+  
+      if (!updatedUser) {
+        console.error("User not found");
+        return res.status(404).json({ message: "User not found" });
       }
+  
       console.log("Username updated successfully:", updatedUser);
       return res.status(200).json({ message: "Username updated successfully" });
-    });
+    } catch (error) {
+      console.error("Error updating username:", error);
+      return res.status(500).json({ message: "An error occurred" });
+    }
   }
+  
   async login(req, res) {
     try {
       const { email, password } = req.body;

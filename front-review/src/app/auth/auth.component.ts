@@ -27,6 +27,8 @@ export class AuthComponent implements OnInit {
 
   email: string;
   password: string;
+  askedUsername: boolean = false;
+  userId: string;
 
   constructor(
     private socialAuthService: SocialAuthService,
@@ -83,6 +85,7 @@ export class AuthComponent implements OnInit {
           // console.log('Logged in!', resData.token, resData.userId);
           this.isLoading = false;
           this.router.navigate(['/feed']);
+          this.userId = this.authService.getUserId();
         },
         error: (errorMessage: any) => {
           this.errorMessage = errorMessage;
@@ -98,7 +101,9 @@ export class AuthComponent implements OnInit {
         next: (resData) => {
           console.log('Registered!', resData.token);
           this.isLoading = false;
-          this.router.navigate(['/feed']);
+          this.askedUsername = true;
+          this.userId = this.authService.getUserId();
+          // this.router.navigate(['/feed']);
         },
         error: (errorMessage) => {
           this.errorMessage = errorMessage.toString().split(': ')[1];
@@ -117,5 +122,17 @@ export class AuthComponent implements OnInit {
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
   }
-  gSignIn() {}
+  setUsername(form: NgForm) {
+    console.log('logged');
+
+    const username = form.value.username;
+    this.authService.updateUsername(this.userId, username).subscribe({
+      next:(response) => {
+        console.log('Update successful:', response);
+        this.router.navigate(['/feed']);
+      },
+      error:(error) => {
+        console.error('Update failed:', error);
+      }})
+  }
 }

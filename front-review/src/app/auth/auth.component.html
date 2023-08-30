@@ -1,17 +1,18 @@
 <div class="flex justify-center items-center h-screen bg-sky-300">
-    <mat-card id="auth" class="w-full max-w-md p-6 md:p-11 h-2.2/3">
+  <div *ngIf="!askedUsername">
+    <mat-card id="auth" class="w-96 max-w-md p-6 md:p-11 h-auth">
       <h1 class="text-center pb-5 md:pb-10 text-xl md:text-2xl text-gray-800">
         Review
       </h1>
-      <div class="loadingSpinner" *ngIf="isLoading">
-        <mat-spinner diameter="40" class="mx-auto"></mat-spinner>
+      <div *ngIf="isLoading" class="flex justify-center items-center h-full">
+        <mat-spinner diameter="70" class="mx-auto"></mat-spinner>
       </div>
       <form
         #authForm="ngForm"
         (ngSubmit)="onSubmit(authForm)"
         *ngIf="!isLoading"
       >
-      <h1 *ngIf="user">{{user.name}}</h1>
+        <h1 *ngIf="user">{{ user.name }}</h1>
         <div *ngIf="errorMessage" class="text-red-500 text-center mb-3">
           {{ errorMessage }}
         </div>
@@ -69,3 +70,17 @@
       </form>
     </mat-card>
   </div>
+  <form *ngIf="askedUsername" #usernameForm="ngForm" (ngSubmit)="setUsername(usernameForm)" class="w-80 mx-auto p-6 bg-white shadow-md rounded-lg">
+    <h2 class="text-2xl font-bold mb-2">Create Username</h2>
+    <p class="text-gray-600 mb-4">The selected username will be public</p>
+
+    <mat-form-field class="w-full">
+      <input matInput placeholder="Username" name="username" ngModel required>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" class="w-full mt-4">
+      Submit
+    </button>
+  </form>
+
+</div>

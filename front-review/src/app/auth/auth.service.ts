@@ -51,7 +51,14 @@ export class AuthService {
   }
   updateUsername(userId: string, newUsername: string):Observable<any>{
     const requestBody = { userId, newUsername };
-    return this.http.post(`${this.backend}/auth/update-username`, requestBody);
+    console.log(requestBody.userId + " from service");
+    console.log(requestBody.newUsername + " from service");
+
+    return this.http.post(`${this.backend}/auth/update-username`, requestBody).pipe(catchError(this.handleError),
+    map(response => {
+      console.log(response + " got response!!");
+      return response;
+    }))
   }
   logout(){
     this.removeAuthToken();
@@ -90,5 +97,8 @@ export class AuthService {
       errorMessage = errorRes.error.message;
     }
     return throwError(() => new Error(errorMessage));
+  }
+  getUserId(): string {
+    return localStorage.getItem('userId');
   }
 }
