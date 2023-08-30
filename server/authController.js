@@ -58,7 +58,7 @@ class authController {
   
       const updatedUser = await User.findOneAndUpdate(
         { _id: userId },
-        { $set: { username: newUsername } },
+        { $set: { username: newUsername.toLowerCase() } },
         { new: true }
       );
   
@@ -72,6 +72,19 @@ class authController {
     } catch (error) {
       console.error("Error updating username:", error);
       return res.status(500).json({ message: "An error occurred" });
+    }
+  }
+  async checkUsernameAvailability(req, res) {
+    const { username } = req.params;
+  
+    try {
+      const existingUser = await User.findOne({ username });
+      const isAvailable = !existingUser;
+  
+      return res.status(200).json({ available: isAvailable });
+    } catch (error) {
+      console.error('Error checking username availability:', error);
+      return res.status(500).json({ message: 'An error occurred' });
     }
   }
   

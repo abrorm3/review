@@ -29,6 +29,9 @@ export class AuthComponent implements OnInit {
   password: string;
   askedUsername: boolean = false;
   userId: string;
+  username: string = ''
+
+  usernameAvailability: boolean | null = null;
 
   constructor(
     private socialAuthService: SocialAuthService,
@@ -135,4 +138,18 @@ export class AuthComponent implements OnInit {
         console.error('Update failed:', error);
       }})
   }
+  checkUsernameAvailability() {
+    const username = this.username.toLowerCase();
+    this.usernameAvailability = null;
+
+    this.authService.checkUsernameAvailability(username).subscribe(
+      (response: any) => {
+        this.usernameAvailability = response.available;
+      },
+      error => {
+        console.error('Error checking username availability:', error);
+      }
+    );
+  }
+
 }
