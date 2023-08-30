@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const { MongoClient, ObjectId } = require("mongodb");
 const { validationResult } = require("express-validator");
 const { secret } = require("./config");
+const nodemailer = require("nodemailer");
 
 const generateAccessToken = (id, roles) => {
   const payload = {
@@ -55,18 +56,18 @@ class authController {
   async updateUsername(req, res) {
     try {
       const { userId, newUsername } = req.body;
-  
+
       const updatedUser = await User.findOneAndUpdate(
         { _id: userId },
         { $set: { username: newUsername.toLowerCase() } },
         { new: true }
       );
-  
+
       if (!updatedUser) {
         console.error("User not found");
         return res.status(404).json({ message: "User not found" });
       }
-  
+
       console.log("Username updated successfully:", updatedUser);
       return res.status(200).json({ message: "Username updated successfully" });
     } catch (error) {
@@ -74,20 +75,108 @@ class authController {
       return res.status(500).json({ message: "An error occurred" });
     }
   }
+  async forgotPassword(req, res) {
+    const { email } = req.body;
+    try {
+      const oldUser = await User.findOne({ email });
+      if (!oldUser) {
+        return res.json({ status: "User Not Exists!!" });
+      }
+      const jwtsecret = secret + oldUser.password;
+      const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, jwtsecret, {
+        expiresIn: "5m",
+      });
+      const link = `http://localhost:3000/auth/reset-password/${oldUser._id}/${token}`;
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "thereviewapp.dev@gmail.com",
+          pass: "nfatnzhdtlyhatll",
+        },
+      });
+
+      var mailOptions = {
+        from: "thereviewapp.dev@gmail.com",
+        to: "abrormukhammadiev@gmail.com",
+        subject: "Password Reset",
+        text: link,
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+          return res.status(500).json({ message: "Error sending email" });
+        } else {
+          console.log("Email sent: " + info.response);
+          return res.status(200).json({ message: "Email sent successfully" });
+        }
+      });
+      console.log(link);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "An error occurred" });
+    }
+  }
+
+  async resetPassword(req, res) {
+    const { id, token } = req.params;
+    console.log(req.params);
+    const oldUser = await User.findOne({ _id: id });
+    if (!oldUser) {
+      return res.json({ status: "User Not Exists!!" });
+    }
+    const jwtsecret = secret + oldUser.password;
+    try {
+      const verify = jwt.verify(token, jwtsecret);
+      res.status(200).json({ email: verify.email, status: "Verified!" });
+    } catch (error) {
+      console.log(error);
+      res.send("Not Verified");
+    }
+  }
+  async postResetPassword(req, res) {
+    const { id, token } = req.params;
+    const { password } = req.body;
+
+    const oldUser = await User.findOne({ _id: id });
+    if (!oldUser) {
+      return res.json({ status: "User Not Exists!!" });
+    }
+    const jwtsecret = secret + oldUser.password;
+    try {
+      const verify = jwt.verify(token, jwtsecret);
+      const encryptedPassword = await bcrypt.hash(password, 10);
+      await User.updateOne(
+        {
+          _id: id,
+        },
+        {
+          $set: {
+            password: encryptedPassword,
+          },
+        }
+      );
+
+      res.status(200).json({ email: verify.email, status: "Verified!" });
+    } catch (error) {
+      console.log(error);
+      res.json({ status: "Something Went Wrong" });
+    }
+  }
   async checkUsernameAvailability(req, res) {
     const { username } = req.params;
-  
+
     try {
       const existingUser = await User.findOne({ username });
       const isAvailable = !existingUser;
-  
+
       return res.status(200).json({ available: isAvailable });
     } catch (error) {
-      console.error('Error checking username availability:', error);
-      return res.status(500).json({ message: 'An error occurred' });
+      console.error("Error checking username availability:", error);
+      return res.status(500).json({ message: "An error occurred" });
     }
   }
-  
+
   async login(req, res) {
     try {
       const { email, password } = req.body;

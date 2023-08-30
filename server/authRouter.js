@@ -18,10 +18,13 @@ router.post(
   ],
   controller.registration
 );
-router.post("/update-username",controller.updateUsername);
-router.get('/check-username/:username', controller.checkUsernameAvailability);
+router.post("/update-username", controller.updateUsername);
+router.get("/check-username/:username", controller.checkUsernameAvailability);
+router.post("/forgot-password",controller.forgotPassword);
+router.get("/reset-password/:id/:token", controller.resetPassword)
+router.post("/reset-password/:id/:token", controller.postResetPassword);
 router.post("/login", controller.login);
-router.get("/users",  (req, res) => {
+router.get("/users", (req, res) => {
   if (req.isBlocked) {
     return res.status(403).json({ message: "User is blocked" });
   }
