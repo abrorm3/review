@@ -1,6 +1,6 @@
 <div class="flex justify-center items-center h-screen bg-sky-300">
   <div *ngIf="!askedUsername">
-    <mat-card id="auth" class="w-96 max-w-md p-6 md:p-11 h-auth">
+    <mat-card id="auth" class="max-w-md p-6 md:p-10 h-auth">
       <h1 class="text-center pb-5 md:pb-10 text-xl md:text-2xl text-gray-800">
         Review
       </h1>
@@ -61,7 +61,7 @@
               {{ isLoginMode ? "Sign Up" : "Login" }}
             </span>
           </p>
-          <p class="mt-2 text-center md:mt-3 text-gray-600">Authenticate via</p>
+          <p class="mt-2 text-center md:mt-3 text-gray-600 arrow-text">or connect with</p>
           <asl-google-signin-button
             text="signin_with"
             size="medium"
