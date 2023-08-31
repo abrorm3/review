@@ -151,5 +151,7 @@ export class AuthComponent implements OnInit {
       }
     );
   }
-
+  navigateToForgotPassword(){
+    this.router.navigate(['/forgot-password']);
+  }
 }

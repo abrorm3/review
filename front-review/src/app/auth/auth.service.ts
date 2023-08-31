@@ -104,4 +104,11 @@ export class AuthService {
   checkUsernameAvailability(username: string): Observable<{ available: boolean }> {
     return this.http.get<{ available: boolean }>(`${this.backend}/auth/check-username/${username}`);
   }
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.backend}/auth/forgot-password`, { email });
+  }
+
+  resetPassword(id: string, token: string, password: string): Observable<any> {
+    return this.http.post(`${this.backend}/auth/reset-password/${id}/${token}`, { password });
+  }
 }

@@ -6,6 +6,7 @@ const { MongoClient, ObjectId } = require("mongodb");
 const { validationResult } = require("express-validator");
 const { secret } = require("./config");
 const nodemailer = require("nodemailer");
+const deployUrl = process.env.deployUrl;
 
 const generateAccessToken = (id, roles) => {
   const payload = {
@@ -77,16 +78,21 @@ class authController {
   }
   async forgotPassword(req, res) {
     const { email } = req.body;
+
     try {
       const oldUser = await User.findOne({ email });
+
       if (!oldUser) {
-        return res.json({ status: "User Not Exists!!" });
+        return res.status(404).json({ message: "User not found" });
       }
+
       const jwtsecret = secret + oldUser.password;
       const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, jwtsecret, {
-        expiresIn: "5m",
+        expiresIn: "20m",
       });
-      const link = `http://localhost:3000/auth/reset-password/${oldUser._id}/${token}`;
+
+      const resetLink = `${deployUrl}/reset-password/${oldUser._id}/${token}`;
+
       var transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -97,9 +103,9 @@ class authController {
 
       var mailOptions = {
         from: "thereviewapp.dev@gmail.com",
-        to: "abrormukhammadiev@gmail.com",
+        to: oldUser.email,
         subject: "Password Reset",
-        text: link,
+        text: `Click on the following link to reset your password: ${resetLink}\n\nIf you didn't make this request, please ignore this email.`,
       };
 
       transporter.sendMail(mailOptions, function (error, info) {
@@ -108,10 +114,11 @@ class authController {
           return res.status(500).json({ message: "Error sending email" });
         } else {
           console.log("Email sent: " + info.response);
-          return res.status(200).json({ message: "Email sent successfully" });
+          return res.status(200).json({ message: "Password reset link sent to your email, please, also check Spam folder" });
         }
       });
-      console.log(link);
+
+      console.log(resetLink);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "An error occurred" });
@@ -135,13 +142,21 @@ class authController {
     }
   }
   async postResetPassword(req, res) {
+    const passwordValidator = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!?\-_@#$%^&*])[A-Za-z\d!?\-_@#$%^&*]{6,}$/;
     const { id, token } = req.params;
     const { password } = req.body;
 
+    if (!passwordValidator.test(password)) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters long and include at least one letter and one number.",
+      });
+    }
+
     const oldUser = await User.findOne({ _id: id });
     if (!oldUser) {
-      return res.json({ status: "User Not Exists!!" });
+      return res.status(404).json({ message: "User Not Found" });
     }
+
     const jwtsecret = secret + oldUser.password;
     try {
       const verify = jwt.verify(token, jwtsecret);
@@ -157,12 +172,13 @@ class authController {
         }
       );
 
-      res.status(200).json({ email: verify.email, status: "Verified!" });
+      res.status(200).json({ email: verify.email, message: "Password Reset Successful" });
     } catch (error) {
-      console.log(error);
-      res.json({ status: "Something Went Wrong" });
+      console.error(error);
+      res.status(400).json({ message: "Password Reset Failed" });
     }
   }
+
   async checkUsernameAvailability(req, res) {
     const { username } = req.params;
 

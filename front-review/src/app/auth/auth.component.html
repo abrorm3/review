@@ -55,17 +55,26 @@
           >
             {{ isLoginMode ? "Login" : "Sign Up" }}
           </button>
+
+          <p class="mt-2 text-center md:mt-3 text-gray-600 arrow-text">or connect with</p>
+          <asl-google-signin-button
+            text="signin_with"
+            size="medium"
+          ></asl-google-signin-button>
+          <button
+            mat-button
+            color="primary"
+            (click)="navigateToForgotPassword()"
+            class="mt-4"
+          >
+            Forgot Password
+          </button>
           <p class="mt-2 text-center md:mt-3 text-gray-600">
             Switch to
             <span (click)="onSwitchMode()" class="text-sky-400 cursor-pointer">
               {{ isLoginMode ? "Sign Up" : "Login" }}
             </span>
           </p>
-          <p class="mt-2 text-center md:mt-3 text-gray-600 arrow-text">or connect with</p>
-          <asl-google-signin-button
-            text="signin_with"
-            size="medium"
-          ></asl-google-signin-button>
         </div>
       </form>
     </mat-card>
@@ -86,6 +95,4 @@
       Submit
     </button>
   </form>
-
-
 </div>
