@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-feed',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./feed.component.css']
 })
 export class FeedComponent {
+  constructor(private router:Router) {
 
+  }
+  goBack(){
+    this.router.navigate(['/auth']);
+  }
 }
