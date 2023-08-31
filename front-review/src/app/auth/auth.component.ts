@@ -7,6 +7,7 @@ import {
   SocialUser,
   SocialAuthService,
   GoogleLoginProvider,
+  FacebookLoginProvider,
 } from '@abacritt/angularx-social-login';
 import { HttpClient } from '@angular/common/http';
 
@@ -72,6 +73,9 @@ export class AuthComponent implements OnInit {
   // Refresh google Access Token
   refreshToken(): void {
     this.socialAuthService.refreshAccessToken(GoogleLoginProvider.PROVIDER_ID);
+  }
+  signInWithFB(): void {
+    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
   onSubmit(form: NgForm) {
     if (form.invalid) {

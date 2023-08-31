@@ -62,6 +62,10 @@
             or connect with
           </p>
           <asl-google-signin-button class="mt-2" text="signin_with" size="medium"></asl-google-signin-button>
+          <button (click)="signInWithFB()">Login with Facebook</button>
+          <div *ngIf="loggedIn">
+            <h4>{{user.name}}</h4>
+          </div>
           <button
             mat-button
             color="primary"

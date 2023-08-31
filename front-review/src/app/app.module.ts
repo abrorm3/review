@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthModule } from './auth/auth.module';
 import {
+  FacebookLoginProvider,
   GoogleLoginProvider,
   GoogleSigninButtonModule,
   SocialAuthServiceConfig,
@@ -65,8 +66,13 @@ export function HttpLoaderFactory(http: HttpClient) {
             provider: new GoogleLoginProvider(
               '478306182791-gp3oe0veh3j5042f2licqcd7eflljdt6.apps.googleusercontent.com'
             ),
-          },
+          },,
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('607240461326409')
+          }
         ],
+
       } as SocialAuthServiceConfig,
     },
   ],
