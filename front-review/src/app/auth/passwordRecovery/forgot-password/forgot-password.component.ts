@@ -16,9 +16,7 @@ export class ForgotPasswordComponent {
     this.authService.forgotPassword(this.email).subscribe({
       next: (response) => {
         this.message = response.message;
-        setTimeout(() => {
-          this.errorExists = false;
-        }, 0);
+        this.errorExists = false;
       },
       error: (error) => {
         console.error(error);
