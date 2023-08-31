@@ -6,7 +6,7 @@ const { MongoClient, ObjectId } = require("mongodb");
 const { validationResult } = require("express-validator");
 const { secret } = require("./config");
 const nodemailer = require("nodemailer");
-const deployUrl = process.env.deployUrl;
+const frontDeployUrl = process.env.frontDeployUrl;
 
 const generateAccessToken = (id, roles) => {
   const payload = {
@@ -91,7 +91,7 @@ class authController {
         expiresIn: "20m",
       });
 
-      const resetLink = `${deployUrl}/reset-password/${oldUser._id}/${token}`;
+      const resetLink = `${frontDeployUrl}/reset-password/${oldUser._id}/${token}`;
 
       var transporter = nodemailer.createTransport({
         service: "gmail",
