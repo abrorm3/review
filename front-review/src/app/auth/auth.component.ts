@@ -89,6 +89,11 @@ export class AuthComponent implements OnInit {
       }
     });
   }
+  checkLoginStatus(){
+    FB.checkLoginStatus((result) => {
+      console.log(result);
+  });
+  }
 
 
   onSubmit(form: NgForm) {

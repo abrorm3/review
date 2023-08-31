@@ -63,7 +63,7 @@
           </p>
           <asl-google-signin-button class="mt-2" text="signin_with" size="medium"></asl-google-signin-button>
           <button (click)="signInWithFB()">Login with Facebook</button>
-          <div class="fb-login-button" data-width="" data-size="" data-button-type="" data-layout="" data-auto-logout-link="false" data-use-continue-as="false"></div>
+          <div class="fb-login-button" data-width="" data-size="" data-button-type="" data-layout="" data-auto-logout-link="false" data-onLogin="checkLoginStatus()" data-use-continue-as="false"></div>
           <div *ngIf="loggedIn">
             <h4>{{user.name}}</h4>
           </div>
