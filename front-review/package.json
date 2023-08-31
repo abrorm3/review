@@ -33,6 +33,7 @@
     "@angular/cli": "16.0.0",
     "@angular/compiler-cli": "16.0.0",
     "@angular/localize": "16.0.0",
+    "@types/facebook-js-sdk": "^3.3.6",
     "@types/jasmine": "~4.3.0",
     "autoprefixer": "^10.4.15",
     "jasmine-core": "~4.6.0",

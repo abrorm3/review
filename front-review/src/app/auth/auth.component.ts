@@ -11,6 +11,7 @@ import {
 } from '@abacritt/angularx-social-login';
 import { HttpClient } from '@angular/common/http';
 
+declare const FB: any;
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
@@ -78,7 +79,18 @@ export class AuthComponent implements OnInit {
   }
   signInWithFB(): void {
     this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
+    FB.login(function(response) {
+      if (response.status === 'connected') {
+        console.log('Successfull');
+
+      } else {
+        console.log('didnt work');
+
+      }
+    });
   }
+
+
   onSubmit(form: NgForm) {
     if (form.invalid) {
       return;
