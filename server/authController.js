@@ -114,7 +114,9 @@ class authController {
           return res.status(500).json({ message: "Error sending email" });
         } else {
           console.log("Email sent: " + info.response);
-          return res.status(200).json({ message: "Password reset link sent to your email, please, also check Spam folder" });
+          return res
+            .status(200)
+            .json({ message: "Password reset link sent to your email, please, also check Spam folder" });
         }
       });
 
@@ -142,7 +144,7 @@ class authController {
     }
   }
   async postResetPassword(req, res) {
-    const passwordValidator = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!?\-_@#$%^&*])[A-Za-z\d!?\-_@#$%^&*]{6,}$/;
+    const passwordValidator = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
     const { id, token } = req.params;
     const { password } = req.body;
 
