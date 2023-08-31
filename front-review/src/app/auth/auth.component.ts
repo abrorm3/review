@@ -47,6 +47,8 @@ export class AuthComponent implements OnInit {
       this.loggedIn = user != null;
       if (this.loggedIn) {
         this.router.navigate(['/feed']);
+        console.log(this.user);
+
       }
     });
   }
