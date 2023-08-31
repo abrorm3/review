@@ -15,8 +15,10 @@ export class ForgotPasswordComponent {
   sendPasswordResetLink() {
     this.authService.forgotPassword(this.email).subscribe({
       next: (response) => {
-        this.errorExists = false;
         this.message = response.message;
+        setTimeout(() => {
+          this.errorExists = false;
+        }, 0);
       },
       error: (error) => {
         console.error(error);

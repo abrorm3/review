@@ -3,7 +3,7 @@ module.exports = {
   content: ["./src/**/*.{html,ts}"],
   theme: {
     extend: {
-      height: { 'auth': "500px" },
+      height: { 'auth': "540px" },
     },
   },
   plugins: [],
