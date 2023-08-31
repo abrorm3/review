@@ -38,7 +38,13 @@
                   "maximumWarning": "8mb",
                   "maximumError": "10mb"
                 }
+              ],"fileReplacements": [
+                {
+                  "replace": "src/environments/environment.development.ts",
+                  "with": "src/environments/environment.ts"
+                }
               ],
+
               "outputHashing": "all"
             },
             "development": {
