@@ -61,11 +61,25 @@
           <p class="mt-2 text-center md:mt-3 text-gray-600 arrow-text">
             or connect with
           </p>
-          <asl-google-signin-button class="mt-2" text="signin_with" size="medium"></asl-google-signin-button>
-          <button (click)="signInWithFB()">Login with Facebook</button>
-          <div class="fb-login-button" data-width="" data-size="" data-button-type="" data-layout="" data-auto-logout-link="false" data-onLogin="checkLoginStatus()" data-use-continue-as="false"></div>
+          <asl-google-signin-button
+            class="mt-2"
+            text="signin_with"
+            size="medium"
+          ></asl-google-signin-button>
+
+          <div
+            class="fb-login-button"
+            data-width=""
+            data-size=""
+            data-button-type=""
+            data-layout=""
+            data-auto-logout-link="false"
+            data-use-continue-as="false"
+            onlogin="handleFacebookLogin"
+          ></div>
+
           <div *ngIf="loggedIn">
-            <h4>{{user.name}}</h4>
+            <h4>{{ user.name }}</h4>
           </div>
           <button
             mat-button
@@ -85,19 +99,49 @@
       </form>
     </mat-card>
   </div>
-  <form *ngIf="askedUsername" #usernameForm="ngForm" (ngSubmit)="setUsername(usernameForm)" class="w-80 mx-auto p-6 bg-white shadow-md rounded-lg h-80">
+  <form
+    *ngIf="askedUsername"
+    #usernameForm="ngForm"
+    (ngSubmit)="setUsername(usernameForm)"
+    class="w-80 mx-auto p-6 bg-white shadow-md rounded-lg h-80"
+  >
     <h2 class="text-2xl font-bold mb-2">Create Username</h2>
     <p class="text-gray-600 mb-4">The selected username will be public</p>
 
     <mat-form-field class="w-full">
-      <input matInput placeholder="Username" name="username"  [(ngModel)]="username" required (input)="checkUsernameAvailability()">
+      <input
+        matInput
+        placeholder="Username"
+        name="username"
+        [(ngModel)]="username"
+        required
+        (input)="checkUsernameAvailability()"
+      />
     </mat-form-field>
-    <div class="h-6"> <!-- Reserve space for the message -->
-      <p *ngIf="usernameAvailability !== null" class="text-sm mt-2" [ngClass]="{'text-red-500': !usernameAvailability, 'text-green-500': usernameAvailability}">
-        {{ usernameAvailability ? 'Username is available' : 'Username is not available' }}
+    <div class="h-6">
+      <!-- Reserve space for the message -->
+      <p
+        *ngIf="usernameAvailability !== null"
+        class="text-sm mt-2"
+        [ngClass]="{
+          'text-red-500': !usernameAvailability,
+          'text-green-500': usernameAvailability
+        }"
+      >
+        {{
+          usernameAvailability
+            ? "Username is available"
+            : "Username is not available"
+        }}
       </p>
     </div>
-    <button mat-raised-button color="primary" [disabled]="!usernameForm.valid || !usernameAvailability" type="submit" class="w-full mt-4">
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!usernameForm.valid || !usernameAvailability"
+      type="submit"
+      class="w-full mt-4"
+    >
       Submit
     </button>
   </form>

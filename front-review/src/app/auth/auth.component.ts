@@ -77,24 +77,14 @@ export class AuthComponent implements OnInit {
   refreshToken(): void {
     this.socialAuthService.refreshAccessToken(GoogleLoginProvider.PROVIDER_ID);
   }
-  signInWithFB(): void {
-    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
-    FB.login(function(response) {
-      if (response.status === 'connected') {
-        console.log('Successfull');
-
-      } else {
-        console.log('didnt work');
-
-      }
-    });
+  handleFacebookLogin(response: any) {
+    if (response.status === 'connected') {
+      console.log('Facebook login successful');
+      this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
+    } else {
+      console.log('Facebook login failed');
+    }
   }
-  checkLoginStatus(){
-    FB.checkLoginStatus((result) => {
-      console.log(result);
-  });
-  }
-
 
   onSubmit(form: NgForm) {
     if (form.invalid) {
