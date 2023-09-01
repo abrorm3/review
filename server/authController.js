@@ -38,10 +38,21 @@ class authController {
       }
       const hashPassword = bcrypt.hashSync(password, 7);
       const userRole = await Role.findOne({ value: "USER" });
+      function getRandomProfilePicture() {
+        const profilePictureUrls = [
+          "https://firebasestorage.googleapis.com/v0/b/review-e9e60.appspot.com/o/users%2Fman.png_1693607431457?alt=media&token=017a48f4-2aea-409b-a1bf-6afc8fa18042",
+          "https://firebasestorage.googleapis.com/v0/b/review-e9e60.appspot.com/o/users%2Fgnome.png_1693607509760?alt=media&token=d03897e9-b60b-4d59-8ea7-eecfcc15b44c",
+          "https://firebasestorage.googleapis.com/v0/b/review-e9e60.appspot.com/o/users%2Fwelder.png_1693607513988?alt=media&token=00e3e1ae-7346-4a46-a6e3-efff849764b8",
+        ];
+
+        const randomIndex = Math.floor(Math.random() * profilePictureUrls.length);
+        return profilePictureUrls[randomIndex];
+      }
       const user = new User({
         email,
         password: hashPassword,
         username: initialUsername,
+        accountPhoto: getRandomProfilePicture(),
         roles: [userRole.value],
         registrationTime: new Date(),
         lastLoginTime: new Date(),
@@ -286,6 +297,21 @@ class authController {
       res.json(users);
     } catch (e) {
       console.log(e);
+    }
+  }
+  async getUser(req, res) {
+    try {
+      const userId = req.params.userId; 
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.json(user);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
     }
   }
   async blockUsers(req, res) {

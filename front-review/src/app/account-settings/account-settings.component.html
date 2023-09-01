@@ -17,7 +17,8 @@
   <div class="mt-4">
     <img [src]="profilePictureUrl" alt="Profile Picture" class="w-32 h-32 rounded-full border-2 border-primary">
   </div>
-
+  <input type="file" (change)="onFileSelected($event)" />     <button (click)="uploadImage()">Upload Image</button>  ,
+  <button (click)="setImage()">GET user data</button>
   <!-- Inputs: Name, Email, About Me -->
   <form class="mt-6 space-y-4">
     <mat-form-field appearance="fill">

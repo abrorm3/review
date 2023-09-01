@@ -30,6 +30,7 @@ router.get("/users", (req, res) => {
   }
   controller.getUsers(req, res); // Call the getUsers function from the controller
 });
+router.get("/user/:userId", controller.getUser);
 // router.get('/users', controller.getUsers)
 router.put("/users/:userId/block", controller.blockUser);
 router.put("/users/block", controller.blockUsers);

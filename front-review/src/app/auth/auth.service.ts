@@ -101,6 +101,9 @@ export class AuthService {
   getUserId(): string {
     return localStorage.getItem('userId');
   }
+  getUser():Observable<any>{
+    return this.http.get(`${this.backend}/auth/user/${this.getUserId()}`)
+  }
   checkUsernameAvailability(username: string): Observable<{ available: boolean }> {
     return this.http.get<{ available: boolean }>(`${this.backend}/auth/check-username/${username}`);
   }

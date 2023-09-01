@@ -8,7 +8,8 @@ export class ImageUploadService {
   constructor(private storage: AngularFireStorage) {}
 
   uploadImage(file: File, path: string): Promise<string> {
-    const storageRef = this.storage.ref(path);
+    const timestamp = new Date().getTime();
+    const storageRef = this.storage.ref(path + '/' + file.name+'_'+timestamp);
     const uploadTask = storageRef.put(file);
 
     return new Promise((resolve, reject) => {
