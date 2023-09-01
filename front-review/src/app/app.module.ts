@@ -23,13 +23,27 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideStorage,getStorage } from '@angular/fire/storage';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AccountSettingsComponent } from './account-settings/account-settings.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
 }
-
+const firebaseConfig = {
+  apiKey: "AIzaSyCdfXFyOtWeXMaX0VdUh7JsQdNq7Gcvi_I",
+  authDomain: "review-e9e60.firebaseapp.com",
+  projectId: "review-e9e60",
+  storageBucket: "review-e9e60.appspot.com",
+  messagingSenderId: "964716560862",
+  appId: "1:964716560862:web:44db28a2523ced4582dd4f",
+  measurementId: "G-J4GWQH2MNB"
+};
 @NgModule({
-  declarations: [AppComponent, AuthComponent],
+  declarations: [AppComponent, AuthComponent, AccountSettingsComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -54,6 +68,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatIconModule,
     MatProgressSpinnerModule,
     BrowserAnimationsModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideStorage(() => getStorage()),
+    AngularFireModule.initializeApp(firebaseConfig)
   ],
   providers: [
     {

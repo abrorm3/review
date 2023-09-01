@@ -1,0 +1,40 @@
+<!-- account-settings.component.html -->
+
+<div class="p-6">
+  <h1 class="text-2xl font-semibold mb-4">Settings</h1>
+
+  <!-- Username and Member Since Year -->
+  <div class="flex flex-col md:flex-row space-y-4 md:space-x-4">
+    <div class="md:w-1/2">
+      <p class="font-semibold">Username: {{ username }}</p>
+    </div>
+    <div class="md:w-1/2">
+      <p class="font-semibold">Member Since Year: {{ memberSince }}</p>
+    </div>
+  </div>
+
+  <!-- Profile Picture -->
+  <div class="mt-4">
+    <img [src]="profilePictureUrl" alt="Profile Picture" class="w-32 h-32 rounded-full border-2 border-primary">
+  </div>
+
+  <!-- Inputs: Name, Email, About Me -->
+  <form class="mt-6 space-y-4">
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput [(ngModel)]="name" name="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="email" name="email">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>About Me</mat-label>
+      <textarea matInput [(ngModel)]="aboutMe" name="aboutMe" rows="4"></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="saveSettings()">Save</button>
+  </form>
+</div>
