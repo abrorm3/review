@@ -57,38 +57,42 @@
           >
             {{ isLoginMode ? "Login" : "Sign Up" }}
           </button>
+          <button
+          mat-button
+          color="primary"
+          (click)="navigateToForgotPassword()"
+          class="mt-2"
+        >
+          Forgot Password
+        </button>
+
+
 
           <p class="mt-2 text-center md:mt-3 text-gray-600 arrow-text">
             or connect with
           </p>
-          <asl-google-signin-button
-            class="mt-2"
-            text="signin_with"
-            size="medium"
-          ></asl-google-signin-button>
+          <div class="flex items-center justify-center">
+            <asl-google-signin-button
+              class="mt-2 mr-3"
+              text="signin_with"
+              size="medium"
+            ></asl-google-signin-button>
 
-          <div
-            class="fb-login-button"
-            data-width=""
-            data-size=""
-            data-button-type=""
-            data-layout=""
-            data-auto-logout-link="false"
-            data-use-continue-as="false"
-            onlogin="handleFacebookLogin"
-          ></div>
-
+            <div
+              class="fb-login-button"
+              data-width=""
+              data-size=""
+              data-button-type=""
+              data-layout=""
+              data-auto-logout-link="false"
+              data-use-continue-as="false"
+              (login)="handleFacebookLogin($event)"
+            ></div>
+          </div>
           <div *ngIf="loggedIn">
             <h4>{{ user.name }}</h4>
           </div>
-          <button
-            mat-button
-            color="primary"
-            (click)="navigateToForgotPassword()"
-            class="mt-4"
-          >
-            Forgot Password
-          </button>
+
           <p class="mt-4 text-center text-gray-600">
             Switch to
             <span (click)="onSwitchMode()" class="text-sky-400 cursor-pointer">
