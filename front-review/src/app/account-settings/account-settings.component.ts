@@ -7,7 +7,7 @@ import { AuthService } from '../auth/auth.service';
   templateUrl: './account-settings.component.html',
   styleUrls: ['./account-settings.component.css'],
 })
-export class AccountSettingsComponent implements OnInit{
+export class AccountSettingsComponent implements OnInit {
   name: string = '';
   email: string = '';
   aboutMe: string = '';
@@ -17,13 +17,29 @@ export class AccountSettingsComponent implements OnInit{
 
   selectedFile: File | null = null;
 
-  constructor(private imageUploadService: ImageUploadService, private authService:AuthService) {}
+  constructor(
+    private imageUploadService: ImageUploadService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-
+    this.setInfo();
   }
   onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+    const file = event.target.files[0];
+
+    if (this.isImageFile(file)) {
+      this.selectedFile = file;
+      this.profilePictureUrl = URL.createObjectURL(file);
+
+    } else {
+      this.setInfo();
+      alert('Please select a valid image file.');
+    }
+  }
+  isImageFile(file: File): boolean {
+    const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp']; // Add more if needed
+    return allowedImageTypes.includes(file.type);
   }
 
   saveSettings() {}
@@ -40,10 +56,17 @@ export class AccountSettingsComponent implements OnInit{
         });
     }
   }
-  setImage(){
-    this.authService.getUser().subscribe((user)=>{
+  setInfo() {
+    this.authService.getUser().subscribe((user) => {
       console.log(user);
       this.profilePictureUrl = user.accountPhoto;
-    })
+      this.name = user.username;
+      this.email = user.email;
+      const memberDate = new Date(user.registrationTime);
+      const year = memberDate.getFullYear();
+      this.memberSince = year.toString();
+      this.username = user.username;
+      console.log(this.name);
+    });
   }
 }

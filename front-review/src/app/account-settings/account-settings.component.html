@@ -1,41 +1,103 @@
-<!-- account-settings.component.html -->
+<div class="flex text-white h-full bg-dark" id="container">
+  <div class="w-1/4">
+    <app-sidebar></app-sidebar>
+  </div>
+  <div class="flex flex-col w-3/5 mx-auto my-auto">
+    <h1 class="text-2xl font-semibold mb-8 text-5xl">Settings</h1>
+    <div
+      class="w-3/4 p-6 px-20 xl:container rounded-3xl mb-32 bg-dark-soft drop-shadow-2xl border border-black shadow-2xl"
+    >
+      <!-- Username, Member Since, and Save Button -->
+      <div
+        class="flex flex-col md:flex-row items-center space-y-4 md:space-x-4"
+      >
+        <div class="md:w-1/2 space-y-2 md:space-y-4">
+          <p class="font-semibold text-2xl">{{ username }}</p>
+          <p class="font-semibold">Member Since: {{ memberSince }}</p>
+        </div>
 
-<div class="p-6">
-  <h1 class="text-2xl font-semibold mb-4">Settings</h1>
+        <button
+          mat-raised-button
+          color="primary"
+          style="margin-left: auto"
+          (click)="saveSettings()"
+        >
+          Save
+        </button>
+      </div>
 
-  <!-- Username and Member Since Year -->
-  <div class="flex flex-col md:flex-row space-y-4 md:space-x-4">
-    <div class="md:w-1/2">
-      <p class="font-semibold">Username: {{ username }}</p>
-    </div>
-    <div class="md:w-1/2">
-      <p class="font-semibold">Member Since Year: {{ memberSince }}</p>
+      <!-- Dividing Arrow -->
+      <div class="border-t border-primary my-4"></div>
+
+      <!-- Profile Picture and About Me -->
+      <div
+        class="flex flex-col justify-between md:flex-row space-y-4 md:space-x-4 items-center"
+      >
+        <!-- Profile Picture -->
+        <div
+          class="group relative rounded-full border-2 border-primary flex flex-col items-center"
+        >
+          <img
+            [src]="profilePictureUrl"
+            alt="Profile Picture"
+            class="w-full h-full rounded-full"
+          />
+          <input
+            type="file"
+            id="fileInput"
+            (change)="onFileSelected($event)"
+            class="absolute inset-0 opacity-0 cursor-pointer"
+          />
+          <label
+            for="fileInput"
+            class="group-hover:bg-gray-800 cursor-pointer absolute bottom-2 bg-gray-600 px-12 h-14 text-white rounded-bl-full rounded-br-full flex items-center transition duration-300 ease-in-out"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 10l7-7m0 0l7 7m-7-7v18"
+              ></path>
+            </svg>
+            Upload
+          </label>
+        </div>
+
+        <!-- About Me -->
+        <mat-form-field class="md:w-1/2">
+          <mat-label>About Me</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="aboutMe"
+            name="aboutMe"
+            rows="1"
+          ></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- Name and Email -->
+      <div
+        class="flex flex-col md:flex-row space-y-4 md:space-x-4 items-center"
+      >
+        <!-- Name -->
+        <mat-form-field class="md:w-1/2">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="name" name="name" />
+        </mat-form-field>
+
+        <!-- Email -->
+        <mat-form-field class="md:w-1/2">
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="email" name="email" />
+        </mat-form-field>
+      </div>
     </div>
   </div>
-
-  <!-- Profile Picture -->
-  <div class="mt-4">
-    <img [src]="profilePictureUrl" alt="Profile Picture" class="w-32 h-32 rounded-full border-2 border-primary">
-  </div>
-  <input type="file" (change)="onFileSelected($event)" />     <button (click)="uploadImage()">Upload Image</button>  ,
-  <button (click)="setImage()">GET user data</button>
-  <!-- Inputs: Name, Email, About Me -->
-  <form class="mt-6 space-y-4">
-    <mat-form-field appearance="fill">
-      <mat-label>Name</mat-label>
-      <input matInput [(ngModel)]="name" name="name">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Email</mat-label>
-      <input matInput [(ngModel)]="email" name="email">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>About Me</mat-label>
-      <textarea matInput [(ngModel)]="aboutMe" name="aboutMe" rows="4"></textarea>
-    </mat-form-field>
-
-    <button mat-raised-button color="primary" (click)="saveSettings()">Save</button>
-  </form>
 </div>

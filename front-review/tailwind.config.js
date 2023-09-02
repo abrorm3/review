@@ -4,6 +4,10 @@ module.exports = {
   theme: {
     extend: {
       height: { 'auth': "540px" },
+      colors: {
+        'dark': "rgb(32 38 52)",
+        'dark-soft': "rgb(41 48 68)",
+      },
     },
   },
   plugins: [],
