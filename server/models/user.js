@@ -1,10 +1,12 @@
 const { Schema, model } = require('mongoose');
 
 const User = new Schema({
+    name:{type: String, default:''},
     email: { type: String, unique: true, required: true },
-    password: { type: String, required: true },
+    aboutUser:{ type: String, default: ''},
+    profilePictureUrl: { type: String, default:''},
     username: {type: String, required: true},
-    accountPhoto: { type: String, required: false},
+    password: { type: String, required: true },
     roles: [{ type: String, ref: 'Role' }],
     lastLoginTime: { type: Date, default: null },
     registrationTime: { type: Date, default: null },

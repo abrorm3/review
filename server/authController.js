@@ -52,7 +52,8 @@ class authController {
         email,
         password: hashPassword,
         username: initialUsername,
-        accountPhoto: getRandomProfilePicture(),
+        profilePictureUrl: getRandomProfilePicture(),
+        aboutUser:'',
         roles: [userRole.value],
         registrationTime: new Date(),
         lastLoginTime: new Date(),
@@ -87,6 +88,55 @@ class authController {
       return res.status(500).json({ message: "An error occurred" });
     }
   }
+  async updateUserInfo(req, res) {
+    try {
+      const { userId } = req.body;
+      const {
+        name,
+        email,
+        aboutUser,
+        profilePictureUrl,
+        username,
+      } = req.body;
+      
+      const existingUser = await User.findOne({ email });
+      if (existingUser && existingUser._id.toString() !== userId) {
+        return res.status(400).json({ message: "Email is already in use" });
+      }
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: userId },
+        {
+          $set: {
+            name: name,
+            email: email,
+            aboutUser: aboutUser,
+            profilePictureUrl: profilePictureUrl,
+            username: username.toLowerCase(),
+          },
+        },
+        { new: true }
+      );
+  
+      if (!updatedUser) {
+        console.error("User not found");
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      if (updatedUser.validationErrors) {
+        // Check for validation errors and log them
+        console.error("Validation errors:", updatedUser.validationErrors);
+        return res.status(400).json({ message: "Validation errors", errors: updatedUser.validationErrors });
+      }
+  
+      console.log("User information updated successfully:", updatedUser);
+      return res.status(200).json({ message: "User information updated successfully" });
+    } catch (error) {
+      console.error("Error updating user information:", error);
+      return res.status(500).json({ message: "An error occurred" });
+    }
+  }
+  
+  
   async forgotPassword(req, res) {
     const { email } = req.body;
 
@@ -289,7 +339,7 @@ class authController {
       // await userRole.save()
       // await adminRole.save()
       // await blockRole.save()
-      const user = User;
+      // const user = User;
       if (req.isBlocked) {
         return res.redirect("/auth"); // Redirect the blocked user to /auth
       }

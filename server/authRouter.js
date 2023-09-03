@@ -19,6 +19,7 @@ router.post(
   controller.registration
 );
 router.post("/update-username", controller.updateUsername);
+router.post("/update-user-info", controller.updateUserInfo)
 router.get("/check-username/:username", controller.checkUsernameAvailability);
 router.post("/forgot-password",controller.forgotPassword);
 router.get("/reset-password/:id/:token", controller.resetPassword)

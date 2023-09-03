@@ -5,25 +5,24 @@ import { AuthRequest, AuthResponse } from './auth.model';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class AuthService {
-
   backend = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   login(credentials: AuthRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.backend}/auth/login`, credentials)
+    return this.http
+      .post<AuthResponse>(`${this.backend}/auth/login`, credentials)
       .pipe(
-        catchError(error => {
+        catchError((error) => {
           if (error.status === 403 && error.error.isBlocked) {
             return throwError(error.error.message);
           }
           return this.handleError(error);
         }),
-        map(response => {
+        map((response) => {
           if (response.token) {
             this.setAuthToken(response.token);
             this.setUserId(response.userId);
@@ -33,34 +32,64 @@ export class AuthService {
       );
   }
 
-
-  signup(credentials:AuthRequest){
-    return this.http.post<AuthResponse>(`${this.backend}/auth/registration`, credentials)
-    .pipe(
-      catchError(this.handleError),
-      map(response => {
-        if (response.token) {
-          this.setAuthToken(response.token);
-        }
-        if (response.userId) {
-          this.setUserId(response.userId);
-        }
-        return response;
-      })
-    )
+  signup(credentials: AuthRequest) {
+    return this.http
+      .post<AuthResponse>(`${this.backend}/auth/registration`, credentials)
+      .pipe(
+        catchError(this.handleError),
+        map((response) => {
+          if (response.token) {
+            this.setAuthToken(response.token);
+          }
+          if (response.userId) {
+            this.setUserId(response.userId);
+          }
+          return response;
+        })
+      );
   }
-  updateUsername(userId: string, newUsername: string):Observable<any>{
+  updateUsername(userId: string, newUsername: string): Observable<any> {
     const requestBody = { userId, newUsername };
-    console.log(requestBody.userId + " from service");
-    console.log(requestBody.newUsername + " from service");
+    console.log(requestBody.userId + ' from service');
+    console.log(requestBody.newUsername + ' from service');
 
-    return this.http.post(`${this.backend}/auth/update-username`, requestBody).pipe(catchError(this.handleError),
-    map(response => {
-      console.log(response + " got response!!");
-      return response;
-    }))
+    return this.http
+      .post(`${this.backend}/auth/update-username`, requestBody)
+      .pipe(
+        catchError(this.handleError),
+        map((response) => {
+          console.log(response + ' got response!!');
+          return response;
+        })
+      );
   }
-  logout(){
+  updateAllInfo(
+    userId: string,
+    name: string,
+    email: string,
+    aboutUser: string,
+    profilePictureUrl,
+    username: string
+  ): Observable<any> {
+    console.log('lastt '+ profilePictureUrl);
+
+    const requestBody = {
+      userId,
+      name,
+      email,
+      aboutUser,
+      profilePictureUrl,
+      username,
+    };
+
+
+    return this.http.post(
+      `${this.backend}/auth/update-user-info`,
+      requestBody
+    );
+  }
+
+  logout() {
     this.removeAuthToken();
   }
   setAuthToken(token: string): void {
@@ -91,7 +120,7 @@ export class AuthService {
   //     catchError(this.handleError)
   //   );
   // }
-  private handleError(errorRes: HttpErrorResponse){
+  private handleError(errorRes: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
     if (errorRes.error && errorRes.error.message) {
       errorMessage = errorRes.error.message;
@@ -101,17 +130,24 @@ export class AuthService {
   getUserId(): string {
     return localStorage.getItem('userId');
   }
-  getUser():Observable<any>{
-    return this.http.get(`${this.backend}/auth/user/${this.getUserId()}`)
+  getUser(): Observable<any> {
+    return this.http.get(`${this.backend}/auth/user/${this.getUserId()}`);
   }
-  checkUsernameAvailability(username: string): Observable<{ available: boolean }> {
-    return this.http.get<{ available: boolean }>(`${this.backend}/auth/check-username/${username}`);
+  checkUsernameAvailability(
+    username: string
+  ): Observable<{ available: boolean }> {
+    return this.http.get<{ available: boolean }>(
+      `${this.backend}/auth/check-username/${username}`
+    );
   }
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.backend}/auth/forgot-password`, { email });
   }
 
   resetPassword(id: string, token: string, password: string): Observable<any> {
-    return this.http.post(`${this.backend}/auth/reset-password/${id}/${token}`, { password });
+    return this.http.post(
+      `${this.backend}/auth/reset-password/${id}/${token}`,
+      { password }
+    );
   }
 }
