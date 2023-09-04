@@ -27,7 +27,6 @@ import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideStorage,getStorage } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 

@@ -95,7 +95,7 @@ class authController {
         name,
         email,
         aboutUser,
-        profilePictureUrl,
+        profilePictureUrl, 
         username,
       } = req.body;
       
@@ -103,17 +103,21 @@ class authController {
       if (existingUser && existingUser._id.toString() !== userId) {
         return res.status(400).json({ message: "Email is already in use" });
       }
+      
+      const updateFields = {
+        name: name,
+        email: email,
+        aboutUser: aboutUser,
+        username: username.toLowerCase(),
+      };
+      
+      if (profilePictureUrl.trim() !== '') {
+        updateFields.profilePictureUrl = profilePictureUrl;
+      }
+      
       const updatedUser = await User.findOneAndUpdate(
         { _id: userId },
-        {
-          $set: {
-            name: name,
-            email: email,
-            aboutUser: aboutUser,
-            profilePictureUrl: profilePictureUrl,
-            username: username.toLowerCase(),
-          },
-        },
+        { $set: updateFields }, // Use the updateFields object
         { new: true }
       );
   

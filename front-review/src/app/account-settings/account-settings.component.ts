@@ -17,6 +17,7 @@ export class AccountSettingsComponent implements OnInit {
   profilePictureUrl: string = '';
   downloadImg: string = '';
   isLoading: boolean = false;
+  imageChanged:boolean = false;
 
   errorMessage: string = '';
   successMessage:string='';
@@ -39,6 +40,7 @@ export class AccountSettingsComponent implements OnInit {
     if (this.isImageFile(file)) {
       this.selectedFile = file;
       this.imgRender = URL.createObjectURL(file);
+      this.imageChanged = true;
     } else {
       this.setInfo();
       this.errorMessage='Please select a valid image file.';
@@ -51,8 +53,7 @@ export class AccountSettingsComponent implements OnInit {
       'image/png',
       'image/gif',
       'image/bmp',
-      'image/webp',
-    ]; // Add more if needed
+    ];
     return allowedImageTypes.includes(file.type);
   }
   async saveSettings() {
@@ -71,12 +72,14 @@ export class AccountSettingsComponent implements OnInit {
         .subscribe({
           next: (response) => {
             this.successMessage = response.message;
+            this.isLoading=false;
           },
           error: (error) => {
             this.errorMessage = error.error.message;
+            this.isLoading=false;
           },
-        })
-        this.isLoading=false;
+        }
+        )
     } catch (err) {
       console.error('Error uploading image:', err);
       // this.isLoading=false;
