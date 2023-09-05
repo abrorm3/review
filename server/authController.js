@@ -103,10 +103,21 @@ class authController {
       if (existingUser && existingUser._id.toString() !== userId) {
         return res.status(400).json({ message: "Email is already in use" });
       }
-      
+      function capitalizeString(string){
+        const words = string.split(' ');
+        const capitalizeWords = words.map(word=>{
+          if (word.length > 0) {
+            const firstLetter = word.charAt(0).toUpperCase();
+            const restOfString = word.slice(1).toLowerCase();
+            return firstLetter + restOfString;
+        }
+        return word; 
+        })
+        return capitalizeWords.join(' ');
+      }
       const updateFields = {
-        name: name,
-        email: email,
+        name: capitalizeString(name),
+        email: email.toLowerCase(),
         aboutUser: aboutUser,
         username: username.toLowerCase(),
       };
