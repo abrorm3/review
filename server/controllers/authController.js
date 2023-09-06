@@ -1,10 +1,10 @@
-const User = require("./models/user");
-const Role = require("./models/role");
+const User = require("../models/user");
+const Role = require("../models/role");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { MongoClient, ObjectId } = require("mongodb");
 const { validationResult } = require("express-validator");
-const { secret } = require("./config");
+const { secret } = require("../config");
 const nodemailer = require("nodemailer");
 const uri = process.env.frontDeployUrl;
 

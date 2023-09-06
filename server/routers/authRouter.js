@@ -1,11 +1,10 @@
 const express = require("express");
 require("dotenv").config();
-const Router = require("express");
-const controller = require("./authController");
+const controller = require("../controllers/authController");
 const passport = require("passport");
 const { check } = require("express-validator");
-const authMiddleware = require("./middleware/authMiddleware");
-const roleMiddleware = require("./middleware/roleMiddleware");
+const authMiddleware = require("../middleware/authMiddleware");
+const roleMiddleware = require("../middleware/roleMiddleware");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 const router = express.Router();
