@@ -29,6 +29,7 @@ import { provideStorage,getStorage } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
+import { CreateReviewComponent } from './create-review/create-review.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -43,7 +44,7 @@ const firebaseConfig = {
   measurementId: "G-J4GWQH2MNB"
 };
 @NgModule({
-  declarations: [AppComponent, AuthComponent, AccountSettingsComponent, SidebarComponent],
+  declarations: [AppComponent, AuthComponent, AccountSettingsComponent, SidebarComponent, CreateReviewComponent],
   imports: [
     BrowserModule,
     HttpClientModule,

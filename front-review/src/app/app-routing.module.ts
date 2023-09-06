@@ -6,6 +6,7 @@ import { AuthGuardService } from './auth/auth.guard';
 import { ForgotPasswordComponent } from './auth/passwordRecovery/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './auth/passwordRecovery/reset-password/reset-password.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { CreateReviewComponent } from './create-review/create-review.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/feed', pathMatch: 'full' },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password/:id/:token', component: ResetPasswordComponent },
   { path: 'account/settings', component: AccountSettingsComponent },
+  {path:'create-review',component:CreateReviewComponent}
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

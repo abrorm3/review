@@ -1,0 +1,13 @@
+<div class="flex text-white h-full bg-dark" id="container">
+  <div class="w-1/4">
+    <app-sidebar></app-sidebar>
+  </div>
+  <div class="flex flex-col w-3/5 mx-auto my-auto">
+    <h2>Create new Review</h2>
+    <form (ngSubmit)="submitReview(createReview)" #createReview="ngForm" >
+      <input type="text" placeholder="Review Name" name="name">
+      
+    </form>
+
+  </div>
+</div>
