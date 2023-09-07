@@ -1,10 +1,12 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const artSchema = new Schema({
-    title: { type: String, required: true },
-    type: { type: Schema.Types.ObjectId, ref: 'GroupType', required: true },
+
+const artSchema = new mongoose.Schema({
+    title: { type: String, required: true, unique: true },
+    type: { type: String, ref: 'GroupType', required: true },
     author:{type:String, required: false},
     director:{type:String, required: false},
 });
 
-module.exports = model('Art', artSchema);
+module.exports = mongoose.model('Art', artSchema);

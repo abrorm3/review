@@ -27,9 +27,8 @@ import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideStorage,getStorage } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AccountSettingsComponent } from './account-settings/account-settings.component';
-import { SidebarComponent } from './shared/sidebar/sidebar.component';
-import { CreateReviewComponent } from './create-review/create-review.component';
+import { ReviewModule } from './create-review/review.module';
+import { MarkdownModule } from 'ngx-markdown';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -44,16 +43,20 @@ const firebaseConfig = {
   measurementId: "G-J4GWQH2MNB"
 };
 @NgModule({
-  declarations: [AppComponent, AuthComponent, AccountSettingsComponent, SidebarComponent, CreateReviewComponent],
+  declarations: [AppComponent, AuthComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
     TranslationModule,
     AuthModule,
+    ReviewModule,
+    FormsModule,
     ReactiveFormsModule,
     SocialLoginModule,
     GoogleSigninButtonModule,
-    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MarkdownModule.forRoot(),
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {

@@ -1,0 +1,12 @@
+<!-- rating.component.html -->
+<div class="rating" [(ngModel)]="rating" name="rating">
+  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+    <span
+      class="star"
+      [class.full]="star <= rating"
+      (click)="setRating(star)"
+    >
+      &#9733;
+    </span>
+  </ng-container>
+</div>

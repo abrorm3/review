@@ -1,13 +1,68 @@
 <div class="flex text-white h-full bg-dark" id="container">
   <div class="w-1/4">
+    <!-- Sidebar component -->
     <app-sidebar></app-sidebar>
   </div>
   <div class="flex flex-col w-3/5 mx-auto my-auto">
     <h2>Create new Review</h2>
-    <form (ngSubmit)="submitReview(createReview)" #createReview="ngForm" >
-      <input type="text" placeholder="Review Name" name="name">
-      
-    </form>
+    <form (ngSubmit)="submitReview()" [formGroup]="createReviewForm">
+      <!-- Review Name -->
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Review Title"
+          required
+        />
+      </mat-form-field>
 
+      <!-- <mat-form-field>
+        <input
+          matInput
+          placeholder="Name of composition"
+          name="composition"
+          ngModel
+        />
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let composition of compositionSuggestions"
+            [value]="composition"
+          >
+            {{ composition }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field> -->
+
+      <mat-form-field>
+        <mat-label>Group Type</mat-label>
+        <input
+          type="text"
+          placeholder="Pick one"
+          [formControl]="createReview"
+          matInput
+          [matAutocomplete]="auto"
+        />
+
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let option of filteredOptions | async"
+            [value]="option"
+          >
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <!-- <app-auto-complete [(ngModel)]="selectedTags" [ngModelOptions]="{ standalone: true }"></app-auto-complete> -->
+
+      <!-- <app-markdown-editor [(ngModel)]="markdownContent"></app-markdown-editor> -->
+
+      <!-- <mat-form-field>
+        <mat-label>Images</mat-label>
+        <input type="file" (change)="onFileSelected($event)" multiple>
+      </mat-form-field>
+
+      <app-rating [(ngModel)]="selectedRating"></app-rating>
+
+      <button mat-raised-button type="submit">Submit Review</button> -->
+    </form>
   </div>
 </div>

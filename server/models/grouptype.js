@@ -1,7 +1,8 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
-const groupTypeSchema = new Schema({
+
+const groupTypeSchema = new mongoose.Schema({
     name: { type: String, unique: true, required: true }
 });
 
-module.exports = model('GroupType', groupTypeSchema);
+module.exports = mongoose.model('GroupType', groupTypeSchema);
