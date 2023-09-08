@@ -11,25 +11,31 @@ const Review = require("../models/review");
 class createReviewController {
   async createReview(req, res) {
     try {
-      const setGroupType = await GroupType.findOne({name:'Movie'})
-      const newArt = new Art({
-        title: "Oppenheimer",
-        type: setGroupType,
-      });
-
+      let reqArt = await Art.findOne({title:req.body.art})
+      if(!reqArt){
+        reqArt = new Art({
+          title: req.body.art,
+          type: req.body.group,
+        })
+        await reqArt.save();
+      }
+      const groupType = await GroupType.findOne({name:req.body.group})
+      if (!groupType) {
+        return res.status(404).json({ message: "GroupType not found" });
+      }
       // const newGroupType = new GroupType({
-      //   name: "Movie",
+      //   name: "Anime",
       // });
 
-      await newArt.save();
+      // await newArt.save();
       // await newGroupType.save();
-    const art = await Art.findOne({ title: "Oppenheimer" });
+    // const art = await Art.findOne({ title: "Oppenheimer" });
     // const groupType = await GroupType.findOne({ name: "Movie" });
       const newReview = new Review({
-        name: "Oppenheimer, 2023",
-        art: art.title, // Reference the 'Art' instance
-        group: art.type, // Reference the 'GroupType' instance
-        description:" During World War II, Lt. Gen. Leslie Groves Jr. appoints physicist J. Robert Oppenheimer to work on the top-secret Manhattan Project. Oppenheimer and a team of scientists spend years developing and designing the atomic bomb. Their work comes to fruition on July 16,"
+        name: req.body.name,
+        art: req.body.art,
+        group: groupType, 
+        description:req.body.description
       });
 
       await newReview.save();
