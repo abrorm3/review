@@ -8,29 +8,13 @@
     <form (ngSubmit)="submitReview()" [formGroup]="createReviewForm">
       <!-- Review Name -->
       <mat-form-field>
+        <mat-label>Title</mat-label>
         <input
           matInput
           placeholder="Review Title"
           required
         />
       </mat-form-field>
-
-      <!-- <mat-form-field>
-        <input
-          matInput
-          placeholder="Name of composition"
-          name="composition"
-          ngModel
-        />
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option
-            *ngFor="let composition of compositionSuggestions"
-            [value]="composition"
-          >
-            {{ composition }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field> -->
 
       <mat-form-field>
         <mat-label>Group Type</mat-label>
@@ -40,6 +24,7 @@
           [formControl]="groupTypeControl"
           matInput
           [matAutocomplete]="groupTypeAuto"
+          required
         />
 
         <mat-autocomplete #groupTypeAuto="matAutocomplete">
@@ -47,20 +32,22 @@
             *ngFor="let option of filteredOptions | async"
             [value]="option"
           >
-            {{ capitalizeFirstLetter(option) }}
+            {{ option }}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
       <mat-form-field>
+        <mat-label>Art</mat-label>
         <input
           matInput
-          placeholder="Art"
+          placeholder="Pick or type new"
           [formControl]="artControl"
           [matAutocomplete]="artAuto"
+          required
         />
         <mat-autocomplete #artAuto="matAutocomplete">
           <mat-option *ngFor="let art of filteredArts | async" [value]="art">
-            {{ capitalizeFirstLetter(art) }}
+            {{ art }}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

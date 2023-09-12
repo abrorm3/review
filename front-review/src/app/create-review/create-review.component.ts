@@ -46,14 +46,14 @@ export class CreateReviewComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return this.groupTypes
-      .map((groupType) => groupType.name.toLowerCase()) // Extract names and convert to lowercase
+      .map((groupType) => this.capitalizeFirstLetter(groupType.name)) // Extract names and convert to lowercase
       .filter((option) => option.includes(filterValue));
   }
   private _filterArts(value: string): string[] {
     // Filter the arts based on user input
     const filterValue = value.toLowerCase();
     return this.artTypes
-      .map((art) => art.title.toLowerCase()) // Extract art titles and convert to lowercase
+      .map((art) => this.capitalizeFirstLetter(art.title)) // Extract art titles and convert to lowercase
       .filter((title) => title.includes(filterValue));
   }
 
