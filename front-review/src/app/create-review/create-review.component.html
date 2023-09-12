@@ -37,20 +37,34 @@
         <input
           type="text"
           placeholder="Pick one"
-          [formControl]="createReview"
+          [formControl]="groupTypeControl"
           matInput
-          [matAutocomplete]="auto"
+          [matAutocomplete]="groupTypeAuto"
         />
 
-        <mat-autocomplete #auto="matAutocomplete">
+        <mat-autocomplete #groupTypeAuto="matAutocomplete">
           <mat-option
             *ngFor="let option of filteredOptions | async"
             [value]="option"
           >
-            {{ option }}
+            {{ capitalizeFirstLetter(option) }}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Art"
+          [formControl]="artControl"
+          [matAutocomplete]="artAuto"
+        />
+        <mat-autocomplete #artAuto="matAutocomplete">
+          <mat-option *ngFor="let art of filteredArts | async" [value]="art">
+            {{ capitalizeFirstLetter(art) }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
       <!-- <app-auto-complete [(ngModel)]="selectedTags" [ngModelOptions]="{ standalone: true }"></app-auto-complete> -->
 
       <!-- <app-markdown-editor [(ngModel)]="markdownContent"></app-markdown-editor> -->

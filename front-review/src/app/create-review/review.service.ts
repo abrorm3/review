@@ -9,7 +9,10 @@ export class ReviewService {
   backend = environment.apiBaseUrl;
   constructor(private http:HttpClient) { }
 
-  fetchGroupType(){
+  fetchGroupArt(){
+    return this.http.get(`${this.backend}/review/fetch-review-models`)
+  }
+  fetchArt(){
     return this.http.get(`${this.backend}/review/fetch-review-models`)
   }
 }

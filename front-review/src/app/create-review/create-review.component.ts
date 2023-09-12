@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { ReviewService } from './review.service';
 import { GroupType } from '../shared/interfaces/group-type.model';
+import { Art } from '../shared/interfaces/art.model';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-create-review',
@@ -10,54 +12,79 @@ import { GroupType } from '../shared/interfaces/group-type.model';
   styleUrls: ['./create-review.component.css'],
 })
 export class CreateReviewComponent implements OnInit {
+  @ViewChild('groupTypeAuto') groupTypeAuto: MatAutocompleteTrigger;
+  @ViewChild('artAuto') artAuto: MatAutocompleteTrigger;
+
   groupTypes: GroupType[] = [];
-  artTypes: ArtType[] = [];
+  artTypes: Art[] = [];
 
   selectedRating: number = 0;
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
+  filteredArts: Observable<string[]>;
   createReviewForm = new FormGroup({});
-  createReview = new FormControl('')
+  groupTypeControl = new FormControl('');
+  artControl = new FormControl();
   selectedTags: string[] = [];
   markdownContent: string = '';
-  constructor(private reviewService:ReviewService) {}
+  constructor(private reviewService: ReviewService) {}
 
   ngOnInit(): void {
-    this.filteredOptions = this.createReview.valueChanges.pipe(
+    this.getGroupTypes();
+    this.getArts();
+    this.filteredOptions = this.groupTypeControl.valueChanges.pipe(
       startWith(''),
-      map((value) => this._filter(value || ''))
+      map((value) => this._filterGroupTypes(value || ''))
     );
+    this.filteredArts = this.artControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterArts(value))
+    );
+
   }
-  private _filter(value: string): string[] {
+  private _filterGroupTypes(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.options.filter((option) =>
-      option.toLowerCase().includes(filterValue)
-    );
+    return this.groupTypes
+      .map((groupType) => groupType.name.toLowerCase()) // Extract names and convert to lowercase
+      .filter((option) => option.includes(filterValue));
   }
-  getGroupTypes(){
-    this.reviewService.fetchGroupType().subscribe({
-      next:
-      (response: any) => {
+  private _filterArts(value: string): string[] {
+    // Filter the arts based on user input
+    const filterValue = value.toLowerCase();
+    return this.artTypes
+      .map((art) => art.title.toLowerCase()) // Extract art titles and convert to lowercase
+      .filter((title) => title.includes(filterValue));
+  }
+
+
+  getGroupTypes() {
+    this.reviewService.fetchGroupArt().subscribe({
+      next: (response: any) => {
         // Assuming your backend response matches the structure you provided
-        this.groupTypes = response.groupTypes as GroupType[];
+        this.groupTypes = response.groupType as GroupType[];
+        console.log(this.groupTypes);
       },
-      error:
-      (error) => {
+      error: (error) => {
         console.error('Error fetching GroupTypes and ArtTypes:', error);
-      }
-  })}
-  getArts(){
-    this.reviewService.fetchGroupType().subscribe({
-      next:
-      (response: any) => {
-        this.artTypes = response.artTypes as ArtType[];
       },
-      error:
-      (error) => {
+    });
+
+  }
+  getArts() {
+    this.reviewService.fetchGroupArt().subscribe({
+      next: (response: any) => {
+        this.artTypes = response.art as Art[];
+        console.log(response);
+      },
+      error: (error) => {
         console.error('Error fetching GroupTypes and ArtTypes:', error);
-      }
-  })}
+      },
+    });
+  }
+  capitalizeFirstLetter(value: string): string {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
 
   submitReview() {}
   onFileSelected(number) {}

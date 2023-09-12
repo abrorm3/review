@@ -35,7 +35,8 @@ class createReviewController {
         name: req.body.name,
         art: req.body.art,
         group: groupType, 
-        description:req.body.description
+        description:req.body.description,
+        authorRate: req.body.authorRate,
       });
 
       await newReview.save();
@@ -59,6 +60,25 @@ class createReviewController {
       return res.status(500).json({message:err.message})
     }
   }
+  async calculateAverageRatingForArt(artTitle) {
+    try {
+      // Find all reviews for the given artTitle
+      const reviews = await Review.find({ art: artTitle });
+  
+      if (reviews.length === 0) {
+        return 0; 
+      }
+      const totalRating = reviews.reduce((acc, review) => acc + review.authorRate, 0);
+  
+      const averageRating = totalRating / reviews.length;
+  
+      return averageRating;
+    } catch (error) {
+      throw error;
+    }
+  }
+  
 }
+
 
 module.exports = new createReviewController();
