@@ -9,7 +9,7 @@
       <!-- Review Name -->
       <mat-form-field>
         <mat-label>Title</mat-label>
-        <input matInput placeholder="Review Title" required />
+        <input matInput placeholder="Your Review title" required />
       </mat-form-field>
 
       <mat-form-field>
@@ -48,14 +48,22 @@
         </mat-autocomplete>
       </mat-form-field>
       <!-- Tags -->
-      <mat-form-field>
+      <mat-form-field class="tagField">
         <mat-label>Tags</mat-label>
-        <input type="text" matInput placeholder="Pick tags or type new"
-        [formControl]="tagControl"
-        [matAutocomplete]="tagAuto"
-        >
-        <mat-autocomplete #tagAuto="matAutocomplete">
-          <mat-option *ngFor="let tag of filteredTags | async" value="tag">
+        <mat-chip-grid #chipGrid aria-label="Tag selection">
+          <mat-chip-row *ngFor="let tag of tags" (removed)="remove(tag)">
+            {{tag}}
+            <button matChipRemove [attr.aria-label]="'remove ' + tag">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        </mat-chip-grid>
+        <input placeholder="New Tags..." #tagInput [formControl]="tagCtrl"
+          [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="add($event)"/>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
             {{tag}}
           </mat-option>
         </mat-autocomplete>

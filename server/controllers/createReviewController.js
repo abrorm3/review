@@ -35,6 +35,7 @@ class createReviewController {
         name: req.body.name,
         art: req.body.art,
         group: groupType, 
+        tags:req.body.tags,
         description:req.body.description,
         authorRate: req.body.authorRate,
       });
@@ -75,6 +76,14 @@ class createReviewController {
       return averageRating;
     } catch (error) {
       throw error;
+    }
+  }
+  async fetchAllTags(req, res) {
+    try {
+      const uniqueTags = await Review.distinct("tags");
+      return res.json({ tags: uniqueTags });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
     }
   }
   

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CreateReviewComponent } from './create-review.component';
-import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownEditorComponent } from './markdown-editor/markdown-editor.component';
 import { RatingComponent } from './rating/rating.component';
@@ -12,15 +11,18 @@ import { AccountSettingsComponent } from '../account-settings/account-settings.c
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { TagsComponent } from './tags/tags.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
     CreateReviewComponent,
-    AutoCompleteComponent,
     MarkdownEditorComponent,
     RatingComponent,
     SidebarComponent,
     AccountSettingsComponent,
+    TagsComponent
   ],
   imports: [
     CommonModule,
@@ -31,6 +33,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
+    MatChipsModule,
+    MatIconModule
   ],
 })
 export class ReviewModule {}

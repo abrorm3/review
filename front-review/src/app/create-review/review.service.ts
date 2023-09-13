@@ -12,7 +12,7 @@ export class ReviewService {
   fetchGroupArt(){
     return this.http.get(`${this.backend}/review/fetch-review-models`)
   }
-  fetchArt(){
-    return this.http.get(`${this.backend}/review/fetch-review-models`)
+  fetchAllTags(){
+    return this.http.get(`${this.backend}/review/fetch-tags`)
   }
 }
