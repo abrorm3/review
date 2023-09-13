@@ -9,11 +9,7 @@
       <!-- Review Name -->
       <mat-form-field>
         <mat-label>Title</mat-label>
-        <input
-          matInput
-          placeholder="Review Title"
-          required
-        />
+        <input matInput placeholder="Review Title" required />
       </mat-form-field>
 
       <mat-form-field>
@@ -51,8 +47,19 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-
-      <!-- <app-auto-complete [(ngModel)]="selectedTags" [ngModelOptions]="{ standalone: true }"></app-auto-complete> -->
+      <!-- Tags -->
+      <mat-form-field>
+        <mat-label>Tags</mat-label>
+        <input type="text" matInput placeholder="Pick tags or type new"
+        [formControl]="tagControl"
+        [matAutocomplete]="tagAuto"
+        >
+        <mat-autocomplete #tagAuto="matAutocomplete">
+          <mat-option *ngFor="let tag of filteredTags | async" value="tag">
+            {{tag}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
 
       <!-- <app-markdown-editor [(ngModel)]="markdownContent"></app-markdown-editor> -->
 

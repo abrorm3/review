@@ -15,16 +15,21 @@ export class CreateReviewComponent implements OnInit {
   @ViewChild('groupTypeAuto') groupTypeAuto: MatAutocompleteTrigger;
   @ViewChild('artAuto') artAuto: MatAutocompleteTrigger;
 
-  groupTypes: GroupType[] = [];
-  artTypes: Art[] = [];
 
-  selectedRating: number = 0;
-  options: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
   filteredArts: Observable<string[]>;
+  filteredTags: Observable<string[]>;
+
   createReviewForm = new FormGroup({});
   groupTypeControl = new FormControl('');
   artControl = new FormControl();
+  tagControl = new FormControl();
+
+  groupTypes: GroupType[] = [];
+  artTypes: Art[] = [];
+  tags: any[]=[]
+  selectedRating: number = 0;
+  options: string[] = ['One', 'Two', 'Three'];
   selectedTags: string[] = [];
   markdownContent: string = '';
   constructor(private reviewService: ReviewService) {}
@@ -40,23 +45,29 @@ export class CreateReviewComponent implements OnInit {
       startWith(''),
       map((value) => this._filterArts(value))
     );
-
+    this.filteredTags = this.tagControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterTags(value))
+    )
   }
   private _filterGroupTypes(value: string): string[] {
     const filterValue = value.toLowerCase();
-
     return this.groupTypes
-      .map((groupType) => this.capitalizeFirstLetter(groupType.name)) // Extract names and convert to lowercase
+      .map((groupType) => this.capitalizeFirstLetter(groupType.name))
       .filter((option) => option.includes(filterValue));
   }
   private _filterArts(value: string): string[] {
-    // Filter the arts based on user input
     const filterValue = value.toLowerCase();
     return this.artTypes
-      .map((art) => this.capitalizeFirstLetter(art.title)) // Extract art titles and convert to lowercase
+      .map((art) => this.capitalizeFirstLetter(art.title))
       .filter((title) => title.includes(filterValue));
   }
-
+  private _filterTags(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.artTypes
+      .map((tag) => this.capitalizeFirstLetter(tag.title))
+      .filter((title) => title.includes(filterValue));
+  }
 
   getGroupTypes() {
     this.reviewService.fetchGroupArt().subscribe({
@@ -69,7 +80,6 @@ export class CreateReviewComponent implements OnInit {
         console.error('Error fetching GroupTypes and ArtTypes:', error);
       },
     });
-
   }
   getArts() {
     this.reviewService.fetchGroupArt().subscribe({
