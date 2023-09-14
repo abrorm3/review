@@ -101,10 +101,15 @@
         />
       </mat-form-field>
     </div>
-    <div class="res-message h-5">
-      <p *ngIf="resMessage">{{resMessage}}</p>
-    </div>
-      <button mat-raised-button color="primary" type="submit">Submit Review</button>
+    <div class="res-message h-5 flex items-center justify-center">
+      <!-- <mat-spinner class="custom-spinner"></mat-spinner> -->
+      <ng-container *ngIf="isLoading; else result">
+        <mat-spinner class="custom-spinner"></mat-spinner>
+      </ng-container>
+      <ng-template #result>
+        <p *ngIf="resMessage" class="text-center" [ngClass]="{'text-red-500': isError, 'text-green-500': isSuccess}">{{ resMessage }}</p>
+      </ng-template></div>
+      <button mat-raised-button color="primary" type="submit" class="mt-2">Submit Review</button>
     </form>
   </div>
 </div>

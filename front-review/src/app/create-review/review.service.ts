@@ -10,7 +10,7 @@ export class ReviewService {
   backend = environment.apiBaseUrl;
   constructor(private http:HttpClient) { }
 
-  sendReview(details: { authorId: string; name: string; group: string; art: any; content: string; authorRate: number; tags: string; }){
+  sendReview(details: { authorId: string; name: string; group: string; art: any; content: string; authorRate: number; tags: string[]; }){
     console.log('Sending request:', details);
     return this.http.post(`${this.backend}/review/create-review`, details)
     .pipe(

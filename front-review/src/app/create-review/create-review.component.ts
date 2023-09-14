@@ -33,8 +33,11 @@ export class CreateReviewComponent implements OnInit {
   announcer = inject(LiveAnnouncer);
   userId = '';
   editorConfig = editorConfig;
-  formSubmitted = false;
-  resMessage:String = '';
+
+  resMessage: String = '';
+  isError: boolean = false;
+  isSuccess: boolean = false;
+  isLoading = false;
 
   filteredOptions: Observable<string[]>;
   filteredArts: Observable<string[]>;
@@ -86,7 +89,6 @@ export class CreateReviewComponent implements OnInit {
     this.getGroupTypes();
     this.getArts();
     this.getAllTags();
-
   }
   getUserInfo() {
     this.userId = this.authService.getUserId();
@@ -151,20 +153,43 @@ export class CreateReviewComponent implements OnInit {
   }
 
   submitReview() {
-    console.log('submitReview() called');
+    this.isLoading = true;
     const authorId = this.authService.getUserId();
     const name = this.reviewTitleControl.value;
     const group = this.groupTypeControl.value;
     const art = this.artControl.value;
     const content = this.htmlContent.value;
     const authorRate = this.authorRateControl.value;
-    const tags = this.tags.join(', ');
-    console.log('Tags:', tags);
-// this.reviewService.fetchGroupArt()
-    this.reviewService.sendReview({authorId,name, group, art,content,authorRate,tags}).subscribe(response => {
-      console.log(response);
-      // if(response.status === 200) {
-    })
+    const tags = this.tags;
+    if (!content || content.trim().length === 0) {
+      this.isError = true;
+      this.isSuccess = false;
+      this.resMessage = 'Content cannot be empty';
+      this.isLoading = false;
+      return;
+    }
+    this.reviewService
+      .sendReview({ authorId, name, group, art, content, authorRate, tags })
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+          this.isSuccess = true;
+          this.isError = false;
+          this.resMessage = 'Review is posted successfully';
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.log(err);
+          this.isError = true;
+          this.isSuccess = false;
+          if (err.status === 500) {
+            this.resMessage = 'Make sure all fields are filled';
+          } else {
+            this.resMessage = err.error.message;
+          }
+          this.isLoading = false;
+        },
+      });
   }
 
   onFileSelected(number) {}
@@ -199,7 +224,6 @@ export class CreateReviewComponent implements OnInit {
     this.tagInput.nativeElement.value = '';
     this.tagCtrl.setValue(null);
   }
-
 
   uploadImage(file: File): Promise<string> {
     return this.imageUploadService.uploadImage(

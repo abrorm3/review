@@ -12,44 +12,38 @@ class createReviewController {
   async createReview(req, res) {
     try {
       console.log(req.body);
-      let reqArt = await Art.findOne({title:req.body.art})
-      if(!reqArt){
+      let reqArt = await Art.findOne({ title: req.body.art });
+      if (!reqArt) {
         reqArt = new Art({
           title: req.body.art,
           type: req.body.group,
-        })
+        });
         await reqArt.save();
       }
-      const groupType = await GroupType.findOne({name:req.body.group})
+      const groupType = await GroupType.findOne({ name: req.body.group });
       if (!groupType) {
-        return res.status(404).json({ message: "GroupType not found" });
+        return res.status(404).json({ message: "You can only pick one group type from given options" });
       }
-      // const newGroupType = new GroupType({
-      //   name: "Anime",
-      // });
-
-      // await newArt.save();
-      // await newGroupType.save();
-    // const art = await Art.findOne({ title: "Oppenheimer" });
-    // const groupType = await GroupType.findOne({ name: "Movie" });
+  
       const newReview = new Review({
         authorId: req.body.authorId,
         name: req.body.name,
         art: req.body.art,
-        group: groupType, 
-        tags:req.body.tags,
-        content:req.body.content,
+        group: groupType,
+        tags: req.body.tags,
+        content: req.body.content,
         authorRate: req.body.authorRate,
       });
-
+  
       await newReview.save();
-
+  
       return res.json({ message: "Review created successfully!" });
     } catch (err) {
-      return res.json({ message: err.message });
+      console.error(err); // Log the error for debugging purposes
+      return res.status(500).json({ message: err.message });
     }
   }
-
+  
   async reviewModels(req,res){
     try {
       const allArts = await Art.find({});
