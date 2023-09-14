@@ -5,7 +5,7 @@
   </div>
   <div class="flex flex-col w-3/5 py-14 mx-auto my-auto">
     <h2 class="mb-10 fontTitle">Create new Review</h2>
-    <form (ngSubmit)="submitReview()" class="flex flex-col ">
+    <form (ngSubmit)="submitReview()" class="flex flex-col">
       <!-- Review Name -->
       <mat-form-field>
         <mat-label>Title</mat-label>
@@ -55,61 +55,85 @@
       </mat-form-field>
 
       <!-- Content -->
-      <angular-editor class="mb-5"
-      [formControl]="htmlContent"
-      [config]="editorConfig"
-      ></angular-editor>
+
+      <div class="relative flex flex-col items-center justify-center">
+        <button
+          (click)="onImageUpload()"
+          class="absolute top-9 right-0 m-2 p-1 bg-gray text-black border-2 text-sm rounded-lg"
+          style="z-index: 1;"
+        >
+          Upload Image
+        </button>
+        <mat-spinner class="custom-image-spinner absolute" *ngIf="isImgLoading"></mat-spinner>
+        <angular-editor
+        id="myEditor"
+          #editor
+          class="mb-5"
+          [formControl]="htmlContent"
+          [config]="editorConfig"
+        ></angular-editor>
+      </div>
       <!-- Tags -->
       <div class="flex">
-      <mat-form-field class="tagField w-3/4 mr-10">
-        <mat-label>Tags</mat-label>
-        <mat-chip-grid #chipGrid aria-label="Tag selection">
-          <mat-chip-row *ngFor="let tag of tags" (removed)="remove(tag)">
-            {{ tag }}
-            <button matChipRemove [attr.aria-label]="'remove ' + tag">
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </mat-chip-row>
-        </mat-chip-grid>
-        <input
-          placeholder="New Tags..."
-          #tagInput
-          [formControl]="tagCtrl"
-          [matChipInputFor]="chipGrid"
-          [matAutocomplete]="auto"
-          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          (matChipInputTokenEnd)="add($event)"
-        />
-        <mat-autocomplete
-          #auto="matAutocomplete"
-          (optionSelected)="selected($event)"
-        >
-          <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
-            {{ tag }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-      <!-- Author Rate -->
-      <mat-form-field class="author-rate w-1/4">
-        <mat-label>Author Rate 1-10</mat-label>
-        <input
-          matInput
-          type="number"
-          [formControl]="authorRateControl"
-          min="1"
-          max="10"
-        />
-      </mat-form-field>
-    </div>
-    <div class="res-message h-5 flex items-center justify-center">
-      <!-- <mat-spinner class="custom-spinner"></mat-spinner> -->
-      <ng-container *ngIf="isLoading; else result">
-        <mat-spinner class="custom-spinner"></mat-spinner>
-      </ng-container>
-      <ng-template #result>
-        <p *ngIf="resMessage" class="text-center" [ngClass]="{'text-red-500': isError, 'text-green-500': isSuccess}">{{ resMessage }}</p>
-      </ng-template></div>
-      <button mat-raised-button color="primary" type="submit" class="mt-2">Submit Review</button>
+        <mat-form-field class="tagField w-3/4 mr-10">
+          <mat-label>Tags</mat-label>
+          <mat-chip-grid #chipGrid aria-label="Tag selection">
+            <mat-chip-row *ngFor="let tag of tags" (removed)="remove(tag)">
+              {{ tag }}
+              <button matChipRemove [attr.aria-label]="'remove ' + tag">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          </mat-chip-grid>
+          <input
+            placeholder="New Tags..."
+            #tagInput
+            [formControl]="tagCtrl"
+            [matChipInputFor]="chipGrid"
+            [matAutocomplete]="auto"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="add($event)"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selected($event)"
+          >
+            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+              {{ tag }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <!-- Author Rate -->
+        <mat-form-field class="author-rate w-1/4">
+          <mat-label>Author Rate 1-10</mat-label>
+          <input
+            matInput
+            type="number"
+            [formControl]="authorRateControl"
+            min="1"
+            max="10"
+            required
+          />
+        </mat-form-field>
+      </div>
+      <div class="res-message h-5 flex items-center justify-center">
+        <!-- <mat-spinner class="custom-spinner"></mat-spinner> -->
+        <ng-container *ngIf="isLoading; else result">
+          <mat-spinner class="custom-spinner"></mat-spinner>
+        </ng-container>
+        <ng-template #result>
+          <p
+            *ngIf="resMessage"
+            class="text-center"
+            [ngClass]="{ 'text-red-500': isError, 'text-green-500': isSuccess }"
+          >
+            {{ resMessage }}
+          </p>
+        </ng-template>
+      </div>
+      <button mat-raised-button color="primary" type="submit" class="mt-2">
+        Submit Review
+      </button>
     </form>
   </div>
 </div>

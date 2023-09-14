@@ -1,18 +1,20 @@
 h1 {
-  font-size: 24px; /* Change this to your desired font size */
+  font-size: 24px;
 }
 
 h2 {
-  font-size: 20px; /* Change this to your desired font size */
+  font-size: 20px;
 }
 
 h3 {
-  font-size: 18px; /* Change this to your desired font size */
+  font-size: 18px;
 }
 .fontTitle{
   font-size: 30px;
 }
 .custom-spinner{
-  
   width: 40px!important;
 }
+:host /deep/ angular-editor#myEditor .angular-editor-button[title="Insert Image"]{
+  display: none
+  }
