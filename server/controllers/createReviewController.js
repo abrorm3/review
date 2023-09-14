@@ -12,6 +12,11 @@ class createReviewController {
   async createReview(req, res) {
     try {
       console.log(req.body);
+      const existingReview = await Review.findOne({ name: req.body.name });
+      if (existingReview) {
+        return res.status(400).json({ message: "Review with this title already exists" });
+      }
+
       let reqArt = await Art.findOne({ title: req.body.art });
       if (!reqArt) {
         reqArt = new Art({
