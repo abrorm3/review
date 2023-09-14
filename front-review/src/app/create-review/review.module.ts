@@ -14,6 +14,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { TagsComponent } from './tags/tags.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { HttpClientModule } from '@angular/common/http';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -22,19 +26,23 @@ import { MatIconModule } from '@angular/material/icon';
     RatingComponent,
     SidebarComponent,
     AccountSettingsComponent,
-    TagsComponent
+    TagsComponent,
   ],
   imports: [
     CommonModule,
     MatAutocompleteModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     MarkdownModule.forRoot(),
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
     MatChipsModule,
-    MatIconModule
+    MatSliderModule,
+    MatIconModule,
+    AngularEditorModule,
+    MatButtonModule,
   ],
 })
 export class ReviewModule {}

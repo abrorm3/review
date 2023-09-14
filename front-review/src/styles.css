@@ -4,6 +4,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@import '../node_modules/font-awesome/css/font-awesome.css';
 /* Customize Angular Material theme colors */
 .mat-color-primary {
   background: #3f51b5;
@@ -24,3 +25,36 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+/* Change button color to blue */
+.angular-editor-toolbar button {
+  color: black; /* Text color */
+  border: none; /* Remove borders */
+  border-radius: 4px; /* Add rounded corners */
+  padding: 4px 8px; /* Add padding to the buttons */
+  margin: 0 2px; /* Add margin between buttons */
+  cursor: pointer; /* Add a pointer cursor on hover */
+}
+
+.angular-editor-wrapper img {
+  max-width: 150px;
+}
+h1 {
+  font-size: 32px; /* Change this to your desired font size */
+}
+
+h2 {
+  font-size: 24px; /* Change this to your desired font size */
+}
+
+h3 {
+  font-size: 18.72px; /* Change this to your desired font size */
+}
+h4{
+  font-size: 16px;
+}
+h5{
+  font-size: 13.28px;
+}
+h6{
+  font-size: 10.72px;
+}

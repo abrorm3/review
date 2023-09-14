@@ -11,6 +11,7 @@ const Review = require("../models/review");
 class createReviewController {
   async createReview(req, res) {
     try {
+      console.log(req.body);
       let reqArt = await Art.findOne({title:req.body.art})
       if(!reqArt){
         reqArt = new Art({
@@ -32,11 +33,12 @@ class createReviewController {
     // const art = await Art.findOne({ title: "Oppenheimer" });
     // const groupType = await GroupType.findOne({ name: "Movie" });
       const newReview = new Review({
+        authorId: req.body.authorId,
         name: req.body.name,
         art: req.body.art,
         group: groupType, 
         tags:req.body.tags,
-        description:req.body.description,
+        content:req.body.content,
         authorRate: req.body.authorRate,
       });
 

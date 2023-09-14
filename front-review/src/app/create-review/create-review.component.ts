@@ -1,13 +1,26 @@
-import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { ReviewService } from './review.service';
 import { GroupType } from '../shared/interfaces/group-type.model';
 import { Art } from '../shared/interfaces/art.model';
-import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {LiveAnnouncer} from '@angular/cdk/a11y';
+import {
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
+} from '@angular/material/autocomplete';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { ImageUploadService } from '../shared/image-upload.service';
+import { AuthService } from '../auth/auth.service';
+import { editorConfig } from './editor-config';
 @Component({
   selector: 'app-create-review',
   templateUrl: './create-review.component.html',
@@ -18,19 +31,24 @@ export class CreateReviewComponent implements OnInit {
   @ViewChild('artAuto') artAuto: MatAutocompleteTrigger;
   @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
   announcer = inject(LiveAnnouncer);
-
+  userId = '';
+  editorConfig = editorConfig;
+  formSubmitted = false;
+  resMessage:String = '';
 
   filteredOptions: Observable<string[]>;
   filteredArts: Observable<string[]>;
-  // filteredTags: Observable<string[]>;
+  filteredTags: Observable<string[]>;
 
-  createReviewForm = new FormGroup({});
+  reviewTitleControl = new FormControl();
   groupTypeControl = new FormControl('');
   artControl = new FormControl();
+  htmlContent = new FormControl('');
+  tagCtrl = new FormControl();
+  authorRateControl = new FormControl(1);
 
   groupTypes: GroupType[] = [];
   artTypes: Art[] = [];
-  // tags: any[]=[]
   selectedRating: number = 0;
   options: string[] = ['One', 'Two', 'Three'];
   selectedTags: string[] = [];
@@ -39,22 +57,20 @@ export class CreateReviewComponent implements OnInit {
   // tags
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  tagCtrl = new FormControl('');
-  filteredTags: Observable<string[]>;
-  tags: string[] = ['Lemon'];
+  tags: string[] = [];
   allTags: string[] = [];
 
-  constructor(private reviewService: ReviewService) {
+  constructor(
+    private reviewService: ReviewService,
+    private imageUploadService: ImageUploadService,
+    private authService: AuthService
+  ) {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
-      map((tag: string | null) => (tag ? this._filter(tag) : this.allTags.slice())),
+      map((tag: string | null) =>
+        tag ? this._filterTags(tag) : this.allTags.slice()
+      )
     );
-  }
-
-  ngOnInit(): void {
-    this.getGroupTypes();
-    this.getArts();
-    this.getAllTags();
     this.filteredOptions = this.groupTypeControl.valueChanges.pipe(
       startWith(''),
       map((value) => this._filterGroupTypes(value || ''))
@@ -64,23 +80,40 @@ export class CreateReviewComponent implements OnInit {
       map((value) => this._filterArts(value))
     );
   }
+
+  ngOnInit(): void {
+    this.getUserInfo();
+    this.getGroupTypes();
+    this.getArts();
+    this.getAllTags();
+
+  }
+  getUserInfo() {
+    this.userId = this.authService.getUserId();
+    this.authService.getUser().subscribe((user) => {
+      console.log(user);
+      user.id;
+    });
+  }
   private _filterGroupTypes(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.groupTypes
       .map((groupType) => this.capitalizeFirstLetter(groupType.name))
-      .filter((option) => option.includes(filterValue));
+      .filter((option) => option.toLowerCase().includes(filterValue));
   }
   private _filterArts(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.artTypes
       .map((art) => this.capitalizeFirstLetter(art.title))
-      .filter((title) => title.includes(filterValue));
+      .filter((title) => title.toLowerCase().includes(filterValue));
   }
+
   private _filterTags(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.artTypes
-      .map((tag) => this.capitalizeFirstLetter(tag.title))
-      .filter((title) => title.includes(filterValue));
+
+    return this.allTags.filter((tag) =>
+      tag.toLowerCase().includes(filterValue)
+    );
   }
 
   getGroupTypes() {
@@ -105,19 +138,35 @@ export class CreateReviewComponent implements OnInit {
       },
     });
   }
-  getAllTags(){
+  getAllTags() {
     this.reviewService.fetchAllTags().subscribe({
-      next:(response:any)=>{
+      next: (response: any) => {
         this.allTags = response.tags;
         console.log(response);
-      }
-    })
+      },
+    });
   }
   capitalizeFirstLetter(value: string): string {
     return value.charAt(0).toUpperCase() + value.slice(1);
   }
 
-  submitReview() {}
+  submitReview() {
+    console.log('submitReview() called');
+    const authorId = this.authService.getUserId();
+    const name = this.reviewTitleControl.value;
+    const group = this.groupTypeControl.value;
+    const art = this.artControl.value;
+    const content = this.htmlContent.value;
+    const authorRate = this.authorRateControl.value;
+    const tags = this.tags.join(', ');
+    console.log('Tags:', tags);
+// this.reviewService.fetchGroupArt()
+    this.reviewService.sendReview({authorId,name, group, art,content,authorRate,tags}).subscribe(response => {
+      console.log(response);
+      // if(response.status === 200) {
+    })
+  }
+
   onFileSelected(number) {}
 
   // tags
@@ -127,12 +176,11 @@ export class CreateReviewComponent implements OnInit {
     // Add our tag
     if (value) {
       this.tags.push(value);
+      this.tagCtrl.setValue('');
     }
 
     // Clear the input value
     event.chipInput!.clear();
-
-    this.tagCtrl.setValue(null);
   }
 
   remove(tag: string): void {
@@ -140,6 +188,7 @@ export class CreateReviewComponent implements OnInit {
 
     if (index >= 0) {
       this.tags.splice(index, 1);
+      this.tagCtrl.setValue('');
 
       this.announcer.announce(`Removed ${tag}`);
     }
@@ -151,9 +200,11 @@ export class CreateReviewComponent implements OnInit {
     this.tagCtrl.setValue(null);
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
 
-    return this.allTags.filter(tag => tag.toLowerCase().includes(filterValue));
+  uploadImage(file: File): Promise<string> {
+    return this.imageUploadService.uploadImage(
+      file,
+      `${this.userId}/${this.reviewTitleControl}`
+    );
   }
 }
