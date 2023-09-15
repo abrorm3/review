@@ -1,157 +1,173 @@
-<div class="flex text-white h-100% bg-dark" id="container">
-  <div class="w-1/4">
-    <!-- Sidebar component -->
+<mat-sidenav-container class="example-container">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    [(opened)]="opened"
+    style="width: 320px"
+  >
     <app-sidebar></app-sidebar>
-  </div>
-  <div class="flex flex-col w-3/5 py-14 mx-auto my-auto">
-    <h2 class="mb-10 fontTitle">Create new Review</h2>
-    <form (ngSubmit)="submitReview()" class="flex flex-col">
-      <!-- Review Name -->
-      <mat-form-field>
-        <mat-label>Title</mat-label>
-        <input
-          matInput
-          class=""
-          placeholder="Your Review title"
-          [formControl]="reviewTitleControl"
-          required
-        />
-      </mat-form-field>
+  </mat-sidenav>
 
-      <mat-form-field>
-        <mat-label>Group Type</mat-label>
-        <input
-          type="text"
-          placeholder="Pick one"
-          [formControl]="groupTypeControl"
-          matInput
-          [matAutocomplete]="groupTypeAuto"
-          required
-        />
-
-        <mat-autocomplete #groupTypeAuto="matAutocomplete">
-          <mat-option
-            *ngFor="let option of filteredOptions | async"
-            [value]="option"
-          >
-            {{ option }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Art</mat-label>
-        <input
-          matInput
-          placeholder="Pick or type new"
-          [formControl]="artControl"
-          [matAutocomplete]="artAuto"
-          required
-        />
-        <mat-autocomplete #artAuto="matAutocomplete">
-          <mat-option *ngFor="let art of filteredArts | async" [value]="art">
-            {{ art }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-
-      <!-- Content -->
-
-      <div class="relative flex flex-col items-center justify-center">
-        <button
-          type="button"
-          (click)="onImageUpload()"
-          class="absolute top-9 right-0 m-2 p-1 bg-gray text-black border-2 text-sm rounded-lg"
-          style="z-index: 1"
-        >
-          Upload Image
-        </button>
-        <mat-spinner
-          class="custom-image-spinner absolute"
-          *ngIf="isImgLoading"
-        ></mat-spinner>
-        <angular-editor
-          id="myEditor"
-          #editor
-          class="mb-5"
-          [formControl]="htmlContent"
-          [config]="editorConfig"
-        ></angular-editor>
-      </div>
-      <!-- Tags -->
-      <div class="flex">
-        <mat-form-field class="tagField w-3/4 mr-10">
-          <mat-label>Tags</mat-label>
-          <mat-chip-grid #chipGrid aria-label="Tag selection">
-            <mat-chip-row *ngFor="let tag of tags" (removed)="remove(tag)">
-              {{ tag }}
-              <button matChipRemove [attr.aria-label]="'remove ' + tag">
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </mat-chip-row>
-          </mat-chip-grid>
-          <input
-            placeholder="New Tags..."
-            #tagInput
-            [formControl]="tagCtrl"
-            [matChipInputFor]="chipGrid"
-            [matAutocomplete]="auto"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            (matChipInputTokenEnd)="add($event)"
-          />
-          <mat-autocomplete
-            #auto="matAutocomplete"
-            (optionSelected)="selected($event)"
-          >
-            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
-              {{ tag }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-        <!-- Author Rate -->
-        <mat-form-field class="author-rate w-1/4">
-          <mat-label>Author Rate 1-10</mat-label>
-          <input
-            matInput
-            type="number"
-            [formControl]="authorRateControl"
-            min="1"
-            max="10"
-            required
-          />
-        </mat-form-field>
-      </div>
-
-      <div class="border p-3 border-blue-300 mb-2">
-      <label for="coverPhotoInput" class="mt-4 text-gray-200 text-sm font-semibold">
-        Cover image
-      </label>
-      <input
-        type="file"
-        #coverPhotoInput
-        accept="image/*"
-        (change)="onCoverPhotoSelected($event)"
-      />
-    </div>
-
-      <div class="res-message h-5 flex items-center justify-center my-2">
-        <!-- <mat-spinner class="custom-spinner"></mat-spinner> -->
-        <ng-container *ngIf="isLoading; else result">
-          <mat-spinner class="custom-spinner"></mat-spinner>
-        </ng-container>
-        <ng-template #result>
-          <p
-            *ngIf="resMessage"
-            class="text-center"
-            [ngClass]="{ 'text-red-500': isError, 'text-green-500': isSuccess }"
-          >
-            {{ resMessage }}
-          </p>
-        </ng-template>
-      </div>
-
-      <button mat-raised-button color="primary" type="submit" class="mt-2 w-2/5 mx-auto">
-        Submit Review
+  <mat-sidenav-content class="relative">
+      <button mat-button (click)="sidenav.toggle()" class="absolute text-xs r-5 px-4 py-1 bg-dark-soft border-solid text-white rounded-r-3xl hover:bg-blue-600" style="color: white;">
+        <mat-icon>menu</mat-icon>
+        Menu
       </button>
-    </form>
-  </div>
-</div>
+            <div class="flex text-white h-100% bg-dark" id="container">
+              <div class="flex flex-col w-4/5 py-14 mx-auto my-auto">
+                <h2 class="mb-10 fontTitle">Create new Review</h2>
+                <form (ngSubmit)="submitReview()" class="flex flex-col">
+                  <!-- Review Name -->
+                  <mat-form-field>
+                    <mat-label>Title</mat-label>
+                    <input
+                      matInput
+                      class=""
+                      placeholder="Your Review title"
+                      [formControl]="reviewTitleControl"
+                      required
+                    />
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <mat-label>Group Type</mat-label>
+                    <input
+                      type="text"
+                      placeholder="Pick one"
+                      [formControl]="groupTypeControl"
+                      matInput
+                      [matAutocomplete]="groupTypeAuto"
+                      required
+                    />
+
+                    <mat-autocomplete #groupTypeAuto="matAutocomplete">
+                      <mat-option
+                        *ngFor="let option of filteredOptions | async"
+                        [value]="option"
+                      >
+                        {{ option }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Art</mat-label>
+                    <input
+                      matInput
+                      placeholder="Pick or type new"
+                      [formControl]="artControl"
+                      [matAutocomplete]="artAuto"
+                      required
+                    />
+                    <mat-autocomplete #artAuto="matAutocomplete">
+                      <mat-option *ngFor="let art of filteredArts | async" [value]="art">
+                        {{ art }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+
+                  <!-- Content -->
+
+                  <div class="relative flex flex-col items-center justify-center max-w-max">
+                    <button
+                      type="button"
+                      (click)="onImageUpload()"
+                      class="absolute top-9 right-0 m-2 p-1 bg-gray text-black border-2 text-sm rounded-lg"
+                      style="z-index: 1"
+                    >
+                      Upload Image
+                    </button>
+                    <mat-spinner
+                      class="custom-image-spinner absolute"
+                      *ngIf="isImgLoading"
+                    ></mat-spinner>
+                    <angular-editor
+                    class="pr-10"
+                      id="myEditor"
+                      #editor
+                      class="mb-5 whitespace-pre-wrap"
+                      [formControl]="htmlContent"
+                      [config]="editorConfig"
+                    ></angular-editor>
+                  </div>
+                  <!-- Tags -->
+                  <div class="flex">
+                    <mat-form-field class="tagField w-3/4 mr-10">
+                      <mat-label>Tags</mat-label>
+                      <mat-chip-grid #chipGrid aria-label="Tag selection">
+                        <mat-chip-row *ngFor="let tag of tags" (removed)="remove(tag)">
+                          {{ tag }}
+                          <button matChipRemove [attr.aria-label]="'remove ' + tag">
+                            <mat-icon>cancel</mat-icon>
+                          </button>
+                        </mat-chip-row>
+                      </mat-chip-grid>
+                      <input
+                        placeholder="New Tags..."
+                        #tagInput
+                        [formControl]="tagCtrl"
+                        [matChipInputFor]="chipGrid"
+                        [matAutocomplete]="auto"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        (matChipInputTokenEnd)="add($event)"
+                      />
+                      <mat-autocomplete
+                        #auto="matAutocomplete"
+                        (optionSelected)="selected($event)"
+                      >
+                        <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                          {{ tag }}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                    <!-- Author Rate -->
+                    <mat-form-field class="author-rate w-1/4">
+                      <mat-label>Author Rate 1-10</mat-label>
+                      <input
+                        matInput
+                        type="number"
+                        [formControl]="authorRateControl"
+                        min="1"
+                        max="10"
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="border p-3 border-blue-300 mb-2">
+                  <label for="coverPhotoInput" class="mt-4 text-gray-200 text-sm font-semibold">
+                    Cover image
+                  </label>
+                  <input
+                    type="file"
+                    #coverPhotoInput
+                    accept="image/*"
+                    (change)="onCoverPhotoSelected($event)"
+                  />
+                </div>
+
+                  <div class="res-message h-5 flex items-center justify-center my-2">
+                    <!-- <mat-spinner class="custom-spinner"></mat-spinner> -->
+                    <ng-container *ngIf="isLoading; else result">
+                      <mat-spinner class="custom-spinner"></mat-spinner>
+                    </ng-container>
+                    <ng-template #result>
+                      <p
+                        *ngIf="resMessage"
+                        class="text-center"
+                        [ngClass]="{ 'text-red-500': isError, 'text-green-500': isSuccess }"
+                      >
+                        {{ resMessage }}
+                      </p>
+                    </ng-template>
+                  </div>
+
+                  <button mat-raised-button color="primary" type="submit" class="mt-2 w-2/5 mx-auto min-w-fit">
+                    Submit Review
+                  </button>
+                </form>
+              </div>
+            </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

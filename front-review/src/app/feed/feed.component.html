@@ -1,9 +1,19 @@
-<p>feed works!</p>
-<button
-  mat-button
-  color="primary"
-  (click)="goBack()"
-  class="mt-4 custom-button"
->
-  Go back to Auth
-</button>
+<mat-sidenav-container class="example-container">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    [(opened)]="opened"
+    style="width: 320px"
+  >
+    <app-sidebar></app-sidebar>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="relative">
+      <button mat-button (click)="sidenav.toggle()" class="absolute text-xs r-5 px-4 py-1 bg-dark-soft text-white rounded-r-3xl hover:bg-blue-600" style="color: white;">
+        <mat-icon>menu</mat-icon>
+        Menu
+      </button>
+
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

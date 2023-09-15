@@ -27,17 +27,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* Change button color to blue */
 .angular-editor-toolbar button {
-  color: black; /* Text color */
-  border: none; /* Remove borders */
-  border-radius: 4px; /* Add rounded corners */
-  padding: 4px 8px; /* Add padding to the buttons */
-  margin: 0 2px; /* Add margin between buttons */
-  cursor: pointer; /* Add a pointer cursor on hover */
+  color: black;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin: 0 2px;
+  cursor: pointer;
 }
-
+.angular-editor-toolbar{
+  /* width: 90%; */
+  height: 80px;
+  /* margin: 0 auto; */
+}
 .angular-editor-wrapper img {
-  display: block; /* Ensures that the image is a block-level element */
-  margin: 0 auto; /* Centers the image horizontally */
+  display: block;
+  margin: 0 auto;
   max-width: 50%;
   max-height: 70%;
 }

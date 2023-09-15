@@ -60,6 +60,7 @@ export class CreateReviewComponent implements OnInit {
   groupTypes: GroupType[] = [];
   artTypes: Art[] = [];
   selectedTags: string[] = [];
+  opened: boolean=true;
   selectedCoverPhoto: File;
 
   // tags
