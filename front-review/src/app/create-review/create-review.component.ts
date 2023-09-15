@@ -34,6 +34,7 @@ export class CreateReviewComponent implements OnInit {
   @ViewChild('artAuto') artAuto: MatAutocompleteTrigger;
   @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
   @ViewChild('editor') editor: AngularEditorComponent;
+  @ViewChild('coverPhotoInput', { static: false }) coverPhotoInput: ElementRef;
 
   announcer = inject(LiveAnnouncer);
   userId = '';
@@ -43,7 +44,7 @@ export class CreateReviewComponent implements OnInit {
   isError: boolean = false;
   isSuccess: boolean = false;
   isLoading = false;
-  isImgLoading=false;
+  isImgLoading = false;
 
   filteredOptions: Observable<string[]>;
   filteredArts: Observable<string[]>;
@@ -58,10 +59,8 @@ export class CreateReviewComponent implements OnInit {
 
   groupTypes: GroupType[] = [];
   artTypes: Art[] = [];
-  selectedRating: number = 0;
-  options: string[] = ['One', 'Two', 'Three'];
   selectedTags: string[] = [];
-  markdownContent: string = '';
+  selectedCoverPhoto: File;
 
   // tags
 
@@ -158,8 +157,16 @@ export class CreateReviewComponent implements OnInit {
     return value.charAt(0).toUpperCase() + value.slice(1);
   }
 
-  submitReview() {
+  async submitReview() {
     this.isLoading = true;
+    let coverImage = '';
+    if (this.selectedCoverPhoto) {
+      coverImage = await this.imageUploadService.uploadImage(
+        this.selectedCoverPhoto,
+        `${this.userId}/${this.reviewTitleControl.value}/coverImage`
+      );
+      console.log('Cover photo uploaded:', coverImage);
+    }
     const authorId = this.authService.getUserId();
     const name = this.reviewTitleControl.value;
     const group = this.groupTypeControl.value;
@@ -177,7 +184,16 @@ export class CreateReviewComponent implements OnInit {
       return;
     }
     this.reviewService
-      .sendReview({ authorId, name, group, art, content, authorRate, tags })
+      .sendReview({
+        authorId,
+        name,
+        group,
+        art,
+        content,
+        authorRate,
+        tags,
+        coverImage,
+      })
       .subscribe({
         next: (response) => {
           console.log(response);
@@ -241,14 +257,14 @@ export class CreateReviewComponent implements OnInit {
       const file = (event.target as HTMLInputElement).files[0];
 
       if (file) {
-        this.isImgLoading=true;
+        this.isImgLoading = true;
         // Upload the image to Firebase Storage
         this.imageUploadService
           .uploadImage(file, `${this.userId}/${this.reviewTitleControl.value}`)
           .then((downloadUrl) => {
             // Inserting the image URL into the editor
             const html = `<img src="${downloadUrl}" alt="Uploaded Image" />`;
-            this.isImgLoading=false;
+            this.isImgLoading = false;
             // Using execCommand to insert HTML at the current cursor position, but yeah it is deprecated
             document.execCommand('insertHTML', false, html);
           });
@@ -257,5 +273,10 @@ export class CreateReviewComponent implements OnInit {
 
     // Triggering the file input dialog
     inputElement.click();
+  }
+
+  // Cover image
+  onCoverPhotoSelected(event: any) {
+    this.selectedCoverPhoto = event.target.files[0];
   }
 }

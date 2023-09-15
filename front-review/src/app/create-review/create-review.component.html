@@ -58,16 +58,19 @@
 
       <div class="relative flex flex-col items-center justify-center">
         <button
-        type="button"
+          type="button"
           (click)="onImageUpload()"
           class="absolute top-9 right-0 m-2 p-1 bg-gray text-black border-2 text-sm rounded-lg"
-          style="z-index: 1;"
+          style="z-index: 1"
         >
           Upload Image
         </button>
-        <mat-spinner class="custom-image-spinner absolute" *ngIf="isImgLoading"></mat-spinner>
+        <mat-spinner
+          class="custom-image-spinner absolute"
+          *ngIf="isImgLoading"
+        ></mat-spinner>
         <angular-editor
-        id="myEditor"
+          id="myEditor"
           #editor
           class="mb-5"
           [formControl]="htmlContent"
@@ -117,7 +120,20 @@
           />
         </mat-form-field>
       </div>
-      <div class="res-message h-5 flex items-center justify-center">
+
+      <div class="border p-3 border-blue-300 mb-2">
+      <label for="coverPhotoInput" class="mt-4 text-gray-200 text-sm font-semibold">
+        Cover image
+      </label>
+      <input
+        type="file"
+        #coverPhotoInput
+        accept="image/*"
+        (change)="onCoverPhotoSelected($event)"
+      />
+    </div>
+
+      <div class="res-message h-5 flex items-center justify-center my-2">
         <!-- <mat-spinner class="custom-spinner"></mat-spinner> -->
         <ng-container *ngIf="isLoading; else result">
           <mat-spinner class="custom-spinner"></mat-spinner>
@@ -132,7 +148,8 @@
           </p>
         </ng-template>
       </div>
-      <button mat-raised-button color="primary" type="submit" class="mt-2">
+
+      <button mat-raised-button color="primary" type="submit" class="mt-2 w-2/5 mx-auto">
         Submit Review
       </button>
     </form>

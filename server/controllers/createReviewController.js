@@ -38,6 +38,7 @@ class createReviewController {
         tags: req.body.tags,
         content: req.body.content,
         authorRate: req.body.authorRate,
+        coverImage:req.body.coverImage,
       });
   
       await newReview.save();
