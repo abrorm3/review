@@ -5,7 +5,7 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { FormControl, FormGroup, NgForm } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { ReviewService } from './review.service';
 import { GroupType } from '../shared/interfaces/group-type.model';
@@ -17,10 +17,7 @@ import {
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatChipInputEvent } from '@angular/material/chips';
-import {
-  AngularEditorComponent,
-  AngularEditorConfig,
-} from '@kolkov/angular-editor';
+import { AngularEditorComponent } from '@kolkov/angular-editor';
 import { ImageUploadService } from '../shared/image-upload.service';
 import { AuthService } from '../auth/auth.service';
 import { editorConfig } from './editor-config';
@@ -60,7 +57,7 @@ export class CreateReviewComponent implements OnInit {
   groupTypes: GroupType[] = [];
   artTypes: Art[] = [];
   selectedTags: string[] = [];
-  opened: boolean=true;
+  opened: boolean = true;
   selectedCoverPhoto: File;
 
   // tags
