@@ -16,3 +16,6 @@
 .feed-container{
   max-width:700px;
 }
+.icon-display {
+  transform: scale(0.7);
+}
