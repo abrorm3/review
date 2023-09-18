@@ -17,13 +17,15 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
 import { FeedComponent } from '../feed/feed.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import { WholeNumberDirective } from '../shared/directives/whole-number.directive';
 
 @NgModule({
   declarations: [
     CreateReviewComponent,
     SidebarComponent,
     AccountSettingsComponent,
-    FeedComponent
+    FeedComponent,
+    WholeNumberDirective
   ],
   imports: [
     CommonModule,

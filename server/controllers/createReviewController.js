@@ -34,7 +34,7 @@ class createReviewController {
         authorId: req.body.authorId,
         name: req.body.name,
         art: req.body.art,
-        group: groupType,
+        group: groupType.name,
         tags: req.body.tags,
         content: req.body.content,
         authorRate: req.body.authorRate,

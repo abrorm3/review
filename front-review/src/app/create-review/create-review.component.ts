@@ -21,6 +21,7 @@ import { AngularEditorComponent } from '@kolkov/angular-editor';
 import { ImageUploadService } from '../shared/image-upload.service';
 import { AuthService } from '../auth/auth.service';
 import { editorConfig } from './editor-config';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-create-review',
   templateUrl: './create-review.component.html',
@@ -69,7 +70,8 @@ export class CreateReviewComponent implements OnInit {
   constructor(
     private reviewService: ReviewService,
     private imageUploadService: ImageUploadService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router:Router
   ) {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
@@ -197,8 +199,11 @@ export class CreateReviewComponent implements OnInit {
           console.log(response);
           this.isSuccess = true;
           this.isError = false;
-          this.resMessage = 'Review is posted successfully';
+          this.resMessage = 'Review is posted successfully. Redirecting to feed ...';
           this.isLoading = false;
+          setTimeout(()=>{
+            this.router.navigate(['/feed'])
+          },2000)
         },
         error: (err) => {
           console.log(err);
