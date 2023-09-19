@@ -13,7 +13,8 @@ const generateAccessToken = (id, roles) => {
     id,
     roles,
   };
-  return jwt.sign(payload, secret, { expiresIn: "12h" });
+  const expiresIn = 3600; // 1 hour = 3600 seconds
+  return jwt.sign(payload, secret, {expiresIn});
 };
 
 class authController {
@@ -291,7 +292,9 @@ class authController {
       user.lastLoginTime = new Date();
       await user.save();
       const token = generateAccessToken(user._id, user.roles);
-      return res.json({ userId, token });
+      const expiresIn = 3600; //milliseconds
+      console.log('what sending -'+userId, token,expiresIn)
+      return res.json({ userId, token,expiresIn });
     } catch (e) {
       console.log(e);
       res.status(400).json({ message: "Login error" });

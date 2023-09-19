@@ -3,14 +3,16 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AuthRequest, AuthResponse } from './auth.model';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   backend = environment.apiBaseUrl;
+  private tokenExpirationTimer: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router:Router) {}
 
   login(credentials: AuthRequest): Observable<AuthResponse> {
     return this.http
@@ -23,14 +25,24 @@ export class AuthService {
           return this.handleError(error);
         }),
         map((response) => {
+          console.log('Server Response:', response);
           if (response.token) {
             this.setAuthToken(response.token);
             this.setUserId(response.userId);
+
+            const expirationDuration = response.expiresIn;
+            this.autoLogout(expirationDuration);
           }
           return response;
         })
       );
   }
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration*2000);
+  }
+
 
   signup(credentials: AuthRequest) {
     return this.http
@@ -40,14 +52,17 @@ export class AuthService {
         map((response) => {
           if (response.token) {
             this.setAuthToken(response.token);
-          }
-          if (response.userId) {
             this.setUserId(response.userId);
+
+            const expirationDuration = response.expiresIn;
+            this.autoLogout(expirationDuration);
           }
+
           return response;
         })
       );
   }
+
   updateUsername(userId: string, newUsername: string): Observable<any> {
     const requestBody = { userId, newUsername };
     console.log(requestBody.userId + ' from service');
@@ -90,7 +105,14 @@ export class AuthService {
   }
 
   logout() {
+    console.log('getting called logout');
+
     this.removeAuthToken();
+    this.router.navigate(['/auth']);
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
   }
   setAuthToken(token: string): void {
     localStorage.setItem('user', token);
@@ -101,6 +123,7 @@ export class AuthService {
 
   removeAuthToken(): void {
     localStorage.removeItem('user');
+    localStorage.removeItem('userId');
   }
 
   isAuthenticated(): Observable<boolean> {
