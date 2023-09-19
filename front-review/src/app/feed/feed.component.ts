@@ -15,12 +15,28 @@ export class FeedComponent implements OnInit {
 
   ngOnInit() {
     this.feedService.getReviews().subscribe({
-      next:(response:any)=>{
+      next: (response: any) => {
         this.reviews = response as Review[];
         console.log(this.reviews);
-      }
-    })
+        this.calculateTimeDifference();
+      },
+    });
   }
-  navigateToReviewDetails(review){}
+  navigateToReviewDetails(review) {}
+  calculateTimeDifference() {
+    const now = new Date();
 
+    this.reviews.forEach((review) => {
+      const createDate = new Date(review.createDate);
+      const timeDifference = now.getTime() - createDate.getTime();
+      const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
+      const daysDifference = Math.floor(hoursDifference / 24);
+
+      if (daysDifference > 0) {
+        review.timeAgo = `${daysDifference}d ago`;
+      } else {
+        review.timeAgo = `${hoursDifference}h ago`;
+      }
+    });
+  }
 }

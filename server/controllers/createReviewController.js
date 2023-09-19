@@ -25,56 +25,62 @@ class createReviewController {
         });
         await reqArt.save();
       }
+      const user = await User.findOne({ _id: req.body.authorId });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
       const groupType = await GroupType.findOne({ name: req.body.group });
       if (!groupType) {
         return res.status(404).json({ message: "You can only pick one group type from given options" });
       }
-  
+      const authorId = user.name || user.username;
       const newReview = new Review({
-        authorId: req.body.authorId,
+        authorId: authorId,
         name: req.body.name,
         art: req.body.art,
         group: groupType.name,
         tags: req.body.tags,
         content: req.body.content,
         authorRate: req.body.authorRate,
-        coverImage:req.body.coverImage,
+        createDate: new Date(),
+        coverImage: req.body.coverImage,
       });
-  
+
       await newReview.save();
-  
+
       return res.json({ message: "Review created successfully!" });
     } catch (err) {
       console.error(err); // Log the error for debugging purposes
       return res.status(500).json({ message: err.message });
     }
   }
-  
-  async reviewModels(req,res){
+
+  async reviewModels(req, res) {
     try {
       const allArts = await Art.find({});
       const allGroupTypes = await GroupType.find({});
 
       return res.json({
-        art:allArts,
+        art: allArts,
         groupType: allGroupTypes,
-      })
-    }catch (err) {
-      return res.status(500).json({message:err.message})
+      });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
     }
   }
   async calculateAverageRatingForArt(artTitle) {
     try {
       // Find all reviews for the given artTitle
       const reviews = await Review.find({ art: artTitle });
-  
+
       if (reviews.length === 0) {
-        return 0; 
+        return 0;
       }
       const totalRating = reviews.reduce((acc, review) => acc + review.authorRate, 0);
-  
+
       const averageRating = totalRating / reviews.length;
-  
+
       return averageRating;
     } catch (error) {
       throw error;
@@ -88,9 +94,6 @@ class createReviewController {
       return res.status(500).json({ message: error.message });
     }
   }
-  
-  
 }
-
 
 module.exports = new createReviewController();

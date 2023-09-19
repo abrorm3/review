@@ -3,7 +3,8 @@
     <app-sidebar></app-sidebar>
   </mat-sidenav>
 
-  <mat-sidenav-content class="relative">
+  <mat-sidenav-content class="relative flex">
+    <div class="w-3/4">
     <button
       mat-button
       (click)="sidenav.toggle()"
@@ -15,8 +16,9 @@
     </button>
     <div class="feed-container">
       <!-- Filter Container -->
+      <h2 class="text-center text-white font-bold text-2xl my-4">Search by</h2>
       <div
-        class="flex justify-center items-center my-4 bg-gray-700 text-xl text-white py-4 rounded-3xl mx-5"
+        class="flex justify-center items-center my-4 bg-gray-700 text-lg text-white py-4 rounded-3xl mx-5"
       >
         <div class="flex space-x-4 gap-6">
           <button class="font-semibold hover:text-blue-600">Latest</button>
@@ -36,24 +38,38 @@
           class="w-full h-48 object-cover"
         />
         <div class="px-6 py-4">
-          <div class="font-semibold text-l mb-2">{{ review.name }}</div>
-          <div class="flex items-center text-gray-700 text-sm">
-            <span class="flex items-center bg-gray-200 rounded-xl px-3 py-1 mr-1">
-              <mat-icon class="icon-display"> workspaces </mat-icon>
-
+          <div class="font-semibold text-xl mb-2">{{ review.name }}</div>
+          <div class="flex items-center text-gray-700 text-sm space-x-2">
+            <span class="flex items-center bg-gray-200 rounded-xl px-3 py-1">
+              <mat-icon class="icon-display text-blue-600">workspaces</mat-icon>
               {{ review.group }}
             </span>
-            <span class="flex items-center bg-gray-200 rounded-xl px-3 py-1 mr-1">
-              <mat-icon class="icon-display">star</mat-icon>
+            <span class="flex items-center bg-gray-200 rounded-xl px-3 py-1">
+              <mat-icon class="icon-display text-yellow-500">star</mat-icon>
               {{ review.authorRate }}
             </span>
-            <span class="flex items-center bg-gray-200 rounded-xl px-3 py-1 mr-1">
-              <mat-icon class="icon-display">person</mat-icon>
+            <span class="flex items-center bg-gray-200 rounded-xl px-3 py-1">
+              <mat-icon class="icon-display text-green-500">person</mat-icon>
               {{ review.authorId }}
             </span>
           </div>
         </div>
       </div>
     </div>
+    </div>
+    <div class="w-1/4 p-4 bg-gray-800 text-white">
+      <h3 class="text-lg font-semibold mb-4">Recently Added Reviews</h3>
+      <div *ngFor="let recentReview of reviews" class="mb-2">
+        <p class="text-sm font-semibold">{{ recentReview.name }} <span><p class="text-xs text-gray-500">{{ recentReview.timeAgo }}</p></span></p>
+        <p class="text-xs text-gray-500">{{ recentReview.authorId }}</p>
+        <div class="flex items-center text-sm">
+          <mat-icon class="icon-display text-yellow-500">star</mat-icon>
+          <p class="ml-1">{{ recentReview.authorRate }}</p>
+        </div>
+
+        <hr class="my-1 border-gray-600">
+      </div>
+    </div>
+
   </mat-sidenav-content>
 </mat-sidenav-container>
