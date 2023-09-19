@@ -12,17 +12,25 @@ export class FeedComponent implements OnInit {
   constructor(private router: Router, private feedService: FeedService) {}
   opened: boolean = true;
   reviews: Review[] = [];
+  recentReviews: Review[] = [];
 
   ngOnInit() {
     this.feedService.getReviews().subscribe({
       next: (response: any) => {
         this.reviews = response as Review[];
-        console.log(this.reviews);
+
+        this.recentReviews = response as Review[];
+        this.reviews.reverse();
+        this.recentReviews = this.recentReviews.slice(0, 10);
+        console.log(this.recentReviews);
         this.calculateTimeDifference();
       },
     });
   }
   navigateToReviewDetails(review) {}
+  createReview(){
+    this.router.navigate(['/create-review']);
+  }
   calculateTimeDifference() {
     const now = new Date();
 
