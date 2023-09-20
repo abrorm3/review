@@ -14,38 +14,35 @@
       Menu
     </button>
     <!-- Actual content -->
-    <div *ngIf="reviewData" class="review-details p-4 m-5 text-white">
+    <div *ngIf="reviewData" class="review-details p-4 m-5 text-slate-500">
       <div class="reviewData-content mt-4">
         <div class="coverImage">
           <img [src]="reviewData.coverImage" alt="{{ reviewData.name }}" />
         </div>
       </div>
-      <p class="text-cyan-600 font-mono font-bold underline p-3">{{ reviewData.art }}</p>
-      <h2 class="text-2xl font-semibold mb-4 text-5xl font-sans" >{{ reviewData.name }}</h2>
-
-      <div class="reviewData-info text-white mb-4">
+      <div class="artAndGroup p-3 flex font-mono font-bold ">
+        <span class="pr-2 text-indigo-300">{{ reviewData.group }}</span>
+        <span class="text-cyan-600 font-mono font-bold">.&nbsp;</span>
+        <p class="text-cyan-600 underline">{{ reviewData.art }}</p>
+      </div>
+      <h2 class="text-2xl font-semibold mb-4 text-5xl font-sans text-white" >{{ reviewData.name }}</h2>
+      <div class="mb-2">
+        <strong class="text-sm">Created on: </strong>
+        <span>{{ reviewData.createDate| date: 'MMMM d, y'  }}</span>
+      </div>
+      <div class="reviewData-info mb-4">
         <div class="flex items-center mb-2 uppercase">
           <img *ngIf="avatarImg" [src]="avatarImg" alt="Author Avatar" class="w-8 h-8 rounded-full mr-2">
           <strong class="mr-2">By</strong>
-          <span>{{ reviewData.authorId }}</span>
+          <span class="text-white">{{ reviewData.authorId }}</span>
         </div>
-        <div class="flex items-center mb-2">
-          <strong class="mr-2">Group:</strong>
-          <span>{{ reviewData.group }}</span>
-        </div>
+        <hr class="border-t-1 border-cyan-300 my-7">
         <!-- HTML content -->
-        <div class="art" [innerHTML]="sanitizedContent"></div>
+        <div class="text-white" [innerHTML]="sanitizedContent"></div>
         <div class="flex items-center mb-2">
           <strong class="mr-2">Author Rating:</strong>
           <span>{{ reviewData.authorRate }}</span>
         </div>
-        <div class="flex items-center mb-2">
-          <strong class="mr-2">Created Date:</strong>
-          <span>{{ reviewData.createDate }}</span>
-        </div>
-      </div>
-      <div class="reviewData-footer mt-4 text-gray-600">
-        <p>{{ reviewData.timeAgo }}</p>
       </div>
     </div>
   </mat-sidenav-content>

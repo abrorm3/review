@@ -266,7 +266,7 @@ export class CreateReviewComponent implements OnInit {
           .uploadImage(file, `${this.userId}/${this.reviewTitleControl.value}`)
           .then((downloadUrl) => {
             // Inserting the image URL into the editor
-            const html = `<img src="${downloadUrl}" alt="Uploaded Image" />`;
+            const html = `<img style="max-height: 50vh;" src="${downloadUrl}" alt="Uploaded Image" />`;
             this.isImgLoading = false;
             // Using execCommand to insert HTML at the current cursor position, but yeah it is deprecated
             document.execCommand('insertHTML', false, html);
