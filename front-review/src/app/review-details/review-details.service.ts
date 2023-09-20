@@ -9,24 +9,18 @@ import { environment } from 'src/environments/environment.development';
 })
 export class ReviewDetailsService {
   backend = environment.apiBaseUrl;
-  private reviewData: Review[];
+  private reviewData: Review | null = null;
 
   constructor(private http: HttpClient) {}
 
-  getReview(reviewName): Observable<Review[]> {
-    console.log('serviceeee');
+  getReview(reviewName: string): Observable<any> {
+    return this.http.get<Review>(`${this.backend}/review-details/${reviewName}`).pipe(
+      tap((res)=>{
+        console.log(res);
 
-    return this.http.get<Review[]>(`${this.backend}/review-details/${reviewName}`)
-    .pipe(
-      tap((data)=>{
-        console.log('data - '+data);
-
-        this.reviewData = data;
       })
     )
   }
-  getStoredReviewData(): Review[] {
-    return this.reviewData;
-  }
+
 
 }

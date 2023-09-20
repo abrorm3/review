@@ -30,12 +30,6 @@ export class FeedComponent implements OnInit {
   }
   navigateToReviewDetails(review) {
     const reviewTitle = review.name;
-    this.reviewDetailsService.getReview(reviewTitle).subscribe((data)=>{
-      console.log(data);
-
-    });
-    console.log('SUP'+reviewTitle);
-
     this.router.navigate(['/review-details', reviewTitle]);
   }
   createReview(){
