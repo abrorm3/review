@@ -1,149 +1,194 @@
-<div class="flex justify-center items-center h-screen bg-sky-300">
-  <div *ngIf="!askedUsername">
-    <mat-card id="auth" class="max-w-md p-6 md:p-10 h-auth">
-      <h1 class="text-center pb-5 md:pb-10 text-2xl md:text-3xl text-gray-800">
-        Review
-      </h1>
-      <div *ngIf="isLoading" class="flex justify-center items-center h-full">
-        <mat-spinner diameter="70" class="mx-auto"></mat-spinner>
+<mat-sidenav-container class="bg-dark">
+  <mat-sidenav #sidenav mode="side" [(opened)]="opened" style="width: 320px">
+    <app-sidebar></app-sidebar>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="relative flex">
+    <button
+      mat-button
+      (click)="sidenav.toggle()"
+      class="absolute text-xs r-5 px-4 py-1 bg-dark-soft text-white rounded-r-3xl hover:bg-blue-600"
+      style="color: white"
+    >
+      <mat-icon>menu</mat-icon>
+      Menu
+    </button>
+    <div class="flex justify-center items-center h-screen mx-auto">
+      <div *ngIf="!askedUsername">
+        <mat-card id="auth" class="max-w-md p-6 md:p-10 h-auth bg-slate-300">
+          <h1
+            class="text-center pb-5 md:pb-10 text-2xl md:text-3xl text-gray-800"
+          >
+            Review
+          </h1>
+          <div
+            *ngIf="isLoading"
+            class="flex justify-center items-center h-full"
+          >
+            <mat-spinner diameter="70" class="mx-auto"></mat-spinner>
+          </div>
+          <form
+            #authForm="ngForm"
+            (ngSubmit)="onSubmit(authForm)"
+            *ngIf="!isLoading"
+          >
+            <h1 *ngIf="user" class="text-lg font-semibold">{{ user.name }}</h1>
+            <div *ngIf="errorMessage" class="text-red-500 text-center mb-3">
+              {{ errorMessage }}
+            </div>
+            <mat-form-field class="w-full">
+              <input
+                matInput
+                type="email"
+                id="email"
+                ngModel
+                required
+                name="email"
+                placeholder="Email"
+              />
+            </mat-form-field>
+            <mat-form-field class="w-full mt-2">
+              <input
+                matInput
+                [type]="changetype ? 'text' : 'password'"
+                name="password"
+                id="password"
+                required
+                ngModel
+                minlength="6"
+                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
+                placeholder="Password (at least one letter & number)"
+              />
+              <button
+                type="button"
+                mat-icon-button
+                matSuffix
+                (click)="viewpassword()"
+              >
+                <mat-icon>{{
+                  visible ? "visibility" : "visibility_off"
+                }}</mat-icon>
+              </button>
+            </mat-form-field>
+            <!-- Heroicons -->
+            <div class="flex items-center mb-2">
+              <div class="flex-shrink-0 mr-2">
+                <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 21V10a4 4 0 014-4h4a4 4 0 014 4v11"/>
+                </svg>
+              </div>
+              <p class="text-gray-500">Minimum 6 characters</p>
+            </div>
+
+            <div class="flex items-center mb-2">
+              <div class="flex-shrink-0 mr-2">
+                <svg class="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <p class="text-gray-500">At least one letter and number</p>
+            </div>
+
+            <div class="actionButtons mt-3 md:mt-4 flex flex-col items-center">
+              <button
+                mat-raised-button
+                color="primary"
+                [disabled]="!authForm.valid"
+                class="w-full"
+              >
+                {{ isLoginMode ? "Login" : "Sign Up" }}
+              </button>
+              <button
+                mat-button
+                color="primary"
+                (click)="navigateToForgotPassword()"
+                class="mt-2"
+              >
+                Forgot Password
+              </button>
+
+              <p class="mt-2 text-center md:mt-3 text-gray-600 arrow-text">
+                or connect with
+              </p>
+              <div class="flex items-center justify-center">
+                <asl-google-signin-button
+                  class="mt-2 mr-3"
+                  text="signin_with"
+                  size="medium"
+                ></asl-google-signin-button>
+
+                <div
+                  class="fb-login-button"
+                  data-width=""
+                  data-size=""
+                  data-button-type=""
+                  data-layout=""
+                  data-auto-logout-link="false"
+                  data-use-continue-as="false"
+                  (login)="handleFacebookLogin($event)"
+                ></div>
+              </div>
+
+              <p class="mt-4 text-center text-gray-600">
+                Switch to
+                <span
+                  (click)="onSwitchMode()"
+                  class="text-sky-400 cursor-pointer"
+                >
+                  {{ isLoginMode ? "Sign Up" : "Login" }}
+                </span>
+              </p>
+            </div>
+          </form>
+        </mat-card>
       </div>
       <form
-        #authForm="ngForm"
-        (ngSubmit)="onSubmit(authForm)"
-        *ngIf="!isLoading"
+        *ngIf="askedUsername"
+        #usernameForm="ngForm"
+        (ngSubmit)="setUsername(usernameForm)"
+        class="w-80 mx-auto p-6 bg-white shadow-md rounded-lg h-80"
       >
-        <h1 *ngIf="user" class="text-lg font-semibold">{{ user.name }}</h1>
-        <div *ngIf="errorMessage" class="text-red-500 text-center mb-3">
-          {{ errorMessage }}
-        </div>
+        <h2 class="text-2xl font-bold mb-2">Create Username</h2>
+        <p class="text-gray-600 mb-4">The selected username will be public</p>
+
         <mat-form-field class="w-full">
           <input
             matInput
-            type="email"
-            id="email"
-            ngModel
+            placeholder="Username"
+            name="username"
+            [(ngModel)]="username"
             required
-            name="email"
-            placeholder="Email"
+            (input)="checkUsernameAvailability()"
           />
         </mat-form-field>
-        <mat-form-field class="w-full mt-2">
-          <input
-            matInput
-            [type]="changetype ? 'text' : 'password'"
-            name="password"
-            id="password"
-            required
-            ngModel
-            minlength="6"
-            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
-            placeholder="Password (at least one letter & number)"
-          />
-          <button
-            type="button"
-            mat-icon-button
-            matSuffix
-            (click)="viewpassword()"
+        <div class="h-6">
+          <!-- Reserve space for the message -->
+          <p
+            *ngIf="usernameAvailability !== null"
+            class="text-sm mt-2"
+            [ngClass]="{
+              'text-red-500': !usernameAvailability,
+              'text-green-500': usernameAvailability
+            }"
           >
-            <mat-icon>{{ visible ? "visibility" : "visibility_off" }}</mat-icon>
-          </button>
-        </mat-form-field>
-        <div class="actionButtons mt-3 md:mt-4 flex flex-col items-center">
-          <button
-            mat-raised-button
-            color="primary"
-            [disabled]="!authForm.valid"
-            class="w-full"
-          >
-            {{ isLoginMode ? "Login" : "Sign Up" }}
-          </button>
-          <button
-          mat-button
-          color="primary"
-          (click)="navigateToForgotPassword()"
-          class="mt-2"
-        >
-          Forgot Password
-        </button>
-
-
-
-          <p class="mt-2 text-center md:mt-3 text-gray-600 arrow-text">
-            or connect with
-          </p>
-          <div class="flex items-center justify-center">
-            <asl-google-signin-button
-              class="mt-2 mr-3"
-              text="signin_with"
-              size="medium"
-            ></asl-google-signin-button>
-
-            <div
-              class="fb-login-button"
-              data-width=""
-              data-size=""
-              data-button-type=""
-              data-layout=""
-              data-auto-logout-link="false"
-              data-use-continue-as="false"
-              (login)="handleFacebookLogin($event)"
-            ></div>
-          </div>
-
-          <p class="mt-4 text-center text-gray-600">
-            Switch to
-            <span (click)="onSwitchMode()" class="text-sky-400 cursor-pointer">
-              {{ isLoginMode ? "Sign Up" : "Login" }}
-            </span>
+            {{
+              usernameAvailability
+                ? "Username is available"
+                : "Username is not available"
+            }}
           </p>
         </div>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="!usernameForm.valid || !usernameAvailability"
+          type="submit"
+          class="w-full mt-4"
+        >
+          Submit
+        </button>
       </form>
-    </mat-card>
-  </div>
-  <form
-    *ngIf="askedUsername"
-    #usernameForm="ngForm"
-    (ngSubmit)="setUsername(usernameForm)"
-    class="w-80 mx-auto p-6 bg-white shadow-md rounded-lg h-80"
-  >
-    <h2 class="text-2xl font-bold mb-2">Create Username</h2>
-    <p class="text-gray-600 mb-4">The selected username will be public</p>
-
-    <mat-form-field class="w-full">
-      <input
-        matInput
-        placeholder="Username"
-        name="username"
-        [(ngModel)]="username"
-        required
-        (input)="checkUsernameAvailability()"
-      />
-    </mat-form-field>
-    <div class="h-6">
-      <!-- Reserve space for the message -->
-      <p
-        *ngIf="usernameAvailability !== null"
-        class="text-sm mt-2"
-        [ngClass]="{
-          'text-red-500': !usernameAvailability,
-          'text-green-500': usernameAvailability
-        }"
-      >
-        {{
-          usernameAvailability
-            ? "Username is available"
-            : "Username is not available"
-        }}
-      </p>
     </div>
-    <button
-      mat-raised-button
-      color="primary"
-      [disabled]="!usernameForm.valid || !usernameAvailability"
-      type="submit"
-      class="w-full mt-4"
-    >
-      Submit
-    </button>
-  </form>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

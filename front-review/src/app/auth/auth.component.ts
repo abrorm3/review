@@ -34,6 +34,7 @@ export class AuthComponent implements OnInit {
   username: string = ''
 
   usernameAvailability: boolean | null = null;
+  opened: boolean = true;
 
   constructor(
     private socialAuthService: SocialAuthService,

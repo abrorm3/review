@@ -3,7 +3,7 @@ module.exports = {
   content: ["./src/**/*.{html,ts}"],
   theme: {
     extend: {
-      height: { 'auth': "540px" },
+      height: { 'auth': "600px" },
       colors: {
         'dark': "rgb(32 38 52)",
         'dark-soft': "rgb(41 48 68)",

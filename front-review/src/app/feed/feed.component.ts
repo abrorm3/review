@@ -33,7 +33,12 @@ export class FeedComponent implements OnInit {
     this.router.navigate(['/review-details', reviewTitle]);
   }
   createReview(){
-    this.router.navigate(['/create-review']);
+    const user = localStorage.getItem('user')
+    if(user){
+      this.router.navigate(['/create-review']);
+    }else{
+      this.router.navigate(['/auth']);
+    }
   }
   calculateTimeDifference() {
     const now = new Date();

@@ -20,6 +20,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import { WholeNumberDirective } from '../shared/directives/whole-number.directive';
 import { MatListModule } from '@angular/material/list';
 import { ReviewDetailsComponent } from '../review-details/review-details.component';
+import { AuthModule } from '../auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -41,13 +42,14 @@ import { ReviewDetailsComponent } from '../review-details/review-details.compone
     MatFormFieldModule,
     MatInputModule,
     MatChipsModule,
-    MatSliderModule,
     MatIconModule,
     AngularEditorModule,
     MatButtonModule,
     MatListModule,
     MatSliderModule,
-    MatSidenavModule
+    MatSidenavModule,
+    AuthModule
   ],
+  exports: [SidebarComponent]
 })
 export class ReviewModule {}
