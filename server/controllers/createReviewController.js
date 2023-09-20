@@ -35,8 +35,10 @@ class createReviewController {
         return res.status(404).json({ message: "You can only pick one group type from given options" });
       }
       const authorId = user.name || user.username;
+      const authorUsername = user.username
       const newReview = new Review({
         authorId: authorId,
+        authorUsername:authorUsername,
         name: req.body.name,
         art: req.body.art,
         group: groupType.name,

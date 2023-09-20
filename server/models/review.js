@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
     authorId:{type: 'string', required: true},
+    authorUsername:{type: 'string', required: true},
     name: { type: String, unique: true, required: true },
     art: { type:String, ref: 'Art' },
     group: [{ type: String, ref: 'GroupType', required: true }],

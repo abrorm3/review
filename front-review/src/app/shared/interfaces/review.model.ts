@@ -2,6 +2,7 @@ export interface Review {
   name: string;
   art: string;
   authorId:string;
+  authorUsername?:string;
   content: string;
   coverImage: string;
   createDate?: string;

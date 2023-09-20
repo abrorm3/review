@@ -24,6 +24,24 @@ class reviewDetailsController {
       res.status(500).json({ message: err });
     }
   }
+  async getAvatar(req, res) {
+    try {
+        const authorName = req.params.username;
+        const user = await User.findOne({ username: authorName });
+        console.log(authorName + ' NAAAME '+user)
+    
+        if (user) {
+          const avatarUrl = user.profilePictureUrl;
+          res.json({ avatar: avatarUrl });
+          console.log(avatarUrl)
+        } else {
+          res.json({ avatar: null });
+        }
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+  }
 }
 
 module.exports = new reviewDetailsController();

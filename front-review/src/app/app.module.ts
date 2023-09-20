@@ -43,7 +43,7 @@ const firebaseConfig = {
   measurementId: "G-J4GWQH2MNB"
 };
 @NgModule({
-  declarations: [AppComponent, AuthComponent, ReviewDetailsComponent],
+  declarations: [AppComponent, AuthComponent],
   imports: [
     BrowserModule,
     HttpClientModule,

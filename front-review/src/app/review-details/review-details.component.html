@@ -1,39 +1,52 @@
-<div *ngIf="reviewData" class="review-details p-4">
-  <h2 class="text-2xl font-semibold">{{ reviewData.name }}</h2>
+<mat-sidenav-container class="bg-dark">
+  <mat-sidenav #sidenav mode="side" [(opened)]="opened" style="width: 320px">
+    <app-sidebar></app-sidebar>
+  </mat-sidenav>
 
-  <div class="reviewData-info mt-4">
-    <div class="flex items-center text-gray-600 mb-2">
-      <strong class="mr-2">Author:</strong>
-      <span>{{ reviewData.authorId }}</span>
-    </div>
-    <div class="flex items-center text-gray-600 mb-2">
-      <strong class="mr-2">Group:</strong>
-      <span>{{ reviewData.group }}</span>
-    </div>
-    <div class="flex items-center text-gray-600 mb-2">
-      <strong class="mr-2">Author Rating:</strong>
-      <span>{{ reviewData.authorRate }}</span>
-    </div>
-    <div class="flex items-center text-gray-600 mb-2">
-      <strong class="mr-2">Created Date:</strong>
-      <span>{{ reviewData.createDate }}</span>
-    </div>
-  </div>
+  <mat-sidenav-content class="relative flex">
+    <button
+      mat-button
+      (click)="sidenav.toggle()"
+      class="absolute text-xs r-5 px-4 py-1 bg-dark-soft text-white rounded-r-3xl hover:bg-blue-600"
+      style="color: white"
+    >
+      <mat-icon>menu</mat-icon>
+      Menu
+    </button>
+    <!-- Actual content -->
+    <div *ngIf="reviewData" class="review-details p-4 m-5 text-white">
+      <div class="reviewData-content mt-4">
+        <div class="coverImage">
+          <img [src]="reviewData.coverImage" alt="{{ reviewData.name }}" />
+        </div>
+      </div>
+      <p class="text-cyan-600 font-mono font-bold underline p-3">{{ reviewData.art }}</p>
+      <h2 class="text-2xl font-semibold mb-4 text-5xl font-sans" >{{ reviewData.name }}</h2>
 
-  <div class="reviewData-content mt-4">
-    <img [src]="reviewData.coverImage" alt="{{ reviewData.name }}" class="w-full h-auto mb-4" />
-    <div class="art" [innerHTML]="reviewData.art"></div>
-    <div class="content">{{ reviewData.content }}</div>
-  </div>
-
-  <div class="reviewData-tags mt-4">
-    <strong class="mr-2">Tags:</strong>
-    <ul class="list-disc list-inside">
-      <li *ngFor="let tag of reviewData.tags" class="mb-1">{{ tag }}</li>
-    </ul>
-  </div>
-
-  <div class="reviewData-footer mt-4 text-gray-600">
-    <p>{{ reviewData.timeAgo }}</p>
-  </div>
-</div>
+      <div class="reviewData-info text-white mb-4">
+        <div class="flex items-center mb-2 uppercase">
+          <img *ngIf="avatarImg" [src]="avatarImg" alt="Author Avatar" class="w-8 h-8 rounded-full mr-2">
+          <strong class="mr-2">By</strong>
+          <span>{{ reviewData.authorId }}</span>
+        </div>
+        <div class="flex items-center mb-2">
+          <strong class="mr-2">Group:</strong>
+          <span>{{ reviewData.group }}</span>
+        </div>
+        <!-- HTML content -->
+        <div class="art" [innerHTML]="sanitizedContent"></div>
+        <div class="flex items-center mb-2">
+          <strong class="mr-2">Author Rating:</strong>
+          <span>{{ reviewData.authorRate }}</span>
+        </div>
+        <div class="flex items-center mb-2">
+          <strong class="mr-2">Created Date:</strong>
+          <span>{{ reviewData.createDate }}</span>
+        </div>
+      </div>
+      <div class="reviewData-footer mt-4 text-gray-600">
+        <p>{{ reviewData.timeAgo }}</p>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

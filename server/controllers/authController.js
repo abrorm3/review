@@ -61,10 +61,40 @@ class authController {
       });
       await user.save();
       const token = generateAccessToken(user._id, user.roles);
-      return res.json({ message: "Registration successful", userId: user._id, token });
+      const expiresIn = 3600; //milliseconds
+      return res.json({ message: `Registration successful ${token}`, userId: user._id, token, expiresIn });
     } catch (e) {
       console.log(e);
       res.status(400).json({ message: "Registration error" });
+    }
+  }
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ message: `Email ${email} not found` });
+      }
+      if (user.roles.includes("BLOCK")) {
+        return res.status(403).json({ message: "User is blocked", isBlocked: true });
+      }
+
+      const validPassword = bcrypt.compareSync(password, user.password);
+      if (!validPassword) {
+        return res.status(400).json({ message: `Password or email is not valid` });
+      }
+      const userId = user._id;
+
+      user.lastLoginTime = new Date();
+      await user.save();
+      const token = generateAccessToken(user._id, user.roles);
+      const expiresIn = 3600; //milliseconds
+      console.log('what sending -'+userId, token,expiresIn)
+      return res.json({ userId, token,expiresIn });
+      
+    } catch (e) {
+      console.log(e);
+      res.status(400).json({ message: "Login error" });
     }
   }
   async updateUsername(req, res) {
@@ -272,34 +302,7 @@ class authController {
     }
   }
 
-  async login(req, res) {
-    try {
-      const { email, password } = req.body;
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ message: `Email ${email} not found` });
-      }
-      if (user.roles.includes("BLOCK")) {
-        return res.status(403).json({ message: "User is blocked", isBlocked: true });
-      }
-
-      const validPassword = bcrypt.compareSync(password, user.password);
-      if (!validPassword) {
-        return res.status(400).json({ message: `Password or email is not valid` });
-      }
-      const userId = user._id;
-
-      user.lastLoginTime = new Date();
-      await user.save();
-      const token = generateAccessToken(user._id, user.roles);
-      const expiresIn = 3600; //milliseconds
-      console.log('what sending -'+userId, token,expiresIn)
-      return res.json({ userId, token,expiresIn });
-    } catch (e) {
-      console.log(e);
-      res.status(400).json({ message: "Login error" });
-    }
-  }
+  
   async blockUser(req, res) {
     try {
       const { userId } = req.params;
@@ -378,6 +381,20 @@ class authController {
   
       res.json(user);
     } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+  async getUsername(req, res) {
+    try {
+      const username = req.params.username;
+      console.log(username + " username");
+      const user = await User.findOne({username:username});
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user);
+    }catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Server error' });
     }

@@ -1,0 +1,10 @@
+.review-details{
+  height: 100vh;
+}
+.coverImage img{
+  height: 200px;
+  width: 100vw;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 15px;
+}

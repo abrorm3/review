@@ -18,6 +18,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { FeedComponent } from '../feed/feed.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { WholeNumberDirective } from '../shared/directives/whole-number.directive';
+import { MatListModule } from '@angular/material/list';
+import { ReviewDetailsComponent } from '../review-details/review-details.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { WholeNumberDirective } from '../shared/directives/whole-number.directiv
     SidebarComponent,
     AccountSettingsComponent,
     FeedComponent,
-    WholeNumberDirective
+    WholeNumberDirective,
+    ReviewDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -42,6 +45,7 @@ import { WholeNumberDirective } from '../shared/directives/whole-number.directiv
     MatIconModule,
     AngularEditorModule,
     MatButtonModule,
+    MatListModule,
     MatSliderModule,
     MatSidenavModule
   ],

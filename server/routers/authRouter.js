@@ -31,7 +31,7 @@ router.get("/users", (req, res) => {
   controller.getUsers(req, res); // Call the getUsers function from the controller
 });
 router.get("/user/:userId", controller.getUser);
-// router.get('/users', controller.getUsers)
+router.get("/username/:username", controller.getUsername)
 router.put("/users/:userId/block", controller.blockUser);
 router.put("/users/block", controller.blockUsers);
 router.put("/users/unblock", controller.unblockUsers);

@@ -37,12 +37,6 @@ export class AuthService {
         })
       );
   }
-  autoLogout(expirationDuration: number) {
-    this.tokenExpirationTimer = setTimeout(() => {
-      this.logout();
-    }, expirationDuration*2000);
-  }
-
 
   signup(credentials: AuthRequest) {
     return this.http
@@ -50,18 +44,27 @@ export class AuthService {
       .pipe(
         catchError(this.handleError),
         map((response) => {
+          console.log('REGG '+response.token );
           if (response.token) {
+            console.log('setting reg localstorages');
+
             this.setAuthToken(response.token);
             this.setUserId(response.userId);
 
             const expirationDuration = response.expiresIn;
             this.autoLogout(expirationDuration);
           }
-
           return response;
         })
       );
   }
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration*2000);
+  }
+
+
 
   updateUsername(userId: string, newUsername: string): Observable<any> {
     const requestBody = { userId, newUsername };
@@ -115,6 +118,8 @@ export class AuthService {
     this.tokenExpirationTimer = null;
   }
   setAuthToken(token: string): void {
+    console.log('setter token ' +token);
+
     localStorage.setItem('user', token);
   }
   setUserId(userId: string): void {
@@ -155,6 +160,9 @@ export class AuthService {
   }
   getUser(): Observable<any> {
     return this.http.get(`${this.backend}/auth/user/${this.getUserId()}`);
+  }
+  getUsername(username): Observable<any> {
+    return this.http.get(`${this.backend}/auth/username/${username}`);
   }
   checkUsernameAvailability(
     username: string
