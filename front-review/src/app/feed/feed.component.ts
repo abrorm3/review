@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FeedService } from './feed.service';
 import { Review } from '../shared/interfaces/review.model';
+import { ReviewDetailsService } from '../review-details/review-details.service';
 
 @Component({
   selector: 'app-feed',
@@ -9,7 +10,7 @@ import { Review } from '../shared/interfaces/review.model';
   styleUrls: ['./feed.component.css'],
 })
 export class FeedComponent implements OnInit {
-  constructor(private router: Router, private feedService: FeedService) {}
+  constructor(private router: Router, private feedService: FeedService, private reviewDetailsService:ReviewDetailsService) {}
   opened: boolean = true;
   reviews: Review[] = [];
   recentReviews: Review[] = [];
@@ -27,7 +28,16 @@ export class FeedComponent implements OnInit {
       },
     });
   }
-  navigateToReviewDetails(review) {}
+  navigateToReviewDetails(review) {
+    const reviewTitle = review.name;
+    this.reviewDetailsService.getReview(reviewTitle).subscribe((data)=>{
+      console.log(data);
+
+    });
+    console.log('SUP'+reviewTitle);
+
+    this.router.navigate(['/review-details', reviewTitle]);
+  }
   createReview(){
     this.router.navigate(['/create-review']);
   }
