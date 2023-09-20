@@ -90,7 +90,7 @@ export class AuthComponent implements OnInit {
     if (form.invalid) {
       return;
     }
-    const email = form.value.email;
+    const email = form.value.email.toLowerCase();
     const password = form.value.password;
     this.isLoading = true;
 
