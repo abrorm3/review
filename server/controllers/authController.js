@@ -7,6 +7,7 @@ const { validationResult } = require("express-validator");
 const { secret } = require("../config");
 const nodemailer = require("nodemailer");
 const uri = process.env.frontDeployUrl;
+const Review = require("../models/review");
 
 const generateAccessToken = (id, roles) => {
   const payload = {
@@ -14,7 +15,7 @@ const generateAccessToken = (id, roles) => {
     roles,
   };
   const expiresIn = 3600; // 1 hour = 3600 seconds
-  return jwt.sign(payload, secret, {expiresIn});
+  return jwt.sign(payload, secret, { expiresIn });
 };
 
 class authController {
@@ -54,7 +55,7 @@ class authController {
         password: hashPassword,
         username: initialUsername,
         profilePictureUrl: getRandomProfilePicture(),
-        aboutUser:'',
+        aboutUser: "",
         roles: [userRole.value],
         registrationTime: new Date(),
         lastLoginTime: new Date(),
@@ -89,9 +90,8 @@ class authController {
       await user.save();
       const token = generateAccessToken(user._id, user.roles);
       const expiresIn = 3600; //milliseconds
-      console.log('what sending -'+userId, token,expiresIn)
-      return res.json({ userId, token,expiresIn });
-      
+      console.log("what sending -" + userId, token, expiresIn);
+      return res.json({ userId, token, expiresIn });
     } catch (e) {
       console.log(e);
       res.status(400).json({ message: "Login error" });
@@ -122,29 +122,23 @@ class authController {
   async updateUserInfo(req, res) {
     try {
       const { userId } = req.body;
-      const {
-        name,
-        email,
-        aboutUser,
-        profilePictureUrl, 
-        username,
-      } = req.body;
-      
+      const { name, email, aboutUser, profilePictureUrl, username } = req.body;
+
       const existingUser = await User.findOne({ email });
       if (existingUser && existingUser._id.toString() !== userId) {
         return res.status(400).json({ message: "Email is already in use" });
       }
-      function capitalizeString(string){
-        const words = string.split(' ');
-        const capitalizeWords = words.map(word=>{
+      function capitalizeString(string) {
+        const words = string.split(" ");
+        const capitalizeWords = words.map((word) => {
           if (word.length > 0) {
             const firstLetter = word.charAt(0).toUpperCase();
             const restOfString = word.slice(1).toLowerCase();
             return firstLetter + restOfString;
-        }
-        return word; 
-        })
-        return capitalizeWords.join(' ');
+          }
+          return word;
+        });
+        return capitalizeWords.join(" ");
       }
       const updateFields = {
         name: capitalizeString(name),
@@ -152,28 +146,34 @@ class authController {
         aboutUser: aboutUser,
         username: username.toLowerCase(),
       };
-      
-      if (profilePictureUrl.trim() !== '') {
+
+      if (profilePictureUrl.trim() !== "") {
         updateFields.profilePictureUrl = profilePictureUrl;
       }
-      
+
+      const user = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      await Review.updateMany({ authorUsername: user.username }, { authorId: name });
+      console.log('user.name '+user.name)
       const updatedUser = await User.findOneAndUpdate(
         { _id: userId },
-        { $set: updateFields }, // Use the updateFields object
+        { $set: updateFields }, 
         { new: true }
       );
-  
+
       if (!updatedUser) {
         console.error("User not found");
         return res.status(404).json({ message: "User not found" });
       }
-  
+
       if (updatedUser.validationErrors) {
         // Check for validation errors and log them
         console.error("Validation errors:", updatedUser.validationErrors);
         return res.status(400).json({ message: "Validation errors", errors: updatedUser.validationErrors });
       }
-  
+
       console.log("User information updated successfully:", updatedUser);
       return res.status(200).json({ message: "User information updated successfully" });
     } catch (error) {
@@ -181,8 +181,7 @@ class authController {
       return res.status(500).json({ message: "An error occurred" });
     }
   }
-  
-  
+
   async forgotPassword(req, res) {
     const { email } = req.body;
 
@@ -302,7 +301,6 @@ class authController {
     }
   }
 
-  
   async blockUser(req, res) {
     try {
       const { userId } = req.params;
@@ -372,31 +370,31 @@ class authController {
   }
   async getUser(req, res) {
     try {
-      const userId = req.params.userId; 
+      const userId = req.params.userId;
       const user = await User.findById(userId);
-  
+
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: "User not found" });
       }
-  
+
       res.json(user);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Server error' });
+      res.status(500).json({ message: "Server error" });
     }
   }
   async getUsername(req, res) {
     try {
       const username = req.params.username;
       console.log(username + " username");
-      const user = await User.findOne({username:username});
+      const user = await User.findOne({ username: username });
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: "User not found" });
       }
       res.json(user);
-    }catch (error) {
+    } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Server error' });
+      res.status(500).json({ message: "Server error" });
     }
   }
   async blockUsers(req, res) {
