@@ -17,7 +17,7 @@
       <div class="feed-container mx-auto">
         <!-- Filter Container -->
         <h2 class="text-center text-white font-bold text-2xl my-4">
-          Search by
+          Filter by
         </h2>
         <div
           class="flex justify-center items-center my-4 bg-gray-700 text-lg text-white py-2 rounded-3xl mx-5"
@@ -88,7 +88,7 @@
         </button>
       </div>
       <h3 class="text-lg font-semibold mb-4">Recently Added Reviews</h3>
-      <div *ngFor="let recentReview of recentReviews" class="mb-2">
+      <div *ngFor="let recentReview of recentReviews" (click)="navigateToDetails(recentReview.name)" class="mb-2 cursor-pointer">
         <p class="text-sm font-semibold">
           {{ recentReview.name }}
           <span

@@ -71,4 +71,7 @@ export class FeedComponent implements OnInit {
   togglePanel(){
     this.feedService.togglePanel();
   }
+  navigateToDetails(review){
+    this.router.navigate([`/review-details/${review}`])
+  }
 }
