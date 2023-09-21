@@ -3,7 +3,7 @@
     <app-sidebar></app-sidebar>
   </mat-sidenav>
 
-  <mat-sidenav-content class="relative flex bg-dark">
+  <mat-sidenav-content class="relative bg-dark">
     <button
       mat-button
       (click)="sidenav.toggle()"
@@ -43,11 +43,13 @@
           </div>
           <div class="flex items-center">
             <mat-icon class="mr-2">event</mat-icon>
-            <strong>Joined:</strong>
+            <strong class="mr-1">Joined:</strong>
             {{ userInfo?.registrationTime | date }}
           </div>
         </div>
       </mat-card-content>
     </mat-card>
+    <app-person-reviews></app-person-reviews>
   </mat-sidenav-content>
 </mat-sidenav-container>
+

@@ -21,6 +21,13 @@ export class ReviewDetailsService {
       })
     )
   }
+  getAuthorReview(username: string): Observable<any> {
+    return this.http.get<Review>(`${this.backend}/review-details/person/${username}`).pipe(
+      tap((res)=>{
+        console.log(res);
+      })
+    )
+  }
   getAvatar(username: string): Observable<string> {
     return this.http
       .get<{ avatar: string }>(`${this.backend}/review-details/get-avatar/${username}`)

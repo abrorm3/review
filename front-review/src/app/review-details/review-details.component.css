@@ -1,5 +1,5 @@
 .review-details{
-  height: 100vh;
+  min-height: 100vh;
 }
 .coverImage img{
   height: 200px;

@@ -15,7 +15,7 @@ class reviewDetailsController {
 
       if (review) {
         res.json({ review });
-        console.log(review)
+        console.log(review);
       } else {
         res.status(404).send("Review not found");
       }
@@ -26,23 +26,42 @@ class reviewDetailsController {
   }
   async getAvatar(req, res) {
     try {
-        const authorName = req.params.username;
-        const user = await User.findOne({ username: authorName });
-        console.log(authorName + ' NAAAME '+user)
-    
-        if (user) {
-          const avatarUrl = user.profilePictureUrl;
-          res.json({ avatar: avatarUrl });
-          console.log(avatarUrl)
-        } else {
-          res.json({ avatar: null });
-        }
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
-      }
-  }
+      const authorName = req.params.username;
+      const user = await User.findOne({ username: authorName });
+      console.log(authorName + " NAAAME " + user);
 
+      if (user) {
+        const avatarUrl = user.profilePictureUrl;
+        res.json({ avatar: avatarUrl });
+        console.log(avatarUrl);
+      } else {
+        res.json({ avatar: null });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+  async getUserReview(req, res) {
+    try {
+      const username = req.params.username;
+      const cleanedUsername = username.replace(/%20/g, " ");
+      console.log(cleanedUsername+ ' CLEER');
+      const review = await Review.find({ authorUsername: username });
+      console.log(review);
+      if (review) {
+        res.json({ review });
+        console.log(review);
+      } else {
+        console.log('not found')
+        res.status(404).send("No reviews found for this author");
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: err });
+    }
+  }
+  catch(err) {}
 }
 
 module.exports = new reviewDetailsController();

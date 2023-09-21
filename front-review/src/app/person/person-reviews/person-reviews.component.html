@@ -1,0 +1,35 @@
+<!-- person-reviews.component.html -->
+
+<div class="container mx-auto mt-8">
+  <h2 class="text-2xl font-semibold mb-5 mx-32 text-white text-3xl ">Reviews by {{ userInfo }}</h2>
+
+  <div
+        *ngFor="let review of reviews"
+        class="bg-slate-300 shadow-lg rounded-lg overflow-hidden my-5 cursor-pointer mx-32 flex flex-row-reverse items-center"
+        (click)="navigateToReviewDetails(review)"
+      >
+        <img
+          src="{{ review.coverImage }}"
+          alt="{{ review.name }}"
+          class="w-full h-48 object-cover flex-1 rounded-l-full"
+        />
+        <div class="px-6 py-4 flex-1">
+          <div class="font-semibold text-xl mb-2">{{ review.name }}</div>
+          <div class="flex items-center text-gray-700 text-sm space-x-2">
+            <span class="flex items-center bg-gray-200 rounded-xl px-3 py-1">
+              <mat-icon class="icon-display text-blue-600">workspaces</mat-icon>
+              {{ review.group }}
+            </span>
+            <span class="flex items-center bg-gray-200 rounded-xl px-3 py-1">
+              <mat-icon class="icon-display text-yellow-500">star</mat-icon>
+              {{ review.authorRate }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+  <!-- No reviews message -->
+  <ng-template #noReviews>
+    <p class="text-gray-500">No reviews found for this author.</p>
+  </ng-template>
+</div>
