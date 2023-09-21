@@ -38,13 +38,6 @@ export class ReviewDetailsComponent implements OnInit {
 
         }
       });
-
-      // Subscribe to the BehaviorSubject to receive updates.
-      // this.reviewDetailsService.reviewData$.subscribe((data) => {
-      //   this.reviewData = data;
-      //   console.log(this.reviewData);
-
-      // });
     });
     this.getUserId();
 

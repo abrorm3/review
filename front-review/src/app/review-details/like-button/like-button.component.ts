@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { ReviewDetailsService } from '../review-details.service';
 import { Like } from 'src/app/shared/interfaces/resLike.model';
+import { AuthService } from 'src/app/auth/auth.service';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { DialogComponent } from './dialog/dialog.component';
 
 @Component({
   selector: 'app-like-button',
@@ -14,7 +17,7 @@ export class LikeButtonComponent {
   isLiked: boolean = false;
   likesCount: number = 0;
 
-  constructor(private reviewDetailsService: ReviewDetailsService) {}
+  constructor(private reviewDetailsService: ReviewDetailsService, private authService:AuthService,public dialog: MatDialog) {}
 
   ngOnInit(): void {
     console.log(this.userId);
@@ -28,20 +31,27 @@ export class LikeButtonComponent {
       this.likesCount = count.likesCount;
     });
   }
+  openDialog() {
+    this.dialog.open(DialogComponent);
+  }
 
   toggleLike() {
     console.log(this.userId);
-
-    if (this.isLiked) {
-      this.reviewDetailsService.unlikeReview(this.userId, this.reviewId).subscribe(() => {
-        this.isLiked = false;
-        this.likesCount--;
-      });
-    } else {
-      this.reviewDetailsService.likeReview(this.userId, this.reviewId).subscribe(() => {
-        this.isLiked = true;
-        this.likesCount++;
-      });
+    const user = this.authService.getUserId();
+    if(user){
+      if (this.isLiked) {
+        this.reviewDetailsService.unlikeReview(this.userId, this.reviewId).subscribe(() => {
+          this.isLiked = false;
+          this.likesCount--;
+        });
+      } else {
+        this.reviewDetailsService.likeReview(this.userId, this.reviewId).subscribe(() => {
+          this.isLiked = true;
+          this.likesCount++;
+        });
+      }
+    }else{
+      this.openDialog();
     }
   }
 }

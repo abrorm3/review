@@ -22,6 +22,9 @@ import { MatListModule } from '@angular/material/list';
 import { ReviewDetailsComponent } from '../review-details/review-details.component';
 import { AuthModule } from '../auth/auth.module';
 import { LikeButtonComponent } from '../review-details/like-button/like-button.component';
+import { DialogComponent } from '../review-details/like-button/dialog/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,8 @@ import { LikeButtonComponent } from '../review-details/like-button/like-button.c
     FeedComponent,
     WholeNumberDirective,
     ReviewDetailsComponent,
-    LikeButtonComponent
+    LikeButtonComponent,
+    DialogComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +54,9 @@ import { LikeButtonComponent } from '../review-details/like-button/like-button.c
     MatListModule,
     MatSliderModule,
     MatSidenavModule,
-    AuthModule
+    AuthModule,
+    MatDialogModule,
+    RouterModule
   ],
   exports: [SidebarComponent]
 })
