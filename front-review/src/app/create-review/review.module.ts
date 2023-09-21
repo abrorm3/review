@@ -21,6 +21,7 @@ import { WholeNumberDirective } from '../shared/directives/whole-number.directiv
 import { MatListModule } from '@angular/material/list';
 import { ReviewDetailsComponent } from '../review-details/review-details.component';
 import { AuthModule } from '../auth/auth.module';
+import { LikeButtonComponent } from '../review-details/like-button/like-button.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AuthModule } from '../auth/auth.module';
     AccountSettingsComponent,
     FeedComponent,
     WholeNumberDirective,
-    ReviewDetailsComponent
+    ReviewDetailsComponent,
+    LikeButtonComponent
   ],
   imports: [
     CommonModule,

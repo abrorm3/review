@@ -32,5 +32,26 @@ export class ReviewDetailsService {
       );
   }
 
+  // LIKE Component
+  likeReview(userId: string, reviewId: string) {
+    console.log('this is serv userid'+userId);
+
+    return this.http.post(`${this.backend}/likes/like/${reviewId}`, { userId});
+  }
+
+  unlikeReview(userId: string, reviewId: string) {
+    return this.http.delete(`${this.backend}/likes/unlike/${reviewId}`, { body: { userId } });
+  }
+
+  checkIfLiked(userId: string, reviewId: string) {
+    return this.http.get(`${this.backend}/likes/check-like/${reviewId}?userId=${userId}`);
+  }
+
+  getLikesCount(reviewId: string) {
+    return this.http.get(`${this.backend}/likes/all-likes/${reviewId}`);
+  }
+  // router.post("/like/:reviewId", controller.like);
+  // router.delete("/unlike/:reviewId", controller.unlike)
+  // router.get("/all-likes/:reviewId", controller.allLikes)
 
 }

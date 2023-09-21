@@ -13,6 +13,7 @@ import { AuthService } from '../auth/auth.service';
 export class ReviewDetailsComponent implements OnInit {
   reviewData: Review;
   user:string;
+  userId:string;
   avatarImg;
   constructor(
     private reviewDetailsService: ReviewDetailsService,
@@ -45,7 +46,11 @@ export class ReviewDetailsComponent implements OnInit {
 
       // });
     });
+    this.getUserId();
 
+  }
+  getUserId(){
+    this.userId= this.authService.getUserId();
   }
   authorAvatar(){
     console.log(this.reviewData.authorUsername);

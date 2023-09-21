@@ -10,4 +10,5 @@ export interface Review {
   group: string;
   tags: string[];
   timeAgo?: string;
+  _id?: string;
 }

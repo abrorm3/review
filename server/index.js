@@ -7,6 +7,7 @@ const authRouter = require('./routers/authRouter');
 const reviewRouter = require('./routers/reviewRouter');
 const feedRouter = require('./routers/feedRouter');
 const reviewDetailsRouter = require('./routers/reviewDetailsRouter');
+const likeRouter = require('./routers/likeRouter');
 const PORT = process.env.PORT || 3000
 const uri = process.env.mongoDBURL;
 
@@ -20,6 +21,7 @@ app.use("/auth", authRouter);
 app.use("/review", reviewRouter);
 app.use("/feed", feedRouter)
 app.use("/review-details", reviewDetailsRouter);
+app.use("/likes",likeRouter)
 app.get('/',(req, res) => {
     res.render('index')
 })
