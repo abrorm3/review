@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageUploadService } from '../shared/image-upload.service';
 import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-settings',
@@ -21,12 +22,14 @@ export class AccountSettingsComponent implements OnInit {
 
   errorMessage: string = '';
   successMessage:string='';
+  opened:boolean=true;
 
   selectedFile: File | null = null;
 
   constructor(
     private imageUploadService: ImageUploadService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router:Router
   ) {}
 
   ngOnInit(): void {
@@ -120,5 +123,8 @@ export class AccountSettingsComponent implements OnInit {
       this.username = user.username;
       console.log(this.name);
     });
+  }
+  navigateToReviews(){
+    this.router.navigate([`/person/${this.name?this.name:this.username}`]);
   }
 }
