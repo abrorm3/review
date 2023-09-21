@@ -1,60 +1,74 @@
-<div class="fixed" style="width: 318px">
+<div class="fixed flex flex-col justify-between" style="width: 320px">
+  <div
+    class="sidebar px-5 pt-10 flex flex-col bg-dark-soft h-screen text-slate-300 font-sans w-full"
+  >
+    <!-- Home -->
 
+    <a
+      class="flex items-center mb-3 p-2 hover:bg-slate-700 rounded-lg"
+      [routerLink]="['/feed']"
+    >
+      <mat-icon class="mr-2">home</mat-icon>
+      <span class="align-middle">Home</span>
+    </a>
 
-    <div class="sidebar px-5 pt-10 flex flex-col bg-dark-soft h-screen text-slate-300 font-sans relative">
-      <!-- Home -->
+    <!-- Search -->
+    <a
+      class="flex items-center mb-3 p-2 hover:bg-slate-700 rounded-lg"
+      [routerLink]="['/search']"
+    >
+      <mat-icon class="mr-2">search</mat-icon>
+      <span>Search</span>
+    </a>
 
-      <a class="flex items-center mb-3 p-2 hover:bg-slate-700 rounded-lg" [routerLink]="['/feed']">
-        <mat-icon class="mr-2">home</mat-icon>
-        <span class="align-middle">Home</span>
-      </a>
+    <!-- Top Contributers -->
+    <a
+      matTooltip="Soon"
+      matTooltipPosition="above"
+      class="flex items-center mb-4 p-2 hover:bg-slate-700 rounded-lg cursor-not-allowed"
+    >
+      <mat-icon class="mr-2">people</mat-icon>
+      <span>Top Contributers</span>
+    </a>
 
+    <!-- Reviews -->
+    <mat-expansion-panel class="w-full">
+      <mat-expansion-panel-header>
+        <mat-icon>rate_review</mat-icon>
+        <span>Reviews</span>
+      </mat-expansion-panel-header>
+      <mat-nav-list>
+        <a mat-list-item [routerLink]="['/feed']">
+          <span>Game</span>
+        </a>
+        <a mat-list-item [routerLink]="['/reviews', 'movie']">
+          <span>Movie</span>
+        </a>
+        <a mat-list-item [routerLink]="['/reviews', 'anime']">
+          <span>Anime</span>
+        </a>
+        <a mat-list-item [routerLink]="['/reviews', 'book']">
+          <span>Book</span>
+        </a>
+      </mat-nav-list>
+    </mat-expansion-panel>
 
-      <!-- Search -->
-      <a class="flex items-center mb-3 p-2 hover:bg-slate-700 rounded-lg" [routerLink]="['/search']">
-        <mat-icon class="mr-2">search</mat-icon>
-        <span>Search</span>
-      </a>
-
-      <!-- Top Contributers -->
-      <a matTooltip="Soon" matTooltipPosition="above"  class="flex items-center mb-4 p-2 hover:bg-slate-700 rounded-lg cursor-not-allowed">
-        <mat-icon class="mr-2">people</mat-icon>
-        <span>Top Contributers</span>
-      </a>
-
-      <!-- Reviews -->
-      <mat-expansion-panel class="w-full">
-        <mat-expansion-panel-header>
-          <mat-icon>rate_review</mat-icon>
-          <span>Reviews</span>
-        </mat-expansion-panel-header>
-        <mat-nav-list>
-          <a mat-list-item [routerLink]="['/feed']">
-            <span>Game</span>
-          </a>
-          <a mat-list-item [routerLink]="['/reviews', 'movie']">
-            <span>Movie</span>
-          </a>
-          <a mat-list-item [routerLink]="['/reviews', 'anime']">
-            <span>Anime</span>
-          </a>
-          <a mat-list-item [routerLink]="['/reviews', 'book']">
-            <span>Book</span>
-          </a>
-        </mat-nav-list>
-      </mat-expansion-panel>
-
-      <div class="user-container h-60 mx-auto absolute bottom-0 bg-blue-500">
-        <ng-container *ngIf="isAuthenticated; else signIn">
-          <span>Hello, {{ userInfo?.username }}</span>
-        </ng-container>
-        <ng-template #signIn>
-          <a mat-button [routerLink]="['/signin']">
-            <span>Sign In</span>
-          </a>
-        </ng-template>
-      </div>
+    <div class="bg-gradient-to-br from-sky-800 flex justify-center items-center mt-auto mb-5 py-2 rounded-lg">
+      <ng-container *ngIf="isAuthenticated; else signIn">
+        <div class="flex items-center py-2 cursor-pointer" (click)="navigateToSettings()">
+          <img [src]="userInfo?.profilePictureUrl" alt="user" class="w-12 h-12 rounded-full mr-2">
+          <div class="nameSettings">
+            <span class="text-lg font-mono">{{ userInfo?.name?userInfo.name:userInfo.username }}</span>
+            <p class="text-xs">Account Settings</p>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #signIn>
+        <a mat-button [routerLink]="['/auth']" class="px-32">
+          <span class="text-white text-lg hover:text-slate-300">Authenticate</span>
+        </a>
+      </ng-template>
     </div>
 
-
   </div>
+</div>

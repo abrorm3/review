@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from '../interfaces/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,7 +12,7 @@ export class SidebarComponent implements OnInit {
   opened: boolean = true;
   isAuthenticated: boolean = false;
   userInfo:User;
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router:Router) {}
 
   ngOnInit(): void {
     this.getUser();
@@ -30,5 +31,8 @@ export class SidebarComponent implements OnInit {
         console.log(err);
       },
     });
+  }
+  navigateToSettings(){
+    this.router.navigate(['/account/settings']);
   }
 }

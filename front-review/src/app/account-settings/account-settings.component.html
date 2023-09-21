@@ -7,7 +7,7 @@
     <button
       mat-button
       (click)="sidenav.toggle()"
-      class="fixed text-xs r-5 px-4 py-1 bg-dark-soft text-white rounded-r-3xl hover:bg-blue-600"
+      class="fixed menuBtn text-xs r-5 px-4 py-1 bg-dark-soft text-white rounded-r-3xl hover:bg-blue-600"
       style="color: white"
     >
       <mat-icon>menu</mat-icon>
@@ -21,12 +21,16 @@
         >
           <!-- Username, Member Since, and Save Button -->
           <div
-            class="flex flex-col md:flex-row items-center space-y-4 md:space-x-4"
+            class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-x-4"
           >
             <div class="md:w-1/2 space-y-2 md:space-y-4">
               <p class="font-semibold text-2xl">{{ username }}</p>
               <p class="font-semibold">Member Since: {{ memberSince }}</p>
             </div>
+            <button type="button" mat-stroked-button (click)="logout()" class="text-white bg-dark hover:bg-red-700">
+              <mat-icon>logout</mat-icon>
+              Logout
+            </button>
           </div>
 
           <!-- Dividing Arrow -->
@@ -93,6 +97,7 @@
                   name="name"
                   #nameInput="ngModel"
                   #emailInput="ngModel"
+                  maxlength="30"
                 />
               </mat-form-field>
             </div>
@@ -142,7 +147,7 @@
       </form>
       <button
         mat-button
-        class="w-full text-center savebtn mb-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg p-2"
+        class="w-1/2 mx-auto savebtn mb-3 text-lg bg-gradient-to-b from-sky-800 hover:bg-sky-700  rounded-lg p-2 underline"
         (click)="navigateToReviews()"
       >
         See my reviews

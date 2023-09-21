@@ -111,7 +111,7 @@ export class AuthService {
     console.log('getting called logout');
 
     this.removeAuthToken();
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/feed']);
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
     }

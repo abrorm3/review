@@ -127,4 +127,7 @@ export class AccountSettingsComponent implements OnInit {
   navigateToReviews(){
     this.router.navigate([`/person/${this.name?this.name:this.username}`]);
   }
+  logout(){
+    this.authService.logout();
+  }
 }
