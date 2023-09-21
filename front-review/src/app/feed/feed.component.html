@@ -5,76 +5,106 @@
 
   <mat-sidenav-content class="relative flex">
     <div class="w-3/4">
-    <button
-      mat-button
-      (click)="sidenav.toggle()"
-      class="fixed menuBtn text-xs r-5 px-4 py-1 bg-dark-soft text-white rounded-r-3xl hover:bg-blue-600"
-      style="color: white"
-    >
-      <mat-icon>menu</mat-icon>
-      Menu
-    </button>
-    <div class="feed-container mx-auto">
-      <!-- Filter Container -->
-      <h2 class="text-center text-white font-bold text-2xl my-4">Search by</h2>
-      <div
-        class="flex justify-center items-center my-4 bg-gray-700 text-lg text-white py-4 rounded-3xl mx-5"
+      <button
+        mat-button
+        (click)="sidenav.toggle()"
+        class="fixed menuBtn text-xs r-5 px-4 py-1 bg-dark-soft text-white rounded-r-3xl hover:bg-blue-600"
+        style="color: white"
       >
-        <div class="flex space-x-4 gap-6">
-          <button class="font-semibold hover:text-blue-600">Latest</button>
-          <button class="font-semibold hover:text-blue-600">High rate</button>
-          <button class="font-semibold hover:text-blue-600">Tag cloud</button>
+        <mat-icon>menu</mat-icon>
+        Menu
+      </button>
+      <div class="feed-container mx-auto">
+        <!-- Filter Container -->
+        <h2 class="text-center text-white font-bold text-2xl my-4">
+          Search by
+        </h2>
+        <div
+          class="flex justify-center items-center my-4 bg-gray-700 text-lg text-white py-2 rounded-3xl mx-5"
+        >
+          <div class="flex gap-6">
+            <button class="font-semibold hover:text-sky-900 hover:bg-slate-300 px-2 py-1 rounded-lg" >Latest</button>
+            <button class="font-semibold hover:text-sky-900 hover:bg-slate-300 px-2 py-1 rounded-lg" [ngClass]="{'active':selectedGroupType===''}">High rate</button>
+            <button class="font-semibold hover:text-sky-900 hover:bg-slate-300 px-2 py-1 rounded-lg">Tag cloud</button>
+            <button class="font-semibold hover:text-sky-900 hover:bg-slate-300 px-2 py-1 rounded-lg" (click)="togglePanel()" [ngClass]="{'active': selectedGroupType != ''}">Group Type</button>
+          </div>
         </div>
-      </div>
 
-      <div
-        *ngFor="let review of reviews"
-        class="bg-slate-300 shadow-lg rounded-lg overflow-hidden my-8 cursor-pointer mx-20"
-        (click)="navigateToReviewDetails(review)"
-      >
-        <img
-          src="{{ review.coverImage }}"
-          alt="{{ review.name }}"
-          class="w-full h-48 object-cover"
-        />
-        <div class="px-6 py-4">
-          <div class="font-semibold text-xl mb-2">{{ review.name }}</div>
-          <div class="flex items-center text-gray-700 text-sm space-x-2">
-            <span class="flex items-center bg-gray-200 rounded-xl px-3 py-1">
-              <mat-icon class="icon-display text-blue-600">workspaces</mat-icon>
-              {{ review.group }}
-            </span>
-            <span class="flex items-center bg-gray-200 rounded-xl px-3 py-1">
-              <mat-icon class="icon-display text-yellow-500">star</mat-icon>
-              {{ review.authorRate }}
-            </span>
-            <span class="flex items-center bg-gray-200 rounded-xl px-3 py-1">
-              <mat-icon class="icon-display text-green-500">person</mat-icon>
-              {{ review.authorId }}
-            </span>
+        <div
+          *ngFor="let review of reviews"
+          [ngClass]="{'my-8': selectedGroupType === '' || selectedGroupType == review.group}"
+          class="bg-slate-300 shadow-lg rounded-lg overflow-hidden cursor-pointer mx-20"
+          (click)="navigateToReviewDetails(review)"
+        >
+          <div
+            *ngIf="
+              selectedGroupType === '' || selectedGroupType == review.group
+            "
+          >
+            <img
+              src="{{ review.coverImage }}"
+              alt="{{ review.name }}"
+              class="w-full h-48 object-cover"
+            />
+            <div class="px-6 py-4">
+              <div class="font-semibold text-xl mb-2">{{ review.name }}</div>
+              <div class="flex items-center text-gray-700 text-sm space-x-2">
+                <span
+                  class="flex items-center bg-gray-200 rounded-xl px-3 py-1"
+                >
+                  <mat-icon class="icon-display text-blue-600"
+                    >workspaces</mat-icon
+                  >
+                  {{ review.group }}
+                </span>
+                <span
+                  class="flex items-center bg-gray-200 rounded-xl px-3 py-1"
+                >
+                  <mat-icon class="icon-display text-yellow-500">star</mat-icon>
+                  {{ review.authorRate }}
+                </span>
+                <span
+                  class="flex items-center bg-gray-200 rounded-xl px-3 py-1"
+                >
+                  <mat-icon class="icon-display text-green-500"
+                    >person</mat-icon
+                  >
+                  {{ review.authorId }}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    </div>
     <div class="w-1/4 p-4 bg-gray-800 text-white">
       <div class="text-right mb-4">
-        <button mat-raised-button (click)="createReview()" class="bg-blue-600 font-semibold py-2 px-4 mt-2 mb-5 rounded-lg hover:bg-blue-700 hover:shadow-md hover:text-white">
+        <button
+          mat-raised-button
+          (click)="createReview()"
+          class="bg-blue-600 font-semibold py-2 px-4 mt-2 mb-5 rounded-lg hover:bg-blue-700 hover:shadow-md hover:text-white"
+        >
           Create Review
         </button>
       </div>
       <h3 class="text-lg font-semibold mb-4">Recently Added Reviews</h3>
       <div *ngFor="let recentReview of recentReviews" class="mb-2">
-        <p class="text-sm font-semibold">{{ recentReview.name }} <span><p class="text-xs text-gray-500">{{ recentReview.timeAgo }}</p></span></p>
+        <p class="text-sm font-semibold">
+          {{ recentReview.name }}
+          <span
+            ><p class="text-xs text-gray-500">
+              {{ recentReview.timeAgo }}
+            </p></span
+          >
+        </p>
         <p class="text-xs text-gray-500">{{ recentReview.authorId }}</p>
         <div class="flex items-center text-sm">
           <mat-icon class="icon-display text-yellow-500">star</mat-icon>
           <p class="ml-1">{{ recentReview.authorRate }}</p>
         </div>
 
-        <hr class="my-1 border-gray-600">
+        <hr class="my-1 border-gray-600" />
       </div>
     </div>
-
   </mat-sidenav-content>
 </mat-sidenav-container>

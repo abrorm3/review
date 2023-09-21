@@ -14,6 +14,8 @@ export class FeedComponent implements OnInit {
   opened: boolean = true;
   reviews: Review[] = [];
   recentReviews: Review[] = [];
+  selectedGroupType: string = '';
+  searchFilter: string = '';
 
   ngOnInit() {
     this.feedService.getReviews().subscribe({
@@ -26,6 +28,11 @@ export class FeedComponent implements OnInit {
         console.log(this.recentReviews);
         this.calculateTimeDifference();
       },
+    });
+    this.feedService.groupType$.subscribe((groupType) => {
+      this.selectedGroupType = groupType;
+      console.log(this.selectedGroupType + ' - SELECTEED');
+
     });
   }
   navigateToReviewDetails(review) {
@@ -55,5 +62,13 @@ export class FeedComponent implements OnInit {
         review.timeAgo = `${hoursDifference}h ago`;
       }
     });
+  }
+  handleGroupTypeSelected(groupType:string){
+    this.selectedGroupType = groupType;
+    console.log(this.selectedGroupType+' GRRRUP!');
+
+  }
+  togglePanel(){
+    this.feedService.togglePanel();
   }
 }
