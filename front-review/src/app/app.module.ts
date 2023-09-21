@@ -30,6 +30,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { ReviewModule } from './create-review/review.module';
 import { MarkdownModule } from 'ngx-markdown';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { PersonModule } from './person/person.module';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
 }
@@ -77,6 +78,7 @@ const firebaseConfig = {
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideStorage(() => getStorage()),
     AngularFireModule.initializeApp(firebaseConfig),
+    PersonModule,
 
   ],
   providers: [

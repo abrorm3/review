@@ -161,7 +161,7 @@ export class AuthService {
   getUser(): Observable<any> {
     return this.http.get(`${this.backend}/auth/user/${this.getUserId()}`);
   }
-  getUsername(username): Observable<any> {
+  getUsername(username: string): Observable<any> {
     return this.http.get(`${this.backend}/auth/username/${username}`);
   }
   checkUsernameAvailability(
