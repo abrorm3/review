@@ -169,7 +169,6 @@ class authController {
       }
 
       if (updatedUser.validationErrors) {
-        // Check for validation errors and log them
         console.error("Validation errors:", updatedUser.validationErrors);
         return res.status(400).json({ message: "Validation errors", errors: updatedUser.validationErrors });
       }
@@ -387,7 +386,9 @@ class authController {
     try {
       const username = req.params.username;
       console.log(username + " username");
-      const user = await User.findOne({ username: username });
+      const user = await User.findOne({
+        $or: [{ name: username }, { username: username }]
+      });
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }

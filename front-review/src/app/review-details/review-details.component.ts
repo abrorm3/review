@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReviewDetailsService } from './review-details.service';
 import { Review } from '../shared/interfaces/review.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '../auth/auth.service';
 
@@ -18,7 +18,8 @@ export class ReviewDetailsComponent implements OnInit {
   constructor(
     private reviewDetailsService: ReviewDetailsService,
     private authService:AuthService,
-    private route: ActivatedRoute,private sanitizer: DomSanitizer
+    private route: ActivatedRoute,private sanitizer: DomSanitizer,
+    private router:Router
   ) {}
   sanitizedContent: SafeHtml | undefined;
   opened: boolean = true;
@@ -41,6 +42,11 @@ export class ReviewDetailsComponent implements OnInit {
     });
     this.getUserId();
 
+  }
+  navigateToPersonDetails(authorId) {
+    this.authService.getUsername(authorId).subscribe((data) => {
+      this.router.navigate(['/person', data.username]);
+    })
   }
   getUserId(){
     this.userId= this.authService.getUserId();
