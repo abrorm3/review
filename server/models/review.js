@@ -11,7 +11,7 @@ const reviewSchema = new mongoose.Schema({
     illustration: [{ type: String, required: false }],
     authorRate: { type: Number, ref: 'Art', min: 1, max: 10 },
     createDate: { type: Date},
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Like' }],
     coverImage: {
         type: String,
         default: 'https://firebasestorage.googleapis.com/v0/b/review-e9e60.appspot.com/o/logo.png?alt=media&token=76680d07-3395-43d0-beef-25e9f5ecf175',

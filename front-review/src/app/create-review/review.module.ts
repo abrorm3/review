@@ -25,7 +25,8 @@ import { LikeButtonComponent } from '../review-details/like-button/like-button.c
 import { DialogComponent } from '../review-details/like-button/dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
-
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTooltipModule} from '@angular/material/tooltip';
 @NgModule({
   declarations: [
     CreateReviewComponent,
@@ -56,7 +57,9 @@ import { RouterModule } from '@angular/router';
     MatSidenavModule,
     AuthModule,
     MatDialogModule,
-    RouterModule
+    RouterModule,
+    MatExpansionModule,
+    MatTooltipModule
   ],
   exports: [SidebarComponent]
 })

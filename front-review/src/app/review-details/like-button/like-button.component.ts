@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ReviewDetailsService } from '../review-details.service';
 import { Like } from 'src/app/shared/interfaces/resLike.model';
 import { AuthService } from 'src/app/auth/auth.service';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from './dialog/dialog.component';
 
 @Component({
@@ -10,35 +10,41 @@ import { DialogComponent } from './dialog/dialog.component';
   templateUrl: './like-button.component.html',
   styleUrls: ['./like-button.component.css']
 })
-export class LikeButtonComponent {
+export class LikeButtonComponent implements OnInit {
   @Input() reviewId: string;
-  @Input() userId: string; // Assuming you have the user's ID
+  @Input() userId: string;
 
   isLiked: boolean = false;
   likesCount: number = 0;
 
-  constructor(private reviewDetailsService: ReviewDetailsService, private authService:AuthService,public dialog: MatDialog) {}
+  constructor(
+    private reviewDetailsService: ReviewDetailsService,
+    private authService: AuthService,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-    console.log(this.userId);
-
-    this.reviewDetailsService.checkIfLiked(this.userId, this.reviewId).subscribe((result:Like) => {
-      this.isLiked = result.isLiked;
-    });
+    this.checkLike();
 
     // Get the number of likes for this review
-    this.reviewDetailsService.getLikesCount(this.reviewId).subscribe((count:any) => {
+    this.reviewDetailsService.getLikesCount(this.reviewId).subscribe((count: any) => {
       this.likesCount = count.likesCount;
     });
   }
+
+  checkLike() {
+    this.reviewDetailsService.checkIfLiked(this.userId, this.reviewId).subscribe((result: Like) => {
+      this.isLiked = result.isLiked;
+    });
+  }
+
   openDialog() {
     this.dialog.open(DialogComponent);
   }
 
   toggleLike() {
-    console.log(this.userId);
     const user = this.authService.getUserId();
-    if(user){
+    if (user) {
       if (this.isLiked) {
         this.reviewDetailsService.unlikeReview(this.userId, this.reviewId).subscribe(() => {
           this.isLiked = false;
@@ -50,7 +56,7 @@ export class LikeButtonComponent {
           this.likesCount++;
         });
       }
-    }else{
+    } else {
       this.openDialog();
     }
   }

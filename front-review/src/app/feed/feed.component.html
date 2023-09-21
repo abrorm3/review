@@ -8,7 +8,7 @@
     <button
       mat-button
       (click)="sidenav.toggle()"
-      class="absolute text-xs r-5 px-4 py-1 bg-dark-soft text-white rounded-r-3xl hover:bg-blue-600"
+      class="fixed text-xs r-5 px-4 py-1 bg-dark-soft text-white rounded-r-3xl hover:bg-blue-600"
       style="color: white"
     >
       <mat-icon>menu</mat-icon>
@@ -29,7 +29,7 @@
 
       <div
         *ngFor="let review of reviews"
-        class="bg-slate-300 shadow-lg rounded-lg overflow-hidden my-4 cursor-pointer mx-32"
+        class="bg-slate-300 shadow-lg rounded-lg overflow-hidden my-8 cursor-pointer mx-20"
         (click)="navigateToReviewDetails(review)"
       >
         <img
