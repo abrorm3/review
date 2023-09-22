@@ -49,5 +49,8 @@ export class SidebarComponent implements OnInit {
   navigateToSettings(){
     this.router.navigate(['/account/settings']);
   }
+  navigateToFeed(){
+    this.router.navigate(['/feed']);
+  }
 
 }

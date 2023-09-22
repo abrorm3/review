@@ -8,3 +8,6 @@
   object-position: center;
   border-radius: 15px;
 }
+.sidebarLeft{
+  position: fixed;
+}

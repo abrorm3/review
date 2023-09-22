@@ -38,7 +38,7 @@
         <mat-icon>rate_review</mat-icon>
         <span>Reviews</span>
       </mat-expansion-panel-header>
-      <mat-nav-list>
+      <mat-nav-list (click)="navigateToFeed()">
         <a mat-list-item class="rounded-3xl" (click)="selectGroupType('Game')" [ngClass]="{'active': selectedGroupType === 'Game'}">
           <span>Game</span>
         </a>
