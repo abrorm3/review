@@ -40,22 +40,36 @@
       </div>
       <div class="reviewData-info mb-4">
         <div
-          (click)="navigateToPersonDetails(reviewData.authorId)"
-          class="flex items-center mb-2 uppercase cursor-pointer"
+          class="flex items-center mb-2 uppercase cursor-pointer justify-between"
         >
-          <img
-            *ngIf="avatarImg"
-            [src]="avatarImg"
-            alt="Author Avatar"
-            class="w-8 h-8 rounded-full mr-2"
-          />
-          <strong class="mr-2">By</strong>
-          <span class="text-white">{{ reviewData.authorId }}</span>
-          <div class="flex items-center ml-3">
-            <span class="align-middle font-mono">
-              {{ likesCount }}
-            </span>
-            <mat-icon class="text-lg mb-1 text-red-500">favorite</mat-icon>
+          <div
+            class="flex justify-center items-center"
+            (click)="navigateToPersonDetails(reviewData.authorId)"
+          >
+            <img
+              *ngIf="avatarImg"
+              [src]="avatarImg"
+              alt="Author Avatar"
+              class="w-8 h-8 rounded-full mr-2"
+            />
+            <strong class="mr-2">By</strong>
+            <span class="text-white">{{ reviewData.authorId }}</span>
+            <div class="flex items-center ml-3">
+              <span class="align-middle font-mono">
+                {{ likesCount }}
+              </span>
+              <mat-icon class="text-lg mb-1 text-red-500">favorite</mat-icon>
+            </div>
+          </div>
+          <div class="crud">
+            <div class="deleting">
+              <button 
+                (click)="confirmDeleteReview()"
+                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+              >
+                Delete
+              </button>
+            </div>
           </div>
 
         </div>

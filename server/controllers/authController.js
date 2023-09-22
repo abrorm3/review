@@ -156,7 +156,6 @@ class authController {
         return res.status(404).json({ message: "User not found" });
       }
       await Review.updateMany({ authorUsername: user.username }, { authorId: name });
-      console.log('user.name '+user.name)
       const updatedUser = await User.findOneAndUpdate(
         { _id: userId },
         { $set: updateFields }, 

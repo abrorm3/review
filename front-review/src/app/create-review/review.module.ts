@@ -28,6 +28,7 @@ import { RouterModule } from '@angular/router';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
+import { DeleteDialogComponent } from '../review-details/delete-dialog/delete-dialog.component';
 @NgModule({
   declarations: [
     CreateReviewComponent,
@@ -37,7 +38,8 @@ import { MatCardModule } from '@angular/material/card';
     WholeNumberDirective,
     ReviewDetailsComponent,
     LikeButtonComponent,
-    DialogComponent
+    DialogComponent,
+    DeleteDialogComponent
   ],
   imports: [
     CommonModule,

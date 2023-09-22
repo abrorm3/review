@@ -7,6 +7,8 @@ import { AuthService } from '../auth/auth.service';
 import { Comment } from '../shared/interfaces/comment.model';
 import { User } from '../shared/interfaces/user.model';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-review-details',
@@ -24,7 +26,7 @@ export class ReviewDetailsComponent implements OnInit {
   comments: Comment[] = [];
   userProfileMap: Map<string, User> = new Map<string, User>();
   newCommentText = '';
-  likesCount: number=0;
+  likesCount: number = 0;
   private likeToggleSubscription: Subscription;
 
   constructor(
@@ -32,23 +34,27 @@ export class ReviewDetailsComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.likeToggleSubscription = this.reviewDetailsService.likeToggle$.subscribe(({ userId, reviewId, isLiked }) => {
-      // Update the likesCount based on the event
-      if (!isLiked) {
-        this.likesCount++;
-      } else {
-        this.likesCount--;
-      }
-    });
+    this.likeToggleSubscription =
+      this.reviewDetailsService.likeToggle$.subscribe(
+        ({ userId, reviewId, isLiked }) => {
+          // Update the likesCount based on the event
+          if (!isLiked) {
+            this.likesCount++;
+          } else {
+            this.likesCount--;
+          }
+        }
+      );
     this.route.params.subscribe((params) => {
       const reviewTitle = params['title'];
       this.reviewDetailsService.getReview(reviewTitle).subscribe({
         next: (response) => {
-          this.reviewData = response.review;
+          this.reviewData = response;
           console.log(this.reviewData);
           this.sanitizedContent = this.sanitizer.bypassSecurityTrustHtml(
             this.reviewData.content
@@ -62,8 +68,12 @@ export class ReviewDetailsComponent implements OnInit {
         },
       });
     });
+    this.checkAuthor()
   }
-  navigateToPersonDetails(authorId) {
+  checkAuthor(){
+    
+  }
+  navigateToPersonDetails(authorId: string) {
     this.authService.getUsername(authorId).subscribe((data) => {
       this.router.navigate(['/person', data.username]);
     });
@@ -116,9 +126,30 @@ export class ReviewDetailsComponent implements OnInit {
         });
     }
   }
+  deleteReview() {
+    const reviewId = this.reviewData._id;
+    this.reviewDetailsService.deleteReview(reviewId, this.user).subscribe({
+      next: (response) => {
+        this.router.navigate(['feed']);
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
+  }
+  confirmDeleteReview() {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      width: '450px',
+      data: { reviewName: this.reviewData.name },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteReview();
+      }
+    });
+  }
   ngOnDestroy() {
-    // Unsubscribe from the like toggle event to prevent memory leaks
     this.likeToggleSubscription.unsubscribe();
   }
-
 }

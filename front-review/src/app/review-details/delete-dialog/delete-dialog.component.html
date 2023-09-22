@@ -1,0 +1,8 @@
+<h2 mat-dialog-title class="text-xl font-semibold">Confirm Delete</h2>
+<mat-dialog-content class="text-gray-600">
+  Are you sure you want to delete the review: <br>"{{ data.reviewName }}"?
+</mat-dialog-content>
+<mat-dialog-actions class="justify-end space-x-2">
+  <button mat-button [mat-dialog-close]="false" class="bg-gray-300 hover:bg-gray-400 text-gray-800">Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial class="bg-red-500 hover:bg-red-600 text-white">Delete</button>
+</mat-dialog-actions>

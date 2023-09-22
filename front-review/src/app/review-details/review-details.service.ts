@@ -4,6 +4,8 @@ import { Review } from '../shared/interfaces/review.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
 import { Comment } from '../shared/interfaces/comment.model';
+import { AuthService } from '../auth/auth.service';
+import { User } from '../shared/interfaces/user.model';
 
 
 @Injectable({
@@ -14,8 +16,9 @@ export class ReviewDetailsService {
   private reviewData: Review | null = null;
   private likeToggleSubject = new Subject<{ userId: string; reviewId: string; isLiked: boolean }>();
   likeToggle$ = this.likeToggleSubject.asObservable();
+  user:User;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService:AuthService) {}
 
   getReview(reviewName: string): Observable<any> {
     return this.http
@@ -88,5 +91,16 @@ export class ReviewDetailsService {
 
     // Emit the event to notify components
     this.likeToggleSubject.next({ userId, reviewId, isLiked });
+  }
+  getUser(){
+    this.authService.getUser().subscribe(user =>{
+      this.user = user;
+      console.log(this.user,' - user is SET');
+
+
+    })
+  }
+  deleteReview(reviewId: string,username:string):Observable<any>{
+    return this.http.delete(`${this.backend}/review-details/delete/${reviewId}/${username}`)
   }
 }
