@@ -6,4 +6,5 @@ const router = express.Router();
 
 router.post("/", controller.postComment);
 router.get("/review/:reviewId", controller.fetchComment)
+router.get("count/:reviewId", controller.calculateComment)
 module.exports = router;

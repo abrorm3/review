@@ -1,3 +1,4 @@
+import { Comment } from "./comment.model";
 export interface Review {
   name: string;
   art: string;
@@ -11,4 +12,5 @@ export interface Review {
   tags: string[];
   timeAgo?: string;
   _id?: string;
+  comments?: Comment[];
 }

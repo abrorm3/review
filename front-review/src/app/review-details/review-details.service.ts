@@ -78,4 +78,7 @@ export class ReviewDetailsService {
     const url = `${this.backend}/comment/review/${reviewId}`;
     return this.http.get<Comment[]>(url);
   }
+  getCommentCount(reviewId:string){
+    return this.http.get(`${this.backend}/comment/count/${reviewId}`)
+  }
 }

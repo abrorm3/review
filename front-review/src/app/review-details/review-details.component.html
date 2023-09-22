@@ -20,36 +20,58 @@
           <img [src]="reviewData.coverImage" alt="{{ reviewData.name }}" />
         </div>
       </div>
-      <div class="artAndGroup p-3 flex font-mono font-bold ">
+      <div class="artAndGroup p-3 flex font-mono font-bold">
         <span class="pr-2 text-indigo-300">{{ reviewData.group }}</span>
         <span class="text-cyan-600 font-mono font-bold">.&nbsp;</span>
         <p class="text-cyan-600 underline">{{ reviewData.art }}</p>
       </div>
-      <h2 class="text-2xl font-semibold mb-4 text-5xl font-sans text-white" >{{ reviewData.name }}</h2>
+      <h2 class="text-2xl font-semibold mb-4 text-5xl font-sans text-white">
+        {{ reviewData.name }}
+      </h2>
       <div class="mb-2">
         <strong class="text-sm">Created on: </strong>
-        <span>{{ reviewData.createDate| date: 'MMMM d, y'  }}</span>
+        <span>{{ reviewData.createDate | date : "MMMM d, y" }}</span>
       </div>
       <div class="reviewData-info mb-4">
-        <div (click)="navigateToPersonDetails(reviewData.authorId )" class="flex items-center mb-2 uppercase cursor-pointer">
-          <img *ngIf="avatarImg" [src]="avatarImg" alt="Author Avatar" class="w-8 h-8 rounded-full mr-2">
+        <div
+          (click)="navigateToPersonDetails(reviewData.authorId)"
+          class="flex items-center mb-2 uppercase cursor-pointer"
+        >
+          <img
+            *ngIf="avatarImg"
+            [src]="avatarImg"
+            alt="Author Avatar"
+            class="w-8 h-8 rounded-full mr-2"
+          />
           <strong class="mr-2">By</strong>
           <span class="text-white">{{ reviewData.authorId }}</span>
         </div>
-        <hr class="border-t-1 border-cyan-300 my-7">
+        <hr class="border-t-1 border-cyan-300 my-7" />
         <!-- HTML content -->
         <div class="text-white" [innerHTML]="sanitizedContent"></div>
         <div class="flex items-center mb-2 mt-20">
-          <app-like-button class="mr-4" [reviewId]="reviewData._id" [userId]="userId"></app-like-button>
+          <app-like-button
+            class="mr-4"
+            [reviewId]="reviewData._id"
+            [userId]="userId"
+          ></app-like-button>
+          <span class="flex justify-center mr-3">
+            <mat-icon>comment</mat-icon>
+            {{ reviewData.comments.length }}
+          </span>
           <strong class="mr-2">Author Rating:</strong>
           <span>{{ reviewData.authorRate }}</span>
         </div>
       </div>
-      <div class="mt-6 bg-dark-soft  flex flex-col justify-center mx-auto rounded-2xl">
+      <div
+        class="mt-6 bg-dark-soft flex flex-col justify-center mx-auto rounded-2xl"
+      >
         <!-- Add Comment Form -->
         <div class="commentCaution ml-5 text-slate-300 pt-5">
           <h3 class="text-lg font-semibold mb-2">Conversation Guidelines</h3>
-          <p class="text-sm">Have fun, but please be respectful and considerate in your comments.</p>
+          <p class="text-sm">
+            Have fun, but please be respectful and considerate in your comments.
+          </p>
         </div>
 
         <mat-card class="mb-10 bg-dark-soft">
@@ -65,11 +87,22 @@
                   maxlength="800"
                 ></textarea>
               </mat-form-field>
-              <button *ngIf="userId; else goAuth" mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid">
+              <button
+                *ngIf="userId; else goAuth"
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="!commentForm.valid"
+              >
                 Add Comment
               </button>
               <ng-template #goAuth>
-                <button (click)="navigateToAuth()" mat-raised-button color="primary" type="button">
+                <button
+                  (click)="navigateToAuth()"
+                  mat-raised-button
+                  color="primary"
+                  type="button"
+                >
                   Sign up to comment
                 </button>
               </ng-template>
@@ -78,7 +111,10 @@
         </mat-card>
 
         <!-- List of Comments -->
-        <mat-card *ngFor="let comment of comments" class="mb-2 bg-dark-soft text-white">
+        <mat-card
+          *ngFor="let comment of comments"
+          class="mb-2 bg-dark-soft text-white"
+        >
           <mat-card-content>
             <!-- Comment Author -->
             <div class="flex items-center">
@@ -90,18 +126,26 @@
                 />
               </div>
               <div class="ml-2">
-                <p class="text-sm font-medium">{{ comment.userId.name ? comment.userId.name : comment.userId.username }}</p>
-                <p class="text-xs text-gray-500">{{ comment.timestamp | date: 'short' }}</p>
+                <p class="text-sm font-medium">
+                  {{
+                    comment.userId.name
+                      ? comment.userId.name
+                      : comment.userId.username
+                  }}
+                </p>
+                <p class="text-xs text-gray-500">
+                  {{ comment.timestamp | date : "short" }}
+                </p>
               </div>
             </div>
 
             <!-- Comment Text -->
-            <p class="mt-2 ml-5 text-sm text-slate-300">{{ comment.content }}</p>
+            <p class="mt-2 ml-5 text-sm text-slate-300">
+              {{ comment.content }}
+            </p>
           </mat-card-content>
         </mat-card>
       </div>
-
     </div>
-
   </mat-sidenav-content>
 </mat-sidenav-container>

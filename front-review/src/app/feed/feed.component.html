@@ -47,7 +47,12 @@
               class="w-full h-48 object-cover"
             />
             <div class="px-6 py-4">
-              <div class="font-semibold text-xl mb-2">{{ review.name }}</div>
+              <div class="font-semibold text-xl mb-1">{{ review.name }}</div>
+              <span (click)="navigateToPersonDetails(review.authorId)"
+                  class="flex items-center rounded-xl mb-2 underline text-sm cursor-alias"
+                >
+                  {{ review.authorId?review.authorId:review.authorUsername }}
+                </span>
               <div class="flex items-center text-gray-700 text-sm space-x-2">
                 <span
                   class="flex items-center bg-gray-200 rounded-xl px-3 py-1"
@@ -67,9 +72,9 @@
                   class="flex items-center bg-gray-200 rounded-xl px-3 py-1"
                 >
                   <mat-icon class="icon-display text-green-500"
-                    >person</mat-icon
+                    >comment</mat-icon
                   >
-                  {{ review.authorId }}
+                  {{review.comments.length}}
                 </span>
               </div>
             </div>

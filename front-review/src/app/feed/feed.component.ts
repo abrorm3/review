@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FeedService } from './feed.service';
 import { Review } from '../shared/interfaces/review.model';
 import { ReviewDetailsService } from '../review-details/review-details.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-feed',
@@ -10,12 +11,13 @@ import { ReviewDetailsService } from '../review-details/review-details.service';
   styleUrls: ['./feed.component.css'],
 })
 export class FeedComponent implements OnInit {
-  constructor(private router: Router, private feedService: FeedService, private reviewDetailsService:ReviewDetailsService) {}
+  constructor(private router: Router, private feedService: FeedService, private reviewDetailsService:ReviewDetailsService, private authService:AuthService) {}
   opened: boolean = true;
   reviews: Review[] = [];
   recentReviews: Review[] = [];
   selectedGroupType: string = '';
   searchFilter: string = '';
+  commentCount:string='0';
 
   ngOnInit() {
     this.feedService.getReviews().subscribe({
@@ -73,5 +75,17 @@ export class FeedComponent implements OnInit {
   }
   navigateToDetails(review){
     this.router.navigate([`/review-details/${review}`])
+  }
+  getCommentCount(reviewId: string){
+    this.reviewDetailsService.getCommentCount(reviewId).subscribe((res)=>{
+      // this.commentCount = res.;
+      console.log(res + ' count');
+
+    })
+  }
+  navigateToPersonDetails(authorId: string) {
+    this.authService.getUsername(authorId).subscribe((data) => {
+      this.router.navigate(['/person', data.username]);
+    })
   }
 }
