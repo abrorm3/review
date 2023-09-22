@@ -27,6 +27,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
 @NgModule({
   declarations: [
     CreateReviewComponent,
@@ -59,7 +60,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatDialogModule,
     RouterModule,
     MatExpansionModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatCardModule
   ],
   exports: [SidebarComponent]
 })

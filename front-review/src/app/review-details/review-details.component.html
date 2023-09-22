@@ -45,6 +45,63 @@
           <span>{{ reviewData.authorRate }}</span>
         </div>
       </div>
+      <div class="mt-6 bg-dark-soft  flex flex-col justify-center mx-auto rounded-2xl">
+        <!-- Add Comment Form -->
+        <div class="commentCaution ml-5 text-slate-300 pt-5">
+          <h3 class="text-lg font-semibold mb-2">Conversation Guidelines</h3>
+          <p class="text-sm">Have fun, but please be respectful and considerate in your comments.</p>
+        </div>
+
+        <mat-card class="mb-10 bg-dark-soft">
+          <mat-card-content>
+            <form #commentForm="ngForm" (ngSubmit)="addComment()">
+              <mat-form-field class="w-full">
+                <textarea
+                  matInput
+                  placeholder="Add a comment"
+                  name="commentText"
+                  [(ngModel)]="newCommentText"
+                  required
+                  maxlength="800"
+                ></textarea>
+              </mat-form-field>
+              <button *ngIf="userId; else goAuth" mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid">
+                Add Comment
+              </button>
+              <ng-template #goAuth>
+                <button (click)="navigateToAuth()" mat-raised-button color="primary" type="button">
+                  Sign up to comment
+                </button>
+              </ng-template>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- List of Comments -->
+        <mat-card *ngFor="let comment of comments" class="mb-2 bg-dark-soft text-white">
+          <mat-card-content>
+            <!-- Comment Author -->
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <img
+                  class="h-8 w-8 rounded-full"
+                  [src]="comment.userId.profilePictureUrl"
+                  [alt]="comment.userId.name"
+                />
+              </div>
+              <div class="ml-2">
+                <p class="text-sm font-medium">{{ comment.userId.name ? comment.userId.name : comment.userId.username }}</p>
+                <p class="text-xs text-gray-500">{{ comment.timestamp | date: 'short' }}</p>
+              </div>
+            </div>
+
+            <!-- Comment Text -->
+            <p class="mt-2 ml-5 text-sm text-slate-300">{{ comment.content }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
     </div>
+
   </mat-sidenav-content>
 </mat-sidenav-container>
