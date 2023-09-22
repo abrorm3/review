@@ -8,6 +8,7 @@ const User = new Schema({
     username: {type: String, required: true},
     password: { type: String, required: true },
     roles: [{ type: String, ref: 'Role' }],
+    totalLikes:{type:Number,default:0},
     lastLoginTime: { type: Date, default: null },
     registrationTime: { type: Date, default: null },
 });

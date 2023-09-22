@@ -6,6 +6,7 @@ export interface User {
   profilePictureUrl: string;
   username: string;
   roles: string;
+  totalLikes: number;
   lastLoginTime: Date;
   registrationTime: Date;
 }

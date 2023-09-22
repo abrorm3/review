@@ -13,6 +13,7 @@ import { Review } from 'src/app/shared/interfaces/review.model';
 export class PersonReviewsComponent implements OnInit {
   userInfo: string;
   reviews: Review[] = [];
+  totalLikes:number =0;
   constructor(
     private reviewDetailsService: ReviewDetailsService,
     private route: ActivatedRoute,
@@ -45,6 +46,7 @@ export class PersonReviewsComponent implements OnInit {
       return this.authService.getUsername(username).subscribe({
         next: (response) => {
           this.userInfo = response.username;
+          this.totalLikes = response.totalLikes;
           this.fetchAuthorReview();
         },
         error: (error) => {

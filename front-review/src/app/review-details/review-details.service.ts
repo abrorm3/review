@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, Subject, map, tap } from 'rxjs';
 import { Review } from '../shared/interfaces/review.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
@@ -12,6 +12,8 @@ import { Comment } from '../shared/interfaces/comment.model';
 export class ReviewDetailsService {
   backend = environment.apiBaseUrl;
   private reviewData: Review | null = null;
+  private likeToggleSubject = new Subject<{ userId: string; reviewId: string; isLiked: boolean }>();
+  likeToggle$ = this.likeToggleSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -80,5 +82,11 @@ export class ReviewDetailsService {
   }
   getCommentCount(reviewId:string){
     return this.http.get(`${this.backend}/comment/count/${reviewId}`)
+  }
+  toggleLike(userId: string, reviewId: string, isLiked: boolean) {
+    // Perform like/unlike logic here
+
+    // Emit the event to notify components
+    this.likeToggleSubject.next({ userId, reviewId, isLiked });
   }
 }

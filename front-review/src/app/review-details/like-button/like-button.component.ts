@@ -13,8 +13,8 @@ import { DialogComponent } from './dialog/dialog.component';
 export class LikeButtonComponent implements OnInit {
   @Input() reviewId: string;
   @Input() userId: string;
+  @Input() isLiked:boolean;
 
-  isLiked: boolean = false;
   likesCount: number = 0;
 
   constructor(
@@ -44,6 +44,7 @@ export class LikeButtonComponent implements OnInit {
 
   toggleLike() {
     const user = this.authService.getUserId();
+    this.reviewDetailsService.toggleLike(this.userId, this.reviewId, this.isLiked);
     if (user) {
       if (this.isLiked) {
         this.reviewDetailsService.unlikeReview(this.userId, this.reviewId).subscribe(() => {

@@ -1,5 +1,11 @@
 <mat-sidenav-container class="bg-dark relative">
-  <mat-sidenav #sidenav mode="side" class="sidebarLeft absolute" [(opened)]="opened" style="width: 320px">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    class="sidebarLeft absolute"
+    [(opened)]="opened"
+    style="width: 320px"
+  >
     <app-sidebar></app-sidebar>
   </mat-sidenav>
 
@@ -45,6 +51,13 @@
           />
           <strong class="mr-2">By</strong>
           <span class="text-white">{{ reviewData.authorId }}</span>
+          <div class="flex items-center ml-3">
+            <span class="align-middle font-mono">
+              {{ likesCount }}
+            </span>
+            <mat-icon class="text-lg mb-1 text-red-500">favorite</mat-icon>
+          </div>
+
         </div>
         <hr class="border-t-1 border-cyan-300 my-7" />
         <!-- HTML content -->

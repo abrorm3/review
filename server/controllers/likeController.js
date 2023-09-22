@@ -9,7 +9,7 @@ const Review = require("../models/review");
 const Like = require("../models/like");
 
 class likeController {
-  async like(req, res) {
+  like = async (req, res) => {
     const { userId } = req.body;
     const reviewId = req.params.reviewId;
 
@@ -28,14 +28,14 @@ class likeController {
       review.likes.push(userId);
       await review.save();
 
+      await this.updateAuthorTotalLikes(review.authorUsername, 1);
       return res.status(200).json({ message: "Review liked successfully" });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Server error" });
     }
-  }
-
-  async unlike(req, res) {
+  };
+  unlike = async (req, res) => {
     const { userId } = req.body;
     const reviewId = req.params.reviewId;
 
@@ -49,13 +49,29 @@ class likeController {
         review.likes.splice(userIndex, 1);
         await review.save();
       }
-
+      await this.updateAuthorTotalLikes(review.authorUsername, -1);
       return res.status(200).json({ message: "Review unliked successfully" });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Server error" });
     }
-  }
+  };
+
+  updateAuthorTotalLikes = async (authorId, incrementBy) => {
+    try {
+      const author = await User.findOne({username:authorId})
+      console.log('11111 - '+authorId+'+'+author)
+
+      if (!author) {
+        return;
+      }
+
+      author.totalLikes += incrementBy;
+      await author.save();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   async checkLike(req, res) {
     try {
@@ -65,7 +81,7 @@ class likeController {
       const review = await Review.findById(reviewId).exec();
 
       if (!review) {
-        return res.status(404).json({ message: 'Review not found' });
+        return res.status(404).json({ message: "Review not found" });
       }
 
       const isLiked = review.likes.includes(userId);
@@ -73,7 +89,7 @@ class likeController {
       res.status(200).json({ isLiked });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Server error' });
+      res.status(500).json({ message: "Server error" });
     }
   }
 
@@ -83,7 +99,7 @@ class likeController {
     try {
       const likesCount = await Like.countDocuments({ reviewId });
 
-      console.log(likesCount + ' - likes Count');
+      console.log(likesCount + " - likes Count");
       return res.status(200).json({ likesCount });
     } catch (error) {
       console.error(error);
