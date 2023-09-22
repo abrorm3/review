@@ -76,6 +76,14 @@
         <hr class="border-t-1 border-cyan-300 my-7" />
         <!-- HTML content -->
         <div class="text-white" [innerHTML]="sanitizedContent"></div>
+        <div class="tags mt-5">
+          <span
+            *ngFor="let tag of reviewData.tags"
+            class="mr-2 px-2 py-1 bg-gradient-to-tr from-indigo-600 to-sky-700 text-white rounded-full text-sm"
+          >
+            #{{ tag }}
+          </span>
+        </div>
         <div class="flex items-center mb-2 mt-20">
           <app-like-button
             class="mr-4"
