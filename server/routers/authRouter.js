@@ -36,5 +36,7 @@ router.put("/users/:userId/block", controller.blockUser);
 router.put("/users/block", controller.blockUsers);
 router.put("/users/unblock", controller.unblockUsers);
 router.delete("/users/:userId/delete", controller.deleteUser);
+router.get("/check-admin/:userId",controller.isAdmin)
+router.post("/make-admin", controller.makeAdmin)
 
 module.exports = router;

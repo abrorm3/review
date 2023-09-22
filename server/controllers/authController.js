@@ -433,6 +433,43 @@ class authController {
       return res.status(500).json({ message: "An error occurred while unblocking users" });
     }
   }
+  async isAdmin(req, res) {
+    const userId = req.params.userId;
+    try{
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json(false);
+      }
+      if (user.roles.includes('ADMIN')) {
+        return res.status(200).json(true); 
+      }
+    }catch(err){
+      console.log(err);
+      return res.status(500).json(false);
+    }
+  }
+  async makeAdmin(req, res) {
+    const username = req.body.username;
+    try {
+      const user = await User.findOne({ username });
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      if (user.roles.includes("ADMIN")) {
+        return res.status(400).json({ message: "User is already an admin" });
+      }
+      user.roles.push("ADMIN");
+  
+      await user.save();
+  
+      return res.status(200).json({ message: "User is now an admin" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Server error" });
+    }
+  }
 }
 
 module.exports = new authController();

@@ -181,4 +181,14 @@ export class AuthService {
       { password }
     );
   }
+  checkAdmin():any{
+    const userId = this.getUserId();
+    if (userId===null) {
+      return throwError(() => new Error("User ID is not available."));
+  }
+    return this.http.get(`${this.backend}/auth/check-admin/${userId}`);
+  }
+  makeAdmin(username){
+    return this.http.post(`${this.backend}/auth/make-admin`, { username });
+  }
 }

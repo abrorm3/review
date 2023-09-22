@@ -56,6 +56,10 @@
 
     <div class="bg-gradient-to-br from-sky-800 flex justify-center items-center mt-auto mb-5 py-2 rounded-lg">
       <ng-container *ngIf="isAuthenticated; else signIn">
+        <div *ngIf="userStatus.includes('ADMIN')" class="flex flex-col items-center">
+          <img style="width: 30px;" [src]="adminImg" alt="">
+          <p class="text-xs">Admin</p>
+        </div>
         <div class="flex items-center py-2 cursor-pointer" (click)="navigateToSettings()">
           <img [src]="userInfo?.profilePictureUrl" alt="user" class="w-12 h-12 rounded-full mr-2">
           <div class="nameSettings">

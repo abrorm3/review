@@ -41,10 +41,17 @@
             <strong>About:</strong>
             {{ userInfo?.aboutUser }}
           </div>
-          <div class="flex items-center">
-            <mat-icon class="mr-2">event</mat-icon>
-            <strong class="mr-1">Joined:</strong>
-            {{ userInfo?.registrationTime | date }}
+          <div class="flex items-center justify-between">
+            <div>
+              <mat-icon class="mr-2">event</mat-icon>
+              <strong class="mr-1">Joined:</strong>
+              {{ userInfo?.registrationTime | date }}
+            </div>
+            <button *ngIf="this.userStatus.includes('ADMIN')" (click)="makeAdmin(userInfo?.username)" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded">
+              <span *ngIf="!adminMessage && this.userStatus.includes('ADMIN') ">Make Admin</span>
+              <span *ngIf="adminMessage">{{adminMessage}}</span>
+            </button>
+
           </div>
         </div>
       </mat-card-content>

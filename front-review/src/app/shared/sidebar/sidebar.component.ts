@@ -15,7 +15,8 @@ export class SidebarComponent implements OnInit {
   isAuthenticated: boolean = false;
   userInfo:User;
   selectedGroupType: string = '';
-
+  userStatus:string[]=['USER']
+  adminImg:string='https://firebasestorage.googleapis.com/v0/b/review-e9e60.appspot.com/o/650d4eb29e165e4c42ff215c%2Fasdas%2FcoverImage%2Fcrown_6941697.png_1695376903170?alt=media&token=a95ae9e9-7b05-4d25-a681-95513ea7cd0c'
   constructor(private authService: AuthService, private router:Router, private feedService:FeedService) {}
 
   ngOnInit(): void {
@@ -23,6 +24,15 @@ export class SidebarComponent implements OnInit {
     this.feedService.isPanelOpen$.subscribe((bool) => {
       this.panelOpenState = bool;
     });
+    this.setStatus();
+  }
+  setStatus(){
+    this.authService.checkAdmin().subscribe((res)=>{
+
+      if(res){
+        this.userStatus.push('ADMIN')
+      }
+    })
   }
   selectGroupType(groupType: string) {
     this.feedService.setGroupType(groupType);

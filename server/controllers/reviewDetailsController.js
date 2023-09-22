@@ -82,13 +82,17 @@ class reviewDetailsController {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
+  
   async canDeleteReview(req, res) {
     const userId = req.params.userId;
     const reviewId = req.params.reviewId;
     try {
       const user = await User.findById(userId);
       if (!user) {
-        return false;
+        return res.status(404).json(false);
+      }
+      if (user.roles.includes('ADMIN')) {
+        return res.status(200).json(true); 
       }
 
       const username = user.username;
@@ -101,8 +105,8 @@ class reviewDetailsController {
       const doMatch= review.authorUsername === username;
       return res.status(200).json(doMatch);
     } catch (err) {
-      console.error(error);
-      return false;
+      console.error(err);
+      return res.status(500).json(false);
     }
   }
 }

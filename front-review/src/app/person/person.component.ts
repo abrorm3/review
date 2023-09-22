@@ -11,6 +11,8 @@ import { User } from '../shared/interfaces/user.model';
 })
 export class PersonComponent implements OnInit {
   userInfo: User;
+  adminMessage: any;
+  userStatus:string[]=['USER'];
   opened:boolean=true;
   constructor(
     private personService: PersonService,
@@ -19,8 +21,20 @@ export class PersonComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.getUsername();
-  }
+    this.setStatus();
 
+
+  }
+  setStatus(){
+    this.authService.checkAdmin().subscribe((res)=>{
+      console.log(res + ' - IS ADMIN?');
+
+      if(res){
+        this.userStatus.push('ADMIN')
+      }
+      console.log(this.userStatus);
+    })
+  }
   getUsername() {
     this.route.params.subscribe((params) => {
       const username = params['username'];
@@ -35,5 +49,18 @@ export class PersonComponent implements OnInit {
         },
       });
     });
+  }
+  makeAdmin(username){
+    this.authService.makeAdmin(username).subscribe({
+      next:(res)=>{
+        this.adminMessage = res;
+        console.log(res);
+
+      },error:(err)=>{
+        this.adminMessage = err.error.message;
+        console.log(this.adminMessage);
+
+      }
+    })
   }
 }
