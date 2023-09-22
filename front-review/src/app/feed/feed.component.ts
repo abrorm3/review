@@ -33,7 +33,6 @@ export class FeedComponent implements OnInit {
     });
     this.feedService.groupType$.subscribe((groupType) => {
       this.selectedGroupType = groupType;
-      console.log(this.selectedGroupType + ' - SELECTEED');
 
     });
   }

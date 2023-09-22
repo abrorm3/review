@@ -27,6 +27,7 @@ export class ReviewDetailsComponent implements OnInit {
   userProfileMap: Map<string, User> = new Map<string, User>();
   newCommentText = '';
   likesCount: number = 0;
+  canDelete:boolean = false;
   private likeToggleSubscription: Subscription;
 
   constructor(
@@ -55,23 +56,28 @@ export class ReviewDetailsComponent implements OnInit {
       this.reviewDetailsService.getReview(reviewTitle).subscribe({
         next: (response) => {
           this.reviewData = response;
-          console.log(this.reviewData);
           this.sanitizedContent = this.sanitizer.bypassSecurityTrustHtml(
             this.reviewData.content
           );
           this.getUserId();
           this.authorAvatar();
           this.loadComments();
+          this.userCheck()
         },
         error: (error) => {
           console.log(error);
         },
       });
     });
-    this.checkAuthor()
+
   }
-  checkAuthor(){
-    
+  userCheck(){
+    const userId=localStorage.getItem('userId');
+    this.reviewDetailsService.canDeleteReview(userId,this.reviewData._id).subscribe((response:boolean)=>{
+      console.log(response+' SSS');
+      this.canDelete = response;
+
+    })
   }
   navigateToPersonDetails(authorId: string) {
     this.authService.getUsername(authorId).subscribe((data) => {
@@ -85,8 +91,6 @@ export class ReviewDetailsComponent implements OnInit {
     this.userId = this.authService.getUserId();
   }
   authorAvatar() {
-    console.log(this.reviewData.authorUsername);
-
     this.authService
       .getUsername(this.reviewData.authorUsername)
       .subscribe((user) => {
@@ -94,7 +98,6 @@ export class ReviewDetailsComponent implements OnInit {
         this.likesCount = user.totalLikes;
         this.reviewDetailsService.getAvatar(this.user).subscribe((data) => {
           this.avatarImg = data;
-          console.log(data + 'our data');
         });
       });
   }
@@ -152,4 +155,5 @@ export class ReviewDetailsComponent implements OnInit {
   ngOnDestroy() {
     this.likeToggleSubscription.unsubscribe();
   }
+
 }

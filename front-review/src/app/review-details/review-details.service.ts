@@ -25,7 +25,6 @@ export class ReviewDetailsService {
       .get<Review>(`${this.backend}/review-details/${reviewName}`)
       .pipe(
         tap((res) => {
-          console.log(res);
         })
       );
   }
@@ -44,8 +43,7 @@ export class ReviewDetailsService {
         `${this.backend}/review-details/get-avatar/${username}`
       )
       .pipe(
-        tap((res) => {
-          console.log('avatar - ' + res);
+        tap(() => {
         }),
         map((res) => res.avatar)
       );
@@ -95,12 +93,12 @@ export class ReviewDetailsService {
   getUser(){
     this.authService.getUser().subscribe(user =>{
       this.user = user;
-      console.log(this.user,' - user is SET');
-
-
     })
   }
   deleteReview(reviewId: string,username:string):Observable<any>{
     return this.http.delete(`${this.backend}/review-details/delete/${reviewId}/${username}`)
+  }
+  canDeleteReview(userId: string,reviewId: string){
+    return this.http.get(`${this.backend}/review-details/can-delete/${userId}/${reviewId}`)
   }
 }
